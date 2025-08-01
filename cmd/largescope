@@ -1,0 +1,4 @@
+# largescope
+#!/bin/bash
+
+echo "dell" | org2asn -silent

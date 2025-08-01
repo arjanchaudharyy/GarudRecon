@@ -1,0 +1,25 @@
+git clone https://github.com/rix4uni/GarudRecon.git --depth 1
+
+# create garudrecon directory if not exit
+mkdir -p ~/.garudrecon
+
+# send important files
+mv GarudRecon/cmd/* GarudRecon/configuration/* ~/.garudrecon/
+
+# make it garudrecon globally
+mv GarudRecon/garudrecon /usr/bin/
+
+# make it excutble
+chmod +x ~/.garudrecon/cmd/* /usr/bin/garudrecon
+
+# install tools
+garudrecon install
+
+# send config files
+cp -r GarudRecon/.config/* ~/.config
+
+echo -e "Add api keys to these files:"
+find .config -type f | sed 's|^|~/|'
+
+# remove
+rm -rf GarudRecon
