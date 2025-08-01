@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="img/GarudRecon_banner.png" alt="GarudRecon"></a>
+  <img src="img/GarudRecon_banner2.png" alt="GarudRecon"></a>
 </h1>
 
 [![License](https://img.shields.io/badge/license-MIT-_red.svg)](https://opensource.org/licenses/MIT)
