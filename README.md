@@ -17,7 +17,7 @@
 An automated recon tool for asset discovery and vulnerability scanning using open-source tools. Supports XSS, SQLi, LFI, RCE, IIS, Open Redirect, Swagger UI, .git exposures and more.
 
 ## History
-I created Garudrecon in 2022 but I deleted because some of api keys leaked here someone forked [Garudrecon](https://github.com/polling-repo-continua/GarudRecon)
+I created GarudRecon in 2022 but I deleted because some of api keys leaked here someone forked [GarudRecon](https://github.com/polling-repo-continua/GarudRecon)
 
 After that i tried in python, golang but i did'nt liked "String Concatenation", so i came back to bash again.
 
@@ -65,28 +65,115 @@ After that i tried in python, golang but i did'nt liked "String Concatenation", 
 bash <(curl -s https://raw.githubusercontent.com/rix4uni/GarudRecon/main/configure)
 ```
 
-## Usage Examples
+## Usage
 
-### smallscope
+<details open>
+  <summary><b>garudrecon -h</b></summary>
 
-```bash
-┌──(root㉿kali)-[/root/.garudrecon]
-└─# bash smallcope.sh target.com
 ```
+GarudRecon - Recon Automation Framework
+A longer description that spans multiple lines and likely contains
+examples and usage of using your application. For example:
 
-### mediumscope
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.
 
-```bash
-┌──(root㉿kali)-[/root/.garudrecon]
-└─# bash mediumscope.sh target.com
+Usage:
+  garudrecon [command]
+
+Available Commands:
+  install                 A brief description of your command
+  smallscope              A brief description of your command
+  mediumscope             A brief description of your command
+  largescope              A brief description of your command
+  cronjobs                A brief description of your command
+
+Flags:
+  -h, --help     help for garudrecon
+  -v, --version  Show version
+
+Use "garudrecon [command] --help" for more information about a command.
 ```
+</details>
 
-### largescope
 
-```bash
-┌──(root㉿kali)-[/root/.garudrecon]
-└─# bash largescope.sh target.com
+<details open>
+  <summary><b>garudrecon smallscope -h</b></summary>
+
 ```
+```
+</details>
+
+
+<details open>
+  <summary><b>garudrecon mediumscope -h</b></summary>
+
+```
+This command utilizes a web scraping approach to collect subdomains of the specified domain.
+
+Usage:
+  garudrecon mediumscope [flags]
+
+Flags:
+  -rx, --recon-xss                      Run full recon with XSS checks"
+  -rs, --recon-sqli                     Run full recon with SQLi checks"
+  -rl, --recon-lfi                      Run full recon with LFI checks"
+  -rst, --recon-subtakeover             Run full recon with Subdomain Takeover checks"
+  -rr, --recon-rce                      Run full recon with RCE checks"
+  -ri, --recon-iis                      Run full recon with IIS checks"
+  -h, --help                            help for mediumscope
+
+Example:
+# Full recon
+  garudrecon mediumscope -d dell.com
+
+# Recon with XSS only
+  garudrecon mediumscope -d dell.com -rx
+
+# Recon with SQLi only
+  garudrecon mediumscope -d dell.com -rs
+
+# Exclude functions manually
+  garudrecon mediumscope -d dell.com -ef "SUBFINDER,AMASS"
+
+# Combined
+  garudrecon mediumscope -d dell.com -rx -ef "AMASS"
+```
+</details>
+
+
+<details open>
+  <summary><b>garudrecon largescope -h</b></summary>
+
+```
+```
+</details>
+
+
+<details open>
+  <summary><b>garudrecon cronjobs -h</b></summary>
+
+```
+This command utilizes a web scraping approach to collect subdomains of the specified domain.
+
+Usage:
+  garudrecon cronjobs [flags]
+
+Flags:
+  -d, --domain                  Domain to monitor
+  -f, --function                Function to run (e.g. MONITOR_SUBDOMAIN)
+  -h, --help                    help for cronjobs
+
+Example:
+  garudrecon cronjobs -d domain.com -f MONITOR_SUBDOMAIN
+  garudrecon cronjobs -d domain.com -f MONITOR_PORTS
+  garudrecon cronjobs -d domain.com -f MONITOR_ALIVESUBD
+  garudrecon cronjobs -d domain.com -f MONITOR_JS
+  garudrecon cronjobs -d domain.com -f MONITOR_JSLEAKS
+```
+</details>
+
 
 ## Demo
 
