@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Default config file path
+source "configuration/garudrecon.cfg"
+
+# Help function
+function show_help() {
+  cat <<EOF
+GarudRecon - Recon Automation Framework
+A longer description that spans multiple lines and likely contains
+examples and usage of using your application. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.
+
+Usage:
+  garudrecon [command]
+
+Available Commands:
+  install                 A brief description of your command
+  smallscope              A brief description of your command
+  mediumscope             A brief description of your command
+  largescope              A brief description of your command
+  cronjobs                A brief description of your command
+
+Flags:
+  -h, --help     help for garudrecon
+  -v, --version  Show version
+
+Use "garudrecon [command] --help" for more information about a command.
+EOF
+}
+
+# Check if no args
+if [[ $# -eq 0 ]]; then
+  show_help
+  exit 0
+fi
+
+COMMAND=$1
+shift
+
+case "$COMMAND" in
+  install)
+    bash "$(dirname "$0")/cmd/install" "$@"
+    ;;
+  smallscope)
+    bash "$(dirname "$0")/cmd/smallscope" "$@"
+    ;;
+  mediumscope)
+    bash "$(dirname "$0")/cmd/mediumscope" "$@"
+    ;;
+  largemscope)
+    bash "$(dirname "$0")/cmd/largemscope" "$@"
+    ;;
+  cronjobs)
+    bash "$(dirname "$0")/cmd/cronjobs" "$@"
+    ;;
+  -v|--version)
+    echo "GarudRecon version: $VERSION"
+    ;;
+  -h|--help)
+    show_help
+    ;;
+  *)
+    echo "Unknown command: $COMMAND"
+    echo "Use 'garudrecon --help' for usage."
+    exit 1
+    ;;
+esac

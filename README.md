@@ -62,7 +62,7 @@ After that i tried in python, golang but i did'nt liked "String Concatenation", 
 
 ### Easy Install
 ```
-bash <(curl -s https://raw.githubusercontent.com/rix4uni/GarudRecon/main/cmd/configure)
+bash <(curl -s https://raw.githubusercontent.com/rix4uni/GarudRecon/main/configure)
 ```
 
 ## Usage Examples

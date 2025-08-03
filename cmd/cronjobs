@@ -1,33 +1,39 @@
 #!/bin/bash
 
-# Define configuration file path
-source "configuration/garudrecon.cfg"
-PRINTBANNER
+# Default config file path
+CONFIG_PATH="configuration/garudrecon.cfg"
 
-# Check root user
-AREUROOTUSER
+TARGET=""
 
 # Help function
 function show_help() {
   cat <<EOF
+This command utilizes a web scraping approach to collect subdomains of the specified domain.
+
 Usage:
-  cmd/cronjobs -d <domain> -f <function>
+  garudrecon cronjobs [flags]
 
 Flags:
-  -d, --domain     Domain to monitor
-  -f, --function   Function to run (e.g. MONITOR_SUBDOMAIN)
-  -h, --help       Show this help message
+  -d, --domain			Domain to monitor
+  -f, --function		Function to run (e.g. MONITOR_SUBDOMAIN)
+  -h, --help			help for cronjobs
 
 Example:
-  cmd/cronjobs -d domain.com -f MONITOR_SUBDOMAIN
-  cmd/cronjobs -d domain.com -f MONITOR_PORTS
-  cmd/cronjobs -d domain.com -f MONITOR_ALIVESUBD
-  cmd/cronjobs -d domain.com -f MONITOR_JS
-  cmd/cronjobs -d domain.com -f MONITOR_JSLEAKS
+  garudrecon cronjobs -d domain.com -f MONITOR_SUBDOMAIN
+  garudrecon cronjobs -d domain.com -f MONITOR_PORTS
+  garudrecon cronjobs -d domain.com -f MONITOR_ALIVESUBD
+  garudrecon cronjobs -d domain.com -f MONITOR_JS
+  garudrecon cronjobs -d domain.com -f MONITOR_JSLEAKS
 EOF
 }
 
-# Parse flags
+# Check if no args
+if [[ $# -eq 0 ]]; then
+  show_help
+  exit 0
+fi
+
+# Parse arguments
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     -d|--domain)
@@ -38,12 +44,16 @@ while [[ "$#" -gt 0 ]]; do
       FUNC="$2"
       shift 2
       ;;
+    -config|--config)
+      CONFIG_PATH="$2"
+      shift 2
+      ;;
     -h|--help)
       show_help
       exit 0
       ;;
     *)
-      echo "Unknown flag: $1"
+      echo "Unknown option: $1"
       exit 1
       ;;
   esac
@@ -51,16 +61,89 @@ done
 
 # Escape dots in domain for regex
 ESCAPED_TARGET=$(echo "$TARGET" | sed 's/\./\\./g')
+
+if [[ -z "$TARGET" ]]; then
+    echo "Error: Target domain is required. Use -d <domain>"
+    exit 1
+fi
+
+# Load configuration
+if [[ -f "$CONFIG_PATH" ]]; then
+    source "$CONFIG_PATH"
+else
+    echo "Error: Configuration file '$CONFIG_PATH' not found."
+    exit 1
+fi
+
+PRINTBANNER
+
+# Check root user
+AREUROOTUSER
+
+# Subdirectories within cronjobscan
+CRONJOBS_SUBDOMAINDIR="cronjobscan/subdomain"
+CRONJOBS_PORTSIR="cronjobscan/ports"
+CRONJOBS_ALIVE_SUBDOMAINDIR="cronjobscan/alivesubdomain"
+CRONJOBS_JSDIR="cronjobscan/javascript"
+CRONJOBS_JSLEAKSDIR="cronjobscan/javascriptleaks"
+
+# Creating directories
 mkdir -p "$CRONJOBS_SUBDOMAINDIR"
 mkdir -p "$CRONJOBS_PORTSIR"
 mkdir -p "$CRONJOBS_ALIVE_SUBDOMAINDIR"
 mkdir -p "$CRONJOBS_JSDIR"
 mkdir -p "$CRONJOBS_JSLEAKSDIR"
 
+# Function to handle CLEANUP on Ctrl+C
+CLEANUP(){
+    if [[ -n "$SPINNER_PID" ]]; then
+        kill "$SPINNER_PID" 2>/dev/null
+    fi
+    exit 1
+}
+trap CLEANUP SIGINT
+
+START_SPINNER(){
+    processing="${1}"
+    START_TIME=$(date +%s)
+    BRAILLE_STYLE_SPINNER_CHARS=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
+    # SLASH_SPINNER_CHARS=("/" "-" "\\" "|")
+    # ARC_SPINNER_CHARS=("◐" "◓" "◑" "◒")
+    # CLASSIC_DOTS_SPINNER_CHARS=("⠂" "⠒" "⠐" "⠰" "⠴" "⠦" "⠖" "⠒")
+    # ARROW_SPINNER_CHARS=("←" "↖" "↑" "↗" "→" "↘" "↓" "↙")
+    # BOX_SPINNER_CHARS=("▖" "▘" "▝" "▗")
+    # QUARTERS_SPINNER_CHARS=("◴" "◷" "◶" "◵")
+    # CLOCK_SPINNER_CHARS=("🕛" "🕐" "🕑" "🕒" "🕓" "🕔" "🕕" "🕖" "🕗" "🕘" "🕙" "🕚")
+    # EMOJI_SPINNER_CHARS=("🌑" "🌒" "🌓" "🌔" "🌕" "🌖" "🌗" "🌘")
+    # TRAIL_SPINNER_CHARS=("⠁" "⠂" "⠄" "⠂")
+
+    while true; do
+    	ELAPSED=$(( $(date +%s) - START_TIME ))
+        for char in "${BRAILLE_STYLE_SPINNER_CHARS[@]}"; do
+            printf "${YELLOW}[${char}]${RESET} ${processing} ${CYAN}(${ELAPSED} seconds)${RESET} 🔎"
+            printf "                                    \r"
+            sleep 0.05
+        done
+    done &
+    SPINNER_PID=$!
+}
+
+STOP_SPINNER(){
+    kill "${SPINNER_PID}" 2>/dev/null
+    TIME=$(( $(date +%s) - START_TIME ))
+    return $TIME
+}
+
+echo -e "Using $CONFIG_PATH"
+
+
 # Passive Subdomain Enumeration
 MONITOR_SUBDOMAIN(){
-	if [[ ! -f "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" ]]; then
-	    curl -s "https://raw.githubusercontent.com/rix4uni/BugBountyData/refs/heads/main/data/${TARGET}.txt" | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs
+	echo -e "Saving file in ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs"
+
+	START_SPINNER "${BGREEN}MONITOR_SUBDOMAIN${RESET}"
+	if [[ ! -s "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" ]]; then
+	  curl -s "https://raw.githubusercontent.com/rix4uni/BugBountyData/refs/heads/main/data/${TARGET}.txt" | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs
 		# subfinder -duc -silent -d ${TARGET} -all -config ~/.config/subfinder/config.yaml -pc ~/.config/subfinder/provider-config.yaml -max-time ${SUBFINDER_ENUM_TIMEOUT} | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs
 		# amass enum -nocolor -nolocaldb -passive -norecursive -noalts -d ${TARGET} -config ~/.config/amass/config.ini -timeout ${AMASS_ENUM_TIMEOUT} 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs
 		# echo ${TARGET} | subdog -silent -tools all | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs
@@ -75,7 +158,7 @@ MONITOR_SUBDOMAIN(){
 		# echo ${TARGET} | haktrails subdomains | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs
 		# echo ${TARGET} | haktrailsfree -silent | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs
 	else
-	    curl -s "https://raw.githubusercontent.com/rix4uni/BugBountyData/refs/heads/main/data/${TARGET}.txt" | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
+	  curl -s "https://raw.githubusercontent.com/rix4uni/BugBountyData/refs/heads/main/data/${TARGET}.txt" | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 		# subfinder -duc -silent -d ${TARGET} -all -config ~/.config/subfinder/config.yaml -pc ~/.config/subfinder/provider-config.yaml -max-time ${SUBFINDER_ENUM_TIMEOUT} | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 		# amass enum -nocolor -nolocaldb -passive -norecursive -noalts -d ${TARGET} -config ~/.config/amass/config.ini -timeout ${AMASS_ENUM_TIMEOUT} 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 		# echo ${TARGET} | subdog -silent -tools all | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
@@ -90,48 +173,76 @@ MONITOR_SUBDOMAIN(){
 		# echo ${TARGET} | haktrails subdomains | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 		# echo ${TARGET} | haktrailsfree -silent | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | unew -el -i -t ${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 	fi
+
+	STOP_SPINNER
+	# echo -e "${BGREEN}[+] MONITOR_SUBDOMAIN${RESET}: All subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0), New subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0), Time taken: ${TIME} seconds"
+	echo -e "${BGREEN}[+] MONITOR_SUBDOMAIN${RESET}\n  ├─ All subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
 }
 
 
 # Port Scanning
 MONITOR_PORTS(){
-	if [[ ! -f "${CRONJOBS_PORTSIR}/${TARGET}.naabu" ]]; then
+	START_SPINNER "${BGREEN}MONITOR_PORTS${RESET}"
+
+	echo -e "Saving file in ${CRONJOBS_PORTSIR}/${TARGET}.naabu"
+	if [[ ! -s "${CRONJOBS_PORTSIR}/${TARGET}.naabu" ]]; then
 	    cat ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | naabu -duc -silent -c ${NAABU_THREADS} -rate ${NAABU_RATELIMIT} -timeout ${NAABU_TIMEOUT} -retries ${NAABU_RETRIES} -top-ports 1000 2>/dev/null | unew -ef -el -i -t -q ${CRONJOBS_PORTSIR}/${TARGET}.naabu
 	else
 		cat ${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs | naabu -duc -silent -c ${NAABU_THREADS} -rate ${NAABU_RATELIMIT} -timeout ${NAABU_TIMEOUT} -retries ${NAABU_RETRIES} -top-ports 1000 2>/dev/null | unew -ef -el -i -t ${CRONJOBS_PORTSIR}/${TARGET}.naabu | unew -ef -el -i -t ${CRONJOBS_PORTSIR}/${TARGET}-new.naabu | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 	fi
+
+	STOP_SPINNER
+	echo -e "${BGREEN}[+] MONITOR_PORTS${RESET}\n  ├─ All ports      : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New ports      : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
 }
 
 
 # Alive Subdomain Scanning
 MONITOR_ALIVESUBD(){
-	if [[ ! -f "${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs" ]]; then
+	START_SPINNER "${BGREEN}MONITOR_ALIVESUBD${RESET}"
+
+	echo -e "Saving file in ${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs"
+	if [[ ! -s "${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs" ]]; then
 	    cat ${CRONJOBS_PORTSIR}/${TARGET}.naabu | httpx -duc -silent -nc -sc -title -td -cl -t ${HTTPX_THREADS} | unew -ef -el -i -t -q ${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs
 	else
 		cat ${CRONJOBS_PORTSIR}/${TARGET}.naabu | httpx -duc -silent -nc -sc -title -td -cl -t ${HTTPX_THREADS} | unew -ef -el -i -t ${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs | unew -ef -el -i -t ${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}-new.alivesubs | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 	fi
+
+	STOP_SPINNER
+	echo -e "${BGREEN}[+] MONITOR_ALIVESUBD${RESET}\n  ├─ All alive subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New alive subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken           : ${TIME} seconds"
 }
 
 
 # Javascript Scanning
 MONITOR_JS(){
-	if [[ ! -f "${CRONJOBS_JSDIR}/${TARGET}.js" ]]; then
+	START_SPINNER "${BGREEN}MONITOR_JS${RESET}"
+
+	echo -e "Saving file in ${CRONJOBS_JSDIR}/${TARGET}.js"
+	if [[ ! -s "${CRONJOBS_JSDIR}/${TARGET}.js" ]]; then
 	    cat ${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs | awk '{print $1}' | subjs | grep -aE "(https?://$TARGET(:[0-9]+)?(/)|\.$TARGET[:/])" | unew -ef -el -i -t -q ${CRONJOBS_JSDIR}/${TARGET}.js
 	else
 		cat ${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs | awk '{print $1}' | subjs | grep -aE "(https?://$TARGET(:[0-9]+)?(/)|\.$TARGET[:/])" | unew -ef -el -i -t ${CRONJOBS_JSDIR}/${TARGET}.js | unew -ef -el -i -t ${CRONJOBS_JSDIR}/${TARGET}-new.js | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 	fi
+
+	STOP_SPINNER
+	echo -e "${BGREEN}[+] MONITOR_JS${RESET}\n  ├─ All js         : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New js         : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
 }
 
 
 # Javascript Leaks Scanning
 MONITOR_JSLEAKS(){
-	if [[ ! -f "${CRONJOBS_JSDIR}/${TARGET}.jsleaks" ]]; then
+	START_SPINNER "${BGREEN}MONITOR_JSLEAKS${RESET}"
+
+	echo -e "Saving file in ${CRONJOBS_JSDIR}/${TARGET}.jsleaks"
+	if [[ ! -s "${CRONJOBS_JSDIR}/${TARGET}.jsleaks" ]]; then
 	    cat ${CRONJOBS_JSDIR}/${TARGET}.js | egrep -av "\.json" | grep -a "\.js" | linkinspector -silent -nc -mt "application/javascript" | awk '{print $1}' | unew -ef -el -i -t -q ${CRONJOBS_JSLEAKSDIR}/${TARGET}.jsleaks
 	    cat ${CRONJOBS_JSDIR}/${TARGET}.js | nuclei -duc -silent -nc -t ~/nuclei-templates/exposures/ | unew -ef -el -i -t -q ${CRONJOBS_JSLEAKSDIR}/${TARGET}.jsleaks
 	else
 		cat ${CRONJOBS_JSDIR}/${TARGET}.js | egrep -av "\.json" | grep -a "\.js" | linkinspector -silent -nc -mt "application/javascript" | awk '{print $1}' | unew -ef -el -i -t ${CRONJOBS_JSLEAKSDIR}/${TARGET}.jsleaks | unew -ef -el -i -t ${CRONJOBS_JSLEAKSDIR}/${TARGET}-new.jsleaks | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 		cat ${CRONJOBS_JSDIR}/${TARGET}.js | nuclei -duc -silent -nc -t ~/nuclei-templates/exposures/ | unew -ef -el -i -t ${CRONJOBS_JSLEAKSDIR}/${TARGET}.jsleaks | unew -ef -el -i -t ${CRONJOBS_JSLEAKSDIR}/${TARGET}-new.jsleaks | notify -silent -duc -bulk -id subdomain-moniter &>/dev/null
 	fi
+
+	STOP_SPINNER
+	echo -e "${BGREEN}[+] MONITOR_JSLEAKS${RESET}\n  ├─ All jsleaks    : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New jsleaks    : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
 }
 
 

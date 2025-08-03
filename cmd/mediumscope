@@ -1,11 +1,187 @@
 #!/bin/bash
 
-# Define configuration file path
-source "configuration/garudrecon.cfg"
+# Default config file path
+CONFIG_PATH="configuration/garudrecon.cfg"
+
+TARGET=""
+
+EXCLUDE_FUNCS=()
+RECON_XSS=false
+RECON_SQLI=false
+RECON_LFI=false
+RECON_SUBTAKEOVER=false
+RECON_RCE=false
+RECON_IIS=false
+
+# Help function
+function show_help() {
+  cat <<EOF
+This command utilizes a web scraping approach to collect subdomains of the specified domain.
+
+Usage:
+  garudrecon mediumscope [flags]
+
+Flags:
+  -rx, --recon-xss			Run full recon with XSS checks"
+  -rs, --recon-sqli			Run full recon with SQLi checks"
+  -rl, --recon-lfi			Run full recon with LFI checks"
+  -rst, --recon-subtakeover		Run full recon with Subdomain Takeover checks"
+  -rr, --recon-rce 	   		Run full recon with RCE checks"
+  -ri, --recon-iis 	   		Run full recon with IIS checks"
+  -h, --help				help for mediumscope
+
+Example:
+# Full recon
+  garudrecon mediumscope -d dell.com
+
+# Recon with XSS only
+  garudrecon mediumscope -d dell.com -rx
+
+# Recon with SQLi only
+  garudrecon mediumscope -d dell.com -rs
+
+# Exclude functions manually
+  garudrecon mediumscope -d dell.com -ef "SUBFINDER,AMASS"
+
+# Combined
+  garudrecon mediumscope -d dell.com -rx -ef "AMASS"
+EOF
+}
+
+# Check if no args
+if [[ $# -eq 0 ]]; then
+  show_help
+  exit 0
+fi
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -d|--domain)
+            TARGET="$2"
+            shift 2
+            ;;
+        -ef|--exclude-functions)
+            IFS=',' read -ra raw_funcs <<< "$2"
+            EXCLUDE_FUNCS=()
+            for func in "${raw_funcs[@]}"; do
+                trimmed_func=$(echo "$func" | xargs)
+                EXCLUDE_FUNCS+=("$trimmed_func")
+            done
+            shift 2
+            ;;
+	    -rx|--recon-xss)
+	        RECON_XSS=true
+	        shift
+	        ;;
+	    -rs|--recon-sqli)
+	        RECON_SQLI=true
+	        shift
+	        ;;
+	    -rl|--recon-lfi)
+	        RECON_LFI=true
+	        shift
+	        ;;
+	    -rst|--recon-subtakeover)
+	        RECON_SUBTAKEOVER=true
+	        shift
+	        ;;
+	    -rr|--recon-rce)
+	        RECON_RCE=true
+	        shift
+	        ;;
+	    -ri|--recon-iis)
+	        RECON_IIS=true
+	        shift
+	        ;;
+        -config|--config)
+            CONFIG_PATH="$2"
+            shift 2
+            ;;
+        -h|--help)
+	        show_help
+	        exit 0
+	        ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# Escape dots in domain for regex
+ESCAPED_TARGET=$(echo "$TARGET" | sed 's/\./\\./g')
+
+if [[ -z "$TARGET" ]]; then
+    echo "Error: Target domain is required. Use -d <domain>"
+    exit 1
+fi
+
+# Load configuration
+if [[ -f "$CONFIG_PATH" ]]; then
+    source "$CONFIG_PATH"
+else
+    echo "Error: Configuration file '$CONFIG_PATH' not found."
+    exit 1
+fi
+
 PRINTBANNER
 
 # Check root user
 AREUROOTUSER
+
+# Base directory
+BASEDIR="scans"
+
+# Function to generate a unique directory name
+generate_unique_dir(){
+    local dir_path="$BASEDIR/$TARGET"
+    local counter=1
+    
+    while [ -d "$dir_path" ]; do
+        dir_path="$BASEDIR/${TARGET}_$counter"
+        ((counter++))
+    done
+
+    echo "$dir_path"
+}
+
+# Generate unique domain directory
+UNIQUEDOMAINDIR=$(generate_unique_dir)
+TMPDIR="$UNIQUEDOMAINDIR/.tmp"
+
+# Subdirectories within .tmp
+SUBDOMAINDIR="$TMPDIR/subdomain"
+FFUFBRUTE="$TMPDIR/ffufbrute"
+FAVICON_HASH="$TMPDIR/favicon_hash"
+SCREENSHOTS="$TMPDIR/screenshots"
+URLSDIR="$TMPDIR/urls"
+VULNDIR="$TMPDIR/vuln"
+GITHUB_ENDPOINTSDIR="$URLSDIR/github_endpoints"
+CRAWLEYDIR="$URLSDIR/crawley"
+CARIDDIDIR="$URLSDIR/cariddi"
+XCRAWL3RDIR="$URLSDIR/xcrawl3r"
+GOLINKFINDERDIR="$URLSDIR/GoLinkFinder"
+AUTOMATED_GOOGLE_DORKINGDIR="$URLSDIR/dorks_hunter"
+SOURCEMAPPERDIR="$URLSDIR/sourcemapper"
+FTPDIR="$VULNDIR/ftp"
+IISIDR="$VULNDIR/iis"
+DOTGITDIR="$VULNDIR/dotgit"
+PDFTOTEXTDIR="$VULNDIR/pdftotext"
+
+# Root-level directories in UNIQUEDOMAINDIR
+ROOT_SUBDOMAINDIR="$UNIQUEDOMAINDIR/subdomain"
+ROOT_URLSDIR="$UNIQUEDOMAINDIR/urls"
+ROOT_EMAILSDIR="$UNIQUEDOMAINDIR/emails"
+ROOT_VULNDIR="$UNIQUEDOMAINDIR/vuln"
+ROOT_LOGS="$UNIQUEDOMAINDIR/logs"
+ROOT_RESUME="$UNIQUEDOMAINDIR/resume"
+ROOT_INPUTFILES="$UNIQUEDOMAINDIR/inputfiles"
+ROOT_WORDLISTDIR="$UNIQUEDOMAINDIR/wordlist"
+
+ERRORLOGFILE="$ROOT_LOGS/error.log"
+SUMMARYLOGFILE="$ROOT_LOGS/summary.logs"
+
 
 # Creating directories
 # Subdirectories within .tmp
@@ -45,6 +221,26 @@ touch "$ROOT_INPUTFILES/inscope.txt"
 touch "$ROOT_INPUTFILES/outofscope.txt"
 touch "$ROOT_INPUTFILES/crunchbase.txt"
 touch "$ROOT_INPUTFILES/manual_google_dorking.txt"
+
+# Utility function to check if a function is excluded
+is_excluded() {
+    local func="$1"
+    for excluded in "${EXCLUDE_FUNCS[@]}"; do
+        if [[ "$excluded" == "$func" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+run() {
+    local func="$1"
+    if is_excluded "$func"; then
+        echo -e "${YELLOW}[~] $func${RESET}: 0, ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+    else
+        $func
+    fi
+}
 
 # Function to handle CLEANUP on Ctrl+C
 CLEANUP(){
@@ -89,6 +285,7 @@ STOP_SPINNER(){
 STARTED_AT=$(date +"%d-%m-%Y_%H:%M:%S")
 START_EPOCH=$(date +%s)
 
+echo -e "Using $CONFIG_PATH"
 echo -e "Saving all files in $UNIQUEDOMAINDIR"
 
 
@@ -2397,203 +2594,373 @@ DELETE_TMPDIR(){
 }
 
 
-# Subdomain Enumeration
-BUGBOUNTYDATA
-SUBFINDER
-AMASS
-SUBDOG
-FINDOMAIN
-CHAOS
-GITHUB_SUBDOMAINS
-# BBOT # Temporary
-ONEFORALL
-SHOSUBGO
-ASSETFINDER
-HAKTRAILS
-# HAKTRAILSFREE
+RECON(){
+	# Subdomain Enumeration
+	run "BUGBOUNTYDATA"
+	run "SUBFINDER"
+	run "AMASS"
+	run "SUBDOG"
+	run "FINDOMAIN"
+	run "CHAOS"
+	run "GITHUB_SUBDOMAINS"
+	# run "BBOT"
+	run "ONEFORALL"
+	run "SHOSUBGO"
+	run "ASSETFINDER"
+	run "HAKTRAILS"
+	# run "HAKTRAILSFREE"
 
 
-# Certificate Transperency
-CERO
-CERTINFO
-CSPRECON
-CSPFINDER
-ALLSUBDOMAIN
-# RECURSIVESUBENUM
+	# Certificate Transperency
+	run "CERO"
+	run "CERTINFO"
+	run "CSPRECON"
+	run "CSPFINDER"
+	run "ALLSUBDOMAIN"
+	# run "RECURSIVESUBENUM"
 
 
-# Subdomain Permutations
-# ALTDNS
-# PUREDNS
-# ALTERX
-# GOTATOR
-# DNSGEN
-# GOALTDNS
-# RIPGEN
-# DNSCEWL
-# ALLSUBDOMAINPERMUTATIONS
+	# Subdomain Permutations
+	# run "ALTDNS"
+	# run "PUREDNS"
+	# run "ALTERX"
+	# run "GOTATOR"
+	# run "DNSGEN"
+	# run "GOALTDNS"
+	# run "RIPGEN"
+	# run "DNSCEWL"
+	# run "ALLSUBDOMAINPERMUTATIONS"
 
 
-# Subdomain Resolving
-# PUREDNS
-# SHUFFLEDNS
-# MASSDNS
+	# Subdomain Resolving
+	# run "PUREDNS"
+	# run "SHUFFLEDNS"
+	# run "MASSDNS"
 
 
-# Subdomain DNS Enumeration
-# DNSX
+	# Subdomain DNS Enumeration
+	# run "DNSX"
 
 
-# Cloud Recon
-KAEFERJAEGER
+	# Cloud Recon
+	run "KAEFERJAEGER"
 
 
-# Port Scanning
-NAABU
-# MASSCAN
-# RUSTSCAN
-# NMAP
+	# Port Scanning
+	run "NAABU"
+	# run "MASSCAN"
+	# run "RUSTSCAN"
+	# run "NMAP"
 
 
-# Subdomain Probing
-HTTPX
+	# Subdomain Probing
+	run "HTTPX"
 
 
-# Subdomain Bruteforcing
-# FFUFBRUTE # Temporary
+	# Subdomain Bruteforcing
+	# run "FFUFBRUTE"
 
 
-# VHOST Dicovery
-# FFUFVHOST
+	# VHOST Dicovery
+	# run "FFUFVHOST"
 
 
-# Favicon Lookup
-FAVINFO
-FAVIRECON
+	# Favicon Lookup
+	run "FAVINFO"
+	run "FAVIRECON"
 
 
-# Screenshotting
-# GOWITNESS
-# AQUATONE
-# EYEWITNESS
-# HTTPX_SS
+	# Screenshotting
+	# run "GOWITNESS"
+	# run "AQUATONE"
+	# run "EYEWITNESS"
+	# run "HTTPX_SS"
 
 
-# Directory Enumeration
-# FFUFDIRENUM
-# DIRSEARCH
-# FEROXBUSTER
-# WFUZZ
+	# Directory Enumeration
+	# run "FFUFDIRENUM"
+	# run "DIRSEARCH"
+	# run "FEROXBUSTER"
+	# run "WFUZZ"
 
 
-# Email Enumeration
-# EMAILFINDER
+	# Email Enumeration
+	# run "EMAILFINDER"
 
 
-# Url Crawling
-WAYMORE
-HAKRAWLER
-WAYBACKURLS
-KATANA
-GAU
-# GOSPIDER
-UFORALL
-URLFINDER
-GITHUB_ENDPOINTS
-XURLFIND3R
-XCRAWL3R
-CRAWLEY
-GOLINKFINDER
-# GALER # Taking too much ram need to be fixed
-# PATHFINDER
-PATHCRAWLER
-ROBOXTRACTOR
-ROBOTXT
+	# Url Crawling
+	run "WAYMORE"
+	run "HAKRAWLER"
+	run "WAYBACKURLS"
+	run "KATANA"
+	run "GAU"
+	# run "GOSPIDER"
+	run "UFORALL"
+	run "URLFINDER"
+	run "GITHUB_ENDPOINTS"
+	run "XURLFIND3R"
+	run "XCRAWL3R"
+	run "CRAWLEY"
+	run "GOLINKFINDER"
+	# run "GALER # Taking too much ram need to be fixed"
+	# run "PATHFINDER"
+	run "PATHCRAWLER"
+	run "ROBOXTRACTOR"
+	run "ROBOTXT"
 
 
-# Google Dorking
-# AUTOMATED_GOOGLE_DORKING
-# MANUAL_GOOGLE_DORKING # Temporary
+	# Google Dorking
+	# run "AUTOMATED_GOOGLE_DORKING"
+	# run "MANUAL_GOOGLE_DORKING"
 
 
-# JS Crawling
-SUBJS
-GETJS
-JSCRAWLER
-JSFINDER
-# JAVASCRIPT_DEOBFUSCATOR
-# LINKFINDER
-XNLINKFINDER
-# GETJSWORDS
-SOURCEMAPPER
-# LINX
-# JSLUICE
+	# JS Crawling
+	run "SUBJS"
+	run "GETJS"
+	run "JSCRAWLER"
+	run "JSFINDER"
+	# run "JAVASCRIPT_DEOBFUSCATOR"
+	# run "LINKFINDER"
+	run "XNLINKFINDER"
+	# run "GETJSWORDS"
+	run "SOURCEMAPPER"
+	# run "LINX"
+	# run "JSLUICE"
 
 
-# Hidden Parameter
-PARAMFINDER
-# MSARJUN # Temporary
-# X8 # Temporary
-ALLURLS
-MANUAL_ALLURLS_FILTER
+	# Hidden Parameter
+	run "PARAMFINDER"
+	# run "MSARJUN"
+	# run "X8"
+	run "ALLURLS"
+	run "MANUAL_ALLURLS_FILTER"
 
 
-# Program Based Wordlist Generator
-# CEWL
-# UNFURL
-# CUSTOM_PARAM
-# COOK
-# PYDICTOR
+	# Delete TMPDIR files
+	run "DELETE_TMPDIR"
+}
+
+# Run functions based on selected recon mode
+if [[ "$RECON_XSS" == true ]]; then
+    RECON
+    run "XSS"
+    run "SWAGGERUI"
+elif [[ "$RECON_SQLI" == true ]]; then
+    RECON
+    run "ERRORBASEDSQLI"
+	# run "TIMEBASEDSQLI"
+elif [[ "$RECON_LFI" == true ]]; then
+    RECON
+    run "LFI"
+elif [[ "$RECON_SUBTAKEOVER" == true ]]; then
+    RECON
+    run "SUBZY"
+	run "NUCLEI"
+elif [[ "$RECON_RCE" == true ]]; then
+    RECON
+    run "RCE"
+elif [[ "$RECON_IIS" == true ]]; then
+    RECON
+    run "IIS"
+else
+    # Default behavior: run all
+    # Subdomain Enumeration
+	run "BUGBOUNTYDATA"
+	run "SUBFINDER"
+	run "AMASS"
+	run "SUBDOG"
+	run "FINDOMAIN"
+	run "CHAOS"
+	run "GITHUB_SUBDOMAINS"
+	# run "BBOT"
+	run "ONEFORALL"
+	run "SHOSUBGO"
+	run "ASSETFINDER"
+	run "HAKTRAILS"
+	# run "HAKTRAILSFREE"
 
 
-# FFUF_CUSTOM_PARAM
+	# Certificate Transperency
+	run "CERO"
+	run "CERTINFO"
+	run "CSPRECON"
+	run "CSPFINDER"
+	run "ALLSUBDOMAIN"
+	# run "RECURSIVESUBENUM"
 
 
-# Subdomain Takeover
-SUBZY
-NUCLEI
+	# Subdomain Permutations
+	# run "ALTDNS"
+	# run "PUREDNS"
+	# run "ALTERX"
+	# run "GOTATOR"
+	# run "DNSGEN"
+	# run "GOALTDNS"
+	# run "RIPGEN"
+	# run "DNSCEWL"
+	# run "ALLSUBDOMAINPERMUTATIONS"
 
 
-# MX Takeover
-MXTAKEOVER
-
-# DNS takeover
-DNSTAKE
-
-# Zone Transfer
-# DIG
+	# Subdomain Resolving
+	# run "PUREDNS"
+	# run "SHUFFLEDNS"
+	# run "MASSDNS"
 
 
-# Vulnerability Scanning
-FTP
-# SSH
-VULNTECHX
-# XSS # Temporary
-ERRORBASEDSQLI
-# TIMEBASEDSQLI
-# LFI # Temporary
-RCE
-DOTGIT
-PDFTOTEXT
-# JSLEAKS
-# JSONLEAKS
-# GITHUBLEAKS
-IIS
-SWAGGERUI
-# 403_401_BYPASS
+	# Subdomain DNS Enumeration
+	# run "DNSX"
 
 
-# URLs Secrets
-# LINKINSPECTOR
+	# Cloud Recon
+	run "KAEFERJAEGER"
 
 
-# Password spraying
-# BRUTESPRAY
+	# Port Scanning
+	run "NAABU"
+	# run "MASSCAN"
+	# run "RUSTSCAN"
+	# run "NMAP"
 
 
-# Delete TMPDIR files
-DELETE_TMPDIR
+	# Subdomain Probing
+	run "HTTPX"
 
+
+	# Subdomain Bruteforcing
+	# run "FFUFBRUTE"
+
+
+	# VHOST Dicovery
+	# run "FFUFVHOST"
+
+
+	# Favicon Lookup
+	run "FAVINFO"
+	run "FAVIRECON"
+
+
+	# Screenshotting
+	# run "GOWITNESS"
+	# run "AQUATONE"
+	# run "EYEWITNESS"
+	# run "HTTPX_SS"
+
+
+	# Directory Enumeration
+	# run "FFUFDIRENUM"
+	# run "DIRSEARCH"
+	# run "FEROXBUSTER"
+	# run "WFUZZ"
+
+
+	# Email Enumeration
+	# run "EMAILFINDER"
+
+
+	# Url Crawling
+	run "WAYMORE"
+	run "HAKRAWLER"
+	run "WAYBACKURLS"
+	run "KATANA"
+	run "GAU"
+	# run "GOSPIDER"
+	run "UFORALL"
+	run "URLFINDER"
+	run "GITHUB_ENDPOINTS"
+	run "XURLFIND3R"
+	run "XCRAWL3R"
+	run "CRAWLEY"
+	run "GOLINKFINDER"
+	# run "GALER # Taking too much ram need to be fixed"
+	# run "PATHFINDER"
+	run "PATHCRAWLER"
+	run "ROBOXTRACTOR"
+	run "ROBOTXT"
+
+
+	# Google Dorking
+	# run "AUTOMATED_GOOGLE_DORKING"
+	# run "MANUAL_GOOGLE_DORKING"
+
+
+	# JS Crawling
+	run "SUBJS"
+	run "GETJS"
+	run "JSCRAWLER"
+	run "JSFINDER"
+	# run "JAVASCRIPT_DEOBFUSCATOR"
+	# run "LINKFINDER"
+	run "XNLINKFINDER"
+	# run "GETJSWORDS"
+	run "SOURCEMAPPER"
+	# run "LINX"
+	# run "JSLUICE"
+
+
+	# Hidden Parameter
+	run "PARAMFINDER"
+	# run "MSARJUN"
+	# run "X8"
+	run "ALLURLS"
+	run "MANUAL_ALLURLS_FILTER"
+
+
+	# Program Based Wordlist Generator
+	# run "CEWL"
+	# run "UNFURL"
+	# run "CUSTOM_PARAM"
+	# run "COOK"
+	# run "PYDICTOR"
+
+
+	# run "FFUF_CUSTOM_PARAM"
+
+
+	# Subdomain Takeover
+	run "SUBZY"
+	run "NUCLEI"
+
+
+	# MX Takeover
+	run "MXTAKEOVER"
+
+	# DNS takeover
+	run "DNSTAKE"
+
+	# Zone Transfer
+	# run "DIG"
+
+
+	# Vulnerability Scanning
+	run "FTP"
+	# run "SSH"
+	run "VULNTECHX"
+	# run "XSS"
+	run "ERRORBASEDSQLI"
+	# run "TIMEBASEDSQLI"
+	# run "LFI"
+	run "RCE"
+	run "DOTGIT"
+	run "PDFTOTEXT"
+	# run "JSLEAKS"
+	# run "JSONLEAKS"
+	# run "GITHUBLEAKS"
+	run "IIS"
+	run "SWAGGERUI"
+	# run "403_401_BYPASS"
+
+
+	# URLs Secrets
+	# run "LINKINSPECTOR"
+
+
+	# Password spraying
+	# run "BRUTESPRAY"
+
+
+	# Delete TMPDIR files
+	run "DELETE_TMPDIR"
+fi
 
 
 ENDED_AT=$(date +"%d-%m-%Y_%H:%M:%S")
