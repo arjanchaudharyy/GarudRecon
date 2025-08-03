@@ -172,6 +172,9 @@ Example:
   garudrecon cronjobs -d domain.com -f MONITOR_JS
   garudrecon cronjobs -d domain.com -f MONITOR_JSLEAKS
 ```
+
+#### Output
+<img src="img/output/cronjobs.png"/>
 </details>
 
 
