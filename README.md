@@ -273,6 +273,7 @@ Example:
 
 #### Output
 <img src="img/output/cronjobs.png"/>
+<img src="img/output/cronjobs_discord.png"/>
 </details>
 
 
