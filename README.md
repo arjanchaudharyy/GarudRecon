@@ -67,7 +67,7 @@ bash <(curl -s https://raw.githubusercontent.com/rix4uni/GarudRecon/main/configu
 
 ## Usage
 
-<details open>
+<details>
   <summary><b>garudrecon -h</b></summary>
 
 ```
@@ -113,7 +113,7 @@ Use "garudrecon [command] --help" for more information about a command.
 </details>
 
 
-<details open>
+<details>
   <summary><b>garudrecon install -h</b></summary>
 
 ```
@@ -121,7 +121,7 @@ Use "garudrecon [command] --help" for more information about a command.
 </details>
 
 
-<details open>
+<details>
   <summary><b>garudrecon smallscope -h</b></summary>
 
 ```
@@ -132,7 +132,7 @@ Use "garudrecon [command] --help" for more information about a command.
 </details>
 
 
-<details open>
+<details>
   <summary><b>garudrecon mediumscope -h</b></summary>
 
 ```
@@ -176,7 +176,7 @@ Example:
 </details>
 
 
-<details open>
+<details>
   <summary><b>garudrecon largescope -h</b></summary>
 
 ```
@@ -187,7 +187,7 @@ Example:
 </details>
 
 
-<details open>
+<details>
   <summary><b>garudrecon cronjobs -h</b></summary>
 
 ```
