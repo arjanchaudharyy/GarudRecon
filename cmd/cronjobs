@@ -5,10 +5,12 @@ CONFIG_PATH="configuration/garudrecon.cfg"
 
 TARGET=""
 
+VERBOSE=false
+
 # Help function
 function show_help() {
   cat <<EOF
-This command utilizes a web scraping approach to collect subdomains of the specified domain.
+This command runs scheduled reconnaissance tasks on a specified domain, such as monitoring subdomains, ports, JavaScript files, and live hosts. It supports various monitoring functions and can be customized with configuration files and verbose output.
 
 Usage:
   garudrecon cronjobs [flags]
@@ -16,7 +18,9 @@ Usage:
 Flags:
   -d, --domain			Domain to monitor
   -f, --function		Function to run (e.g. MONITOR_SUBDOMAIN)
-  -h, --help			help for cronjobs
+  -c, --config   		Custom configuration file path
+  -v, --verbose 		enable verbose mode
+  -h, --help   			help for cronjobs
 
 Example:
   garudrecon cronjobs -d domain.com -f MONITOR_SUBDOMAIN
@@ -44,9 +48,13 @@ while [[ "$#" -gt 0 ]]; do
       FUNC="$2"
       shift 2
       ;;
-    -config|--config)
+    -c|--config)
       CONFIG_PATH="$2"
       shift 2
+      ;;
+    -verbose|--verbose)
+      VERBOSE=true
+      shift
       ;;
     -h|--help)
       show_help
@@ -175,8 +183,11 @@ MONITOR_SUBDOMAIN(){
 	fi
 
 	STOP_SPINNER
-	# echo -e "${BGREEN}[+] MONITOR_SUBDOMAIN${RESET}: All subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0), New subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0), Time taken: ${TIME} seconds"
-	echo -e "${BGREEN}[+] MONITOR_SUBDOMAIN${RESET}\n  ├─ All subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	if [[ "$VERBOSE" == true ]]; then
+	  echo -e "${BGREEN}[+] MONITOR_SUBDOMAIN${RESET}\n  ├─ All subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	else
+	  echo -e "${BGREEN}[+] MONITOR_SUBDOMAIN${RESET}: All subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0), New subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0), Time taken: ${TIME} seconds"
+	fi
 }
 
 
@@ -192,7 +203,11 @@ MONITOR_PORTS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MONITOR_PORTS${RESET}\n  ├─ All ports      : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New ports      : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	if [[ "$VERBOSE" == true ]]; then
+	  echo -e "${BGREEN}[+] MONITOR_PORTS${RESET}\n  ├─ All ports      : $(wc -l 2>/dev/null < "${CRONJOBS_PORTSIR}/${TARGET}.naabu" || echo 0)\n  ├─ New ports      : $(wc -l 2>/dev/null < "${CRONJOBS_PORTSIR}/${TARGET}-new.naabu" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	else
+	  echo -e "${BGREEN}[+] MONITOR_PORTS${RESET}: All ports: $(wc -l 2>/dev/null < "${CRONJOBS_PORTSIR}/${TARGET}.naabu" || echo 0), New ports: $(wc -l 2>/dev/null < "${CRONJOBS_PORTSIR}/${TARGET}-new.naabu" || echo 0), Time taken: ${TIME} seconds"
+	fi
 }
 
 
@@ -208,7 +223,11 @@ MONITOR_ALIVESUBD(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MONITOR_ALIVESUBD${RESET}\n  ├─ All alive subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New alive subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken           : ${TIME} seconds"
+	if [[ "$VERBOSE" == true ]]; then
+	  echo -e "${BGREEN}[+] MONITOR_ALIVESUBD${RESET}\n  ├─ All alive subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs" || echo 0)\n  ├─ New alive subdomains : $(wc -l 2>/dev/null < "${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}-new.alivesubs" || echo 0)\n  └─ Time taken           : ${TIME} seconds"
+	else
+	  echo -e "${BGREEN}[+] MONITOR_ALIVESUBD${RESET}: All alive subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}.alivesubs" || echo 0), New alive subdomains: $(wc -l 2>/dev/null < "${CRONJOBS_ALIVE_SUBDOMAINDIR}/${TARGET}-new.alivesubs" || echo 0), Time taken: ${TIME} seconds"
+	fi
 }
 
 
@@ -224,7 +243,11 @@ MONITOR_JS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MONITOR_JS${RESET}\n  ├─ All js         : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New js         : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	if [[ "$VERBOSE" == true ]]; then
+	  echo -e "${BGREEN}[+] MONITOR_JS${RESET}\n  ├─ All js         : $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}.js" || echo 0)\n  ├─ New js         : $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}-new.js" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	else
+	  echo -e "${BGREEN}[+] MONITOR_JS${RESET}: All js: $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}.js" || echo 0), New js: $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}-new.js" || echo 0), Time taken: ${TIME} seconds"
+	fi
 }
 
 
@@ -242,7 +265,11 @@ MONITOR_JSLEAKS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MONITOR_JSLEAKS${RESET}\n  ├─ All jsleaks    : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}.subs" || echo 0)\n  ├─ New jsleaks    : $(wc -l 2>/dev/null < "${CRONJOBS_SUBDOMAINDIR}/${TARGET}-new.subs" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	if [[ "$VERBOSE" == true ]]; then
+	  echo -e "${BGREEN}[+] MONITOR_JSLEAKS${RESET}\n  ├─ All jsleaks    : $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}.jsleaks" || echo 0)\n  ├─ New jsleaks    : $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}-new.jsleaks" || echo 0)\n  └─ Time taken     : ${TIME} seconds"
+	else
+	  echo -e "${BGREEN}[+] MONITOR_JSLEAKS${RESET}: All jsleaks: $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}.jsleaks" || echo 0), New jsleaks: $(wc -l 2>/dev/null < "${CRONJOBS_JSDIR}/${TARGET}-new.jsleaks" || echo 0), Time taken: ${TIME} seconds"
+	fi
 }
 
 

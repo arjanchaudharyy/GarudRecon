@@ -72,26 +72,41 @@ bash <(curl -s https://raw.githubusercontent.com/rix4uni/GarudRecon/main/configu
 
 ```
 GarudRecon - Recon Automation Framework
-A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.
+GarudRecon is an automated reconnaissance framework designed for asset discovery,
+vulnerability detection, and continuous monitoring. It leverages a wide range of
+open-source tools to scan domains, collect subdomains, and check for various
+vulnerabilities such as:
+
+  • XSS (Cross-Site Scripting)
+  • SQLi (SQL Injection)
+  • LFI (Local File Inclusion)
+  • RCE (Remote Code Execution)
+  • IIS misconfigurations
+  • Subdomain Takeover
+  • Open Redirects
+  • Swagger UI exposures
+  • .git directory leaks
+  • JavaScript secrets and more.
+
+The tool supports scoped recon with flexible modes like smallscope, mediumscope,
+and largescope, depending on your coverage needs. You can customize scans,
+exclude specific functions, provide configuration files, and automate cron jobs
+for continuous monitoring.
 
 Usage:
   garudrecon [command]
 
 Available Commands:
-  install                 A brief description of your command
-  smallscope              A brief description of your command
-  mediumscope             A brief description of your command
-  largescope              A brief description of your command
-  cronjobs                A brief description of your command
+  install                 Set up the tool and dependencies
+  smallscope              Run minimal recon for subdomain (e.g. support.domain.com)
+  mediumscope             Perform moderate recon with optional vulnerability checks for wildcard domain (e.g. *.domain.com)
+  largescope              Full-scale recon for deep visibility for organisation
+  cronjobs                Automate recurring recon tasks
 
 Flags:
   -h, --help     help for garudrecon
-  -v, --version  Show version
+  -v, --version  Display the current version
 
 Use "garudrecon [command] --help" for more information about a command.
 ```
@@ -121,7 +136,7 @@ Use "garudrecon [command] --help" for more information about a command.
   <summary><b>garudrecon mediumscope -h</b></summary>
 
 ```
-Usually the scope is wildcard scope where all the subdomains are part of scope. like: Scope: *.domain.com
+Performs a medium-level reconnaissance on the target domain, typically scoped as *.domain.com. This includes subdomain enumeration, vulnerability checks (like XSS, SQLi, LFI, etc.), and optional filtering of out-of-scope subdomains.
 
 Usage:
   garudrecon mediumscope [flags]
@@ -136,7 +151,7 @@ Flags:
   -rr, --recon-rce                      Run full recon with RCE checks
   -ri, --recon-iis                      Run full recon with IIS checks
   -oos, --outofscope                    Exclude outofscope subdomains from a list (e.g. domain.com.oos)
-  -config, --config                     Custom configuration file path
+  -c, --config                          Custom configuration file path
   -h, --help                            help for mediumscope
 
 Example:
@@ -176,7 +191,7 @@ Example:
   <summary><b>garudrecon cronjobs -h</b></summary>
 
 ```
-This command utilizes a web scraping approach to collect subdomains of the specified domain.
+This command runs scheduled reconnaissance tasks on a specified domain, such as monitoring subdomains, ports, JavaScript files, and live hosts. It supports various monitoring functions and can be customized with configuration files and verbose output.
 
 Usage:
   garudrecon cronjobs [flags]
@@ -184,6 +199,8 @@ Usage:
 Flags:
   -d, --domain                  Domain to monitor
   -f, --function                Function to run (e.g. MONITOR_SUBDOMAIN)
+  -c, --config                  Custom configuration file path
+  -v, --verbose                 enable verbose mode
   -h, --help                    help for cronjobs
 
 Example:

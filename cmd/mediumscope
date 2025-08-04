@@ -16,7 +16,7 @@ RECON_IIS=false
 # Help function
 function show_help() {
   cat <<EOF
-Usually the scope is wildcard scope where all the subdomains are part of scope. like: Scope: *.domain.com
+Performs a medium-level reconnaissance on the target domain, typically scoped as *.domain.com. This includes subdomain enumeration, vulnerability checks (like XSS, SQLi, LFI, etc.), and optional filtering of out-of-scope subdomains.
 
 Usage:
   garudrecon mediumscope [flags]
@@ -31,7 +31,7 @@ Flags:
   -rr, --recon-rce 	   		Run full recon with RCE checks
   -ri, --recon-iis 	   		Run full recon with IIS checks
   -oos, --outofscope			Exclude outofscope subdomains from a list (e.g. domain.com.oos)
-  -config, --config			Custom configuration file path
+  -c, --config				Custom configuration file path
   -h, --help				help for mediumscope
 
 Example:
@@ -112,7 +112,7 @@ while [[ "$#" -gt 0 ]]; do
 		    OOS_FILE="$2"
 		    shift 2
 		    ;;
-        -config|--config)
+        -c|--config)
             CONFIG_PATH="$2"
             shift 2
             ;;
@@ -196,7 +196,7 @@ ROOT_INPUTFILES="$UNIQUEDOMAINDIR/inputfiles"
 ROOT_WORDLISTDIR="$UNIQUEDOMAINDIR/wordlist"
 
 ERRORLOGFILE="$UNIQUEDOMAINDIR/error.log"
-SUMMARYLOGFILE="$UNIQUEDOMAINDIR/resume.cfg"
+RESUMELOGFILE="$UNIQUEDOMAINDIR/resume.cfg"
 
 
 # Creating directories
@@ -247,7 +247,7 @@ is_excluded() {
 run() {
     local func="$1"
     if is_excluded "$func"; then
-        echo -e "${YELLOW}[~] $func${RESET}: 0, ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+        echo -e "${YELLOW}[~] $func${RESET}: 0, ${TIME} seconds" | unew -a $RESUMELOGFILE
     else
         $func
     fi
@@ -325,7 +325,7 @@ BUGBOUNTYDATA(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/bugbountydata.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/bugbountydata.subs
 
     STOP_SPINNER
-	echo -e "${BGREEN}[+] BUGBOUNTYDATA${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/bugbountydata.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] BUGBOUNTYDATA${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/bugbountydata.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SUBFINDER(){
@@ -337,7 +337,7 @@ SUBFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/subfinder.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/subfinder.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SUBFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subfinder.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SUBFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subfinder.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 AMASS(){
@@ -349,7 +349,7 @@ AMASS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/amass.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/amass.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] AMASS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/amass.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] AMASS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/amass.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SUBDOG(){
@@ -361,7 +361,7 @@ SUBDOG(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/subdog.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/subdog.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SUBDOG${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subdog.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SUBDOG${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subdog.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 XSUBFIND3R(){
@@ -373,7 +373,7 @@ XSUBFIND3R(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/xsubfind3r.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/xsubfind3r.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] XSUBFIND3R${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/xsubfind3r.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] XSUBFIND3R${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/xsubfind3r.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 FINDOMAIN(){
@@ -385,7 +385,7 @@ FINDOMAIN(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/findomain.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/findomain.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FINDOMAIN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/findomain.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FINDOMAIN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/findomain.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 CHAOS(){
@@ -397,7 +397,7 @@ CHAOS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/chaos.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/chaos.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CHAOS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/chaos.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CHAOS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/chaos.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GITHUB_SUBDOMAINS(){
@@ -410,7 +410,7 @@ GITHUB_SUBDOMAINS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/github-subdomains.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/github-subdomains.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GITHUB_SUBDOMAINS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/github-subdomains.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GITHUB_SUBDOMAINS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/github-subdomains.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 BBOT(){
@@ -423,7 +423,7 @@ BBOT(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/bbot.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/bbot.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] BBOT${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/bbot.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] BBOT${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/bbot.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ONEFORALL(){
@@ -436,7 +436,7 @@ ONEFORALL(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/oneforall.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/oneforall.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ONEFORALL${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/oneforall.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ONEFORALL${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/oneforall.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SHOSUBGO(){
@@ -448,7 +448,7 @@ SHOSUBGO(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/shosubgo.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/shosubgo.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SHOSUBGO${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/shosubgo.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SHOSUBGO${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/shosubgo.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ASSETFINDER(){
@@ -460,7 +460,7 @@ ASSETFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/assetfinder.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/assetfinder.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ASSETFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/assetfinder.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ASSETFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/assetfinder.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 HAKTRAILS(){
@@ -479,7 +479,7 @@ HAKTRAILS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/haktrails.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/haktrails.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] HAKTRAILS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/haktrails.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] HAKTRAILS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/haktrails.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 HAKTRAILSFREE(){
@@ -538,7 +538,7 @@ HAKTRAILSFREE(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/haktrailsfree.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/haktrailsfree.subs
 
     # Display the count of lines in manual_google_dorking.urls
-    echo -e "${BGREEN}[+] HAKTRAILSFREE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/securitytrails.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+    echo -e "${BGREEN}[+] HAKTRAILSFREE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/securitytrails.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 OCCRP(){
@@ -547,7 +547,7 @@ OCCRP(){
 	# do this manually
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ORG2ASN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/occrp-orgs.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ORG2ASN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/occrp-orgs.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ORG2ASN(){
@@ -580,7 +580,7 @@ ORG2ASN(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/cero.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/cero.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ORG2ASN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/cero.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ORG2ASN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/cero.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 IPFINDER(){
@@ -615,7 +615,7 @@ IPFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/certinfo.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/certinfo.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] IPFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] IPFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 IPRANGES(){
@@ -641,7 +641,7 @@ IPRANGES(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/certinfo.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/certinfo.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] IPRANGES${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] IPRANGES${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ARINRANGE(){
@@ -653,7 +653,7 @@ ARINRANGE(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/certinfo.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/certinfo.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ARINRANGE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ips.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ARINRANGE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ips.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SPK(){
@@ -671,7 +671,7 @@ SPK(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/certinfo.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/certinfo.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SPK${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ips.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SPK${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ips.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ASNMAP(){
@@ -689,7 +689,7 @@ ASNMAP(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/certinfo.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/certinfo.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ASNMAP${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ASNMAP${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ANALYTICSRELATIONSHIPS(){
@@ -707,7 +707,7 @@ ANALYTICSRELATIONSHIPS(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/builtwith.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/builtwith.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ANALYTICSRELATIONSHIPS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ANALYTICSRELATIONSHIPS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 UDON(){
@@ -719,7 +719,7 @@ UDON(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/udon.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/builtwith.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] UDON${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] UDON${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 BUILTWITH(){
@@ -731,7 +731,7 @@ BUILTWITH(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/builtwith.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/builtwith.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] BUILTWITH${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] BUILTWITH${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 WHOXYSUBS(){
@@ -746,7 +746,7 @@ WHOXYSUBS(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/builtwith.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/builtwith.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] WHOXYSUBS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] WHOXYSUBS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/builtwith.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -761,7 +761,7 @@ KAEFERJAEGER(){
 	curl -s "https://kaeferjaeger.gay/sni-ip-ranges/oracle/ipv4_merged_sni.txt" | awk -F'-- ' '{print $2}' |  tr ' ' '\n' | tr '[' ' ' | sed 's/\]//' | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/kaeferjaeger.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] KAEFERJAEGER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/kaeferjaeger.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] KAEFERJAEGER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/kaeferjaeger.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 TRICKESTCLOUD(){
@@ -770,7 +770,7 @@ TRICKESTCLOUD(){
 	cat wordlists/trickestcloud_ssl.txt | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/trickestcloud_ssl.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] TRICKESTCLOUD${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/trickestcloud_ssl.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] TRICKESTCLOUD${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/trickestcloud_ssl.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -783,7 +783,7 @@ CERO(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/cero.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/cero.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CERO${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/cero.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CERO${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/cero.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 CERTINFO(){
@@ -801,7 +801,7 @@ CERTINFO(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/certinfo.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/certinfo.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CERTINFO${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CERTINFO${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/certinfo.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -816,7 +816,7 @@ CSPRECON(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/csprecon.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/csprecon.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CSPRECON${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/csprecon.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CSPRECON${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/csprecon.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 CSPFINDER(){
@@ -828,7 +828,7 @@ CSPFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/cspfinder.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/cspfinder.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CSPFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/cspfinder.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CSPFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/cspfinder.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JSUBFINDER(){
@@ -846,7 +846,7 @@ JSUBFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/jsubfinder.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/jsubfinder.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] JSUBFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/jsubfinder.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] JSUBFINDER${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/jsubfinder.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ALLSUBDOMAIN(){
@@ -865,7 +865,7 @@ ALLSUBDOMAIN(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ALLSUBDOMAIN${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/allsubs.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ALLSUBDOMAIN${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/allsubs.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 DNSXBRUTE(){
@@ -888,7 +888,7 @@ DNSXBRUTE(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/dnsxbrute.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/dnsxbrute.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DNSXBRUTE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnsxbrute.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DNSXBRUTE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnsxbrute.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SUBWIZ(){
@@ -901,7 +901,7 @@ SUBWIZ(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/subdomain/subwiz.subs 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/subwiz.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SUBWIZ${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subwiz.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SUBWIZ${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subwiz.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 RECURSIVESUBENUM(){
@@ -913,7 +913,7 @@ RECURSIVESUBENUM(){
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | haktrails subdomains
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] RECURSIVESUBENUM${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/recursivesubenum.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] RECURSIVESUBENUM${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/recursivesubenum.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 # Subdomain Permutations
@@ -923,7 +923,7 @@ ALTDNS(){
 	altdns -i ${ROOT_SUBDOMAINDIR}/allsubs.txt -o ${SUBDOMAINDIR}/altdns.subs -w ${ROOT_WORDLISTDIR}/perms.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ALTDNS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/altdns.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ALTDNS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/altdns.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 PUREDNS(){
@@ -933,7 +933,7 @@ PUREDNS(){
 	puredns bruteforce wordlists/2m-subdomains.txt -d wildcards.txt -r $RESOLVERS_WORDLIST --skip-sanitize --skip-validation --skip-wildcard-filter --wildcard-tests ${PUREDNS_WILDCARD_TESTS} -w puredns_output.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] PUREDNS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/puredns.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] PUREDNS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/puredns.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ALTERX(){
@@ -942,7 +942,7 @@ ALTERX(){
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | alterx -silent -o ${SUBDOMAINDIR}/alterx.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ALTERX${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/alterx.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ALTERX${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/alterx.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GOTATOR(){
@@ -951,7 +951,7 @@ GOTATOR(){
 	gotator -silent -sub ${ROOT_SUBDOMAINDIR}/allsubs.txt -perm ${ROOT_WORDLISTDIR}/perms.txt -depth ${GOTATOR_DEPTH} -numbers ${GOTATOR_NUMBERS} -mindup -adv -md | head -c ${GOTATOR_MAX_SIZE} >> ${SUBDOMAINDIR}/gotator.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GOTATOR${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/gotator.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GOTATOR${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/gotator.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 DNSGEN(){
@@ -960,7 +960,7 @@ DNSGEN(){
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | dnsgen -w ${ROOT_WORDLISTDIR}/perms.txt - >> ${SUBDOMAINDIR}/dnsgen.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DNSGEN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnsgen.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DNSGEN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnsgen.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GOALTDNS(){
@@ -969,7 +969,7 @@ GOALTDNS(){
 	goaltdns -l ${ROOT_SUBDOMAINDIR}/allsubs.txt -w ${ROOT_WORDLISTDIR}/perms.txt -o ${SUBDOMAINDIR}/goaltdns.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GOALTDNS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/goaltdns.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GOALTDNS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/goaltdns.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 RIPGEN(){
@@ -978,7 +978,7 @@ RIPGEN(){
 	ripgen -d ${ROOT_SUBDOMAINDIR}/allsubs.txt -w ${ROOT_WORDLISTDIR}/perms.txt > ${SUBDOMAINDIR}/ripgen.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] RIPGEN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ripgen.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] RIPGEN${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ripgen.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 DMUT(){
@@ -987,14 +987,14 @@ DMUT(){
 	cat subdomainList.txt | dmut -d mutations.txt -w 100 --dns-timeout 300 --dns-retries 5 --dns-errorLimit 25 --show-stats -o results.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DMUT${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnscewl.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DMUT${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnscewl.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 DNSCEWL(){
 	START_SPINNER "${BGREEN}DNSCEWL${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DNSCEWL${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnscewl.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DNSCEWL${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnscewl.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1004,7 +1004,7 @@ ALLSUBDOMAINPERMUTATIONS(){
 	cat ${SUBDOMAINDIR}/*.subs | unew -el -i -t -q ${SUBDOMAINDIR}/allpermutationssubs.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ALLSUBDOMAINPERMUTATIONS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/allpermutationssubs.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ALLSUBDOMAINPERMUTATIONS${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/allpermutationssubs.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1060,7 +1060,7 @@ MANUAL_SUBDOMAIN_RESOLVING(){
 
     # Display the count of lines in allpermutationssubs.txt
 	STOP_SPINNER
-    echo -e "${BGREEN}[+] MANUAL_SUBDOMAIN_RESOLVING${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/allpermutationssubs.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+    echo -e "${BGREEN}[+] MANUAL_SUBDOMAIN_RESOLVING${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/allpermutationssubs.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 # Subdomain Resolving
@@ -1076,7 +1076,7 @@ PUREDNS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] PUREDNS${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/puredns_resolve.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] PUREDNS${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/puredns_resolve.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SHUFFLEDNS(){
@@ -1091,7 +1091,7 @@ SHUFFLEDNS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SHUFFLEDNS${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/shuffledns_resolve.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SHUFFLEDNS${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/shuffledns_resolve.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 MASSDNS(){
@@ -1107,7 +1107,7 @@ MASSDNS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MASSDNS${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/massdns_resolve.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] MASSDNS${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/massdns_resolve.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1118,7 +1118,7 @@ DNSX(){
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | dnsx -duc -silent -nc -a -aaaa -cname -ns -txt -srv -ptr -mx -soa -axfr -caa -retry 3 -t 100 -json -r $RESOLVERS_WORDLIST -o ${SUBDOMAINDIR}/dnsx.json
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DNSX${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnsx.json || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DNSX${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/dnsx.json || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1132,7 +1132,7 @@ NAABU(){
 	cat ${BASEDIR}/${TARGET}*/subdomain/naabu.txt 2>/dev/null | unew -el -i -t -q ${ROOT_SUBDOMAINDIR}/naabu.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] NAABU${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] NAABU${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 MASSCAN(){
@@ -1142,7 +1142,7 @@ MASSCAN(){
 	masscan -p1-65535 -iL final-ips.txt --max-rate 10000 -oG $TARGET_OUTPUT
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MASSCAN${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] MASSCAN${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 RUSTSCAN(){
@@ -1151,7 +1151,7 @@ RUSTSCAN(){
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | naabu -duc -silent -c ${NAABU_THREADS} -rate ${NAABU_RATELIMIT} -timeout ${NAABU_TIMEOUT} -retries ${NAABU_RETRIES} -top-ports 1000 | unew -el -i -t -q ${ROOT_SUBDOMAINDIR}/naabu.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] RUSTSCAN${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] RUSTSCAN${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 NMAP(){
@@ -1160,7 +1160,7 @@ NMAP(){
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | naabu -duc -silent -c ${NAABU_THREADS} -rate ${NAABU_RATELIMIT} -timeout ${NAABU_TIMEOUT} -retries ${NAABU_RETRIES} -top-ports 1000 | unew -el -i -t -q ${ROOT_SUBDOMAINDIR}/naabu.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] NMAP${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] NMAP${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1174,7 +1174,7 @@ HTTPX(){
 	cat ${ROOT_SUBDOMAINDIR}/httpx.txt | awk '{print $1}' | sed -e 's/https\?:\/\/\(www\.\)\?//' -e 's/:.*$//' | dlevel --silent --max-level | unew -el -i -t -q ${SUBDOMAINDIR}/withoutprotocolsubs.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] HTTPX${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/httpx.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] HTTPX${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/httpx.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1231,7 +1231,7 @@ FFUFBRUTE(){
 	cat ${FFUFBRUTE}/httpx.txt | awk '{print $1}' | sed -e 's/https\?:\/\/\(www\.\)\?//' -e 's/:.*$//' | dlevel --silent --max-level | unew -el -i -t ${SUBDOMAINDIR}/withoutprotocolsubs.txt | unew -el -i -t -q ${FFUFBRUTE}/withoutprotocolsubs.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FFUFBRUTE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ffuf.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FFUFBRUTE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ffuf.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1267,7 +1267,7 @@ FFUFVHOST(){
 	ffuf -c -w ips.txt:IP -w vhost_wordlist.txt:FUZZ -w subs.txt:DOMAIN -u IP -H "Host: FUZZ.DOMAIN" -mc 200,301,302
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FFUFBRUTE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ffuf.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FFUFBRUTE${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/ffuf.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1278,7 +1278,7 @@ FAVINFO(){
 	timelimitx -t ${FAVINFO_TIMELIMITX} "cat ${SUBDOMAINDIR}/alivesubs.txt | favinfo -silent -timeout $FAVINFO_TIMEOUT | unew -el -t -q ${FAVICON_HASH}/favinfo.txt"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FAVINFO${RESET}: $(wc -l 2>/dev/null < ${FAVICON_HASH}/favinfo.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FAVINFO${RESET}: $(wc -l 2>/dev/null < ${FAVICON_HASH}/favinfo.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 FAVIRECON(){
@@ -1287,7 +1287,7 @@ FAVIRECON(){
 	timelimitx -t ${FAVIRECON_TIMELIMITX} "cat ${SUBDOMAINDIR}/alivesubs.txt | favirecon -silent -concurrency $FAVIRECON_CONCURRENCY -timeout $FAVIRECON_TIMEOUT | unew -el -t -q ${FAVICON_HASH}/favirecon.txt"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FAVIRECON${RESET}: $(wc -l 2>/dev/null < ${FAVICON_HASH}/favirecon.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FAVIRECON${RESET}: $(wc -l 2>/dev/null < ${FAVICON_HASH}/favirecon.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1307,7 +1307,7 @@ GOWITNESS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GOWITNESS${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GOWITNESS${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 AQUATONE(){
@@ -1315,7 +1315,7 @@ AQUATONE(){
 
 	${SUBDOMAINDIR}/alivesubs.txt
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] AQUATONE${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] AQUATONE${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 EYEWITNESS(){
@@ -1324,7 +1324,7 @@ EYEWITNESS(){
 	cat ${SUBDOMAINDIR}/alivesubs.txt | eyewitness
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] EYEWITNESS${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] EYEWITNESS${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 HTTPX_SS(){
@@ -1333,7 +1333,7 @@ HTTPX_SS(){
 	cat ${SUBDOMAINDIR}/alivesubs.txt | httpx -duc -silent -nc -ss -screenshot-timeout 60s
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] HTTPX_SS${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] HTTPX_SS${RESET}: $(wc -l 2>/dev/null < ${SCREENSHOTS}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1345,7 +1345,7 @@ FFUFDIRENUM(){
 	cat notaccessible_subs.txt | interlace --silent -threads ${INTERLACE_THREADS} -c "ffuf -s -u _target_/FUZZ -w wordlists/onelistforallshort.txt -mc ${FFUFDIRENUM_STATUS_MATCH} -o _output_/_cleantarget_.json" -o ${SUBDOMAINDIR}/ffufdirenum
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FFUFDIRENUM${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FFUFDIRENUM${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 DIRSEARCH(){
@@ -1353,7 +1353,7 @@ DIRSEARCH(){
 
 	${SUBDOMAINDIR}/alivesubs.txt
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DIRSEARCH${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DIRSEARCH${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 FEROXBUSTER(){
@@ -1361,7 +1361,7 @@ FEROXBUSTER(){
 
 	${SUBDOMAINDIR}/alivesubs.txt
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FEROXBUSTER${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FEROXBUSTER${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 WFUZZ(){
@@ -1369,7 +1369,7 @@ WFUZZ(){
 
 	${SUBDOMAINDIR}/alivesubs.txt
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] WFUZZ${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] WFUZZ${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1386,7 +1386,7 @@ EMAILFINDER(){
 	cat ${SUBDOMAINDIR}/withoutprotocolsubs.txt | emailfinder yandex -e | unew -el -i -t -q ${ROOT_EMAILSDIR}/emailfinder.emails
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] EMAILFINDER${RESET}: $(wc -l 2>/dev/null < ${ROOT_EMAILSDIR}/emailfinder.emails || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] EMAILFINDER${RESET}: $(wc -l 2>/dev/null < ${ROOT_EMAILSDIR}/emailfinder.emails || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1400,7 +1400,7 @@ WAYMORE(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/waymore.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/waymore.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] WAYMORE${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/waymore.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] WAYMORE${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/waymore.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 HAKRAWLER(){
@@ -1412,7 +1412,7 @@ HAKRAWLER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/hakrawler.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/hakrawler.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] HAKRAWLER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/hakrawler.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] HAKRAWLER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/hakrawler.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 WAYBACKURLS(){
@@ -1424,7 +1424,7 @@ WAYBACKURLS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/waybackurls.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/waybackurls.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] WAYBACKURLS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/waybackurls.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] WAYBACKURLS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/waybackurls.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 KATANA(){
@@ -1436,7 +1436,7 @@ KATANA(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/katana.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/katana.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] KATANA${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/katana.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] KATANA${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/katana.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GAU(){
@@ -1448,7 +1448,7 @@ GAU(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/gau.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/gau.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GAU${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/gau.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GAU${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/gau.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GOSPIDER(){
@@ -1460,7 +1460,7 @@ GOSPIDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/gospider.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/gospider.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GOSPIDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/gospider.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GOSPIDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/gospider.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 UFORALL(){
@@ -1472,7 +1472,7 @@ UFORALL(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/uforall.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/uforall.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] UFORALL${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/uforall.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] UFORALL${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/uforall.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 CARIDDI(){
@@ -1492,7 +1492,7 @@ CARIDDI(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/cariddi.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/cariddi.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CARIDDI${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/cariddi.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CARIDDI${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/cariddi.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 URLFINDER(){
@@ -1504,7 +1504,7 @@ URLFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/urlfinder.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/urlfinder.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] URLFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/urlfinder.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] URLFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/urlfinder.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GITHUB_ENDPOINTS(){
@@ -1525,7 +1525,7 @@ GITHUB_ENDPOINTS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/github-endpoints.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/github-endpoints.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GITHUB_ENDPOINTS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/github-endpoints.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GITHUB_ENDPOINTS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/github-endpoints.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 XURLFIND3R(){
@@ -1537,7 +1537,7 @@ XURLFIND3R(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/xurlfind3r.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/xurlfind3r.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] XURLFIND3R${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/xurlfind3r.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] XURLFIND3R${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/xurlfind3r.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 XCRAWL3R(){
@@ -1557,7 +1557,7 @@ XCRAWL3R(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/xcrawl3r.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/xcrawl3r.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] XCRAWL3R${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/xcrawl3r.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] XCRAWL3R${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/xcrawl3r.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 CRAWLEY(){
@@ -1577,7 +1577,7 @@ CRAWLEY(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/crawley.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/crawley.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CRAWLEY${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/crawley.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CRAWLEY${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/crawley.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GOLINKFINDER(){
@@ -1598,7 +1598,7 @@ GOLINKFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/GoLinkFinder.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/GoLinkFinder.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GOLINKFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/GoLinkFinder.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GOLINKFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/GoLinkFinder.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GALER(){
@@ -1610,7 +1610,7 @@ GALER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/galer.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/galer.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GALER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/galer.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GALER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/galer.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GOURLEX(){
@@ -1623,7 +1623,7 @@ GOURLEX(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/urls/galer.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/galer.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GOURLEX${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/gourlex.urls|| echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GOURLEX${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/gourlex.urls|| echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 PATHFINDER(){
@@ -1643,7 +1643,7 @@ PATHFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/pathfinder.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/pathfinder.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] PATHFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/pathfinder.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] PATHFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/pathfinder.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 PATHCRAWLER(){
@@ -1655,7 +1655,7 @@ PATHCRAWLER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/pathcrawler.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/pathcrawler.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] PATHCRAWLER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/pathcrawler.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] PATHCRAWLER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/pathcrawler.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ROBOXTRACTOR(){
@@ -1667,7 +1667,7 @@ ROBOXTRACTOR(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/roboxtractor.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/roboxtractor.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ROBOXTRACTOR${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/roboxtractor.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ROBOXTRACTOR${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/roboxtractor.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ROBOTXT(){
@@ -1679,7 +1679,7 @@ ROBOTXT(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/robotxt.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/robotxt.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ROBOTXT${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/robotxt.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ROBOTXT${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/robotxt.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 # Google Dorking
@@ -1697,7 +1697,7 @@ AUTOMATED_GOOGLE_DORKING(){
 	cat ${URLSDIR}/automated_google_dorking.urls | unew -el -t -q ${URLSDIR}/automated_google_dorking.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] AUTOMATED_GOOGLE_DORKING${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/automated_google_dorking.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] AUTOMATED_GOOGLE_DORKING${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/automated_google_dorking.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 MANUAL_GOOGLE_DORKING(){
@@ -1754,7 +1754,7 @@ MANUAL_GOOGLE_DORKING(){
     fi
 
     # Display the count of lines in manual_google_dorking.urls
-    echo -e "${BGREEN}[+] MANUAL_GOOGLE_DORKING${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/manual_google_dorking.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+    echo -e "${BGREEN}[+] MANUAL_GOOGLE_DORKING${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/manual_google_dorking.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 # JS Crawling
@@ -1767,7 +1767,7 @@ SUBJS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/subjs.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/subjs.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SUBJS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/subjs.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SUBJS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/subjs.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GETJS(){
@@ -1779,7 +1779,7 @@ GETJS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/getJS.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/getJS.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GETJS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/getJS.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GETJS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/getJS.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JSCRAWLER(){
@@ -1791,7 +1791,7 @@ JSCRAWLER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/${URLSDIR}/jscrawler.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/jscrawler.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] JSCRAWLER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/jscrawler.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] JSCRAWLER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/jscrawler.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JSFINDER(){
@@ -1803,7 +1803,7 @@ JSFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/jsfinder.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/jsfinder.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] JSFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/jsfinder.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] JSFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/jsfinder.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JAVASCRIPT_DEOBFUSCATOR(){
@@ -1812,14 +1812,14 @@ JAVASCRIPT_DEOBFUSCATOR(){
 	# https://github.com/ben-sb/javascript-deobfuscator
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] JAVASCRIPT_DEOBFUSCATOR${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/javascript_deobfuscator.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] JAVASCRIPT_DEOBFUSCATOR${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/javascript_deobfuscator.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 LINKFINDER(){
 	START_SPINNER "${BGREEN}LINKFINDER${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] LINKFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/linkfinder.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] LINKFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/linkfinder.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 XNLINKFINDER(){
@@ -1832,14 +1832,14 @@ XNLINKFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/xnLinkFinder.params 2>/dev/null | unew -el -t -q ${URLSDIR}/xnLinkFinder.params
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] XNLINKFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/xnLinkFinder.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] XNLINKFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/xnLinkFinder.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GETJSWORDS(){
 	START_SPINNER "${BGREEN}GETJSWORDS${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GETJSWORDS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/getjswords.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GETJSWORDS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/getjswords.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SOURCEMAPPER(){
@@ -1863,7 +1863,7 @@ SOURCEMAPPER(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/urls/sourcemapper.urls 2>/dev/null | unew -el -t -q ${URLSDIR}/sourcemapper.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SOURCEMAPPER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/sourcemapper.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SOURCEMAPPER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/sourcemapper.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 LINX(){
@@ -1880,7 +1880,7 @@ LINX(){
 	# cat ${BASEDIR}/${TARGET}*/.tmp/urls/naabu.txt 2>/dev/null | eval ${SUBDOMAIN_FILTER} | grep -aE "^(.*\.)?$ESCAPED_TARGET$" | unew -el -i -t -q ${SUBDOMAINDIR}/bugbountydata.subs
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] LINX${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/linx.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] LINX${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/linx.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JSLUICE(){
@@ -1895,7 +1895,7 @@ JSLUICE(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/jsluice.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/jsluice.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] LINX${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/jsluice.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] LINX${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/jsluice.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -1922,7 +1922,7 @@ PARAMFINDER(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/paramfinder.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/paramfinder.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] PARAMFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/paramfinder.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] PARAMFINDER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/paramfinder.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 MSARJUN(){
@@ -1936,7 +1936,7 @@ MSARJUN(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/msarjun.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/msarjun.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MSARJUN${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/msarjun.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] MSARJUN${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/msarjun.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 X8(){
@@ -1959,7 +1959,7 @@ X8(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/x8.urls 2>/dev/null | unew -el -i -t -q ${URLSDIR}/x8.urls
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] X8${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/x8.urls || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] X8${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/x8.urls || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ALLURLS(){
@@ -1974,8 +1974,8 @@ ALLURLS(){
 	cat ${BASEDIR}/${TARGET}*/.tmp/urls/filteredurls.txt 2>/dev/null | eval ${URLS_FILTER} | grep -aE "(https?://$TARGET(:[0-9]+)?(/)|\.$TARGET[:/])" | unew -el -i -t -q ${URLSDIR}/filteredurls.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ALLURLS${RESET}: $(wc -l 2>/dev/null < ${ROOT_URLSDIR}/allurls.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
-	echo -e "${BGREEN}[+] FILTEREDALLURLS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/filteredurls.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ALLURLS${RESET}: $(wc -l 2>/dev/null < ${ROOT_URLSDIR}/allurls.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
+	echo -e "${BGREEN}[+] FILTEREDALLURLS${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/filteredurls.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SUBDOMAIN_SCRAPING(){
@@ -1987,7 +1987,7 @@ SUBDOMAIN_SCRAPING(){
 	# cat ${BASEDIR}/${TARGET}*/urls/allurls.txt 2>/dev/null | eval ${URLS_FILTER} | grep -aE "(https?://$TARGET(:[0-9]+)?(/)|\.$TARGET[:/])" | unew -el -i -t -q ${ROOT_URLSDIR}/allurls.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SUBDOMAIN_SCRAPING${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subdomain_scraping.subs || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SUBDOMAIN_SCRAPING${RESET}: $(wc -l 2>/dev/null < ${SUBDOMAINDIR}/subdomain_scraping.subs || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JS_SUBDOMAINS(){
@@ -2006,7 +2006,7 @@ JS_SUBDOMAINS(){
 	# cat ${BASEDIR}/${TARGET}*/urls/js_subdomains.txt 2>/dev/null | eval ${URLS_FILTER} | grep -aE "(https?://$TARGET(:[0-9]+)?(/)|\.$TARGET[:/])" | unew -el -i -t -q ${ROOT_URLSDIR}/js_subdomains.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] JS_SUBDOMAINS${RESET}: $(wc -l 2>/dev/null < ${ROOT_URLSDIR}/js_subdomains.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] JS_SUBDOMAINS${RESET}: $(wc -l 2>/dev/null < ${ROOT_URLSDIR}/js_subdomains.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 MANUAL_ALLURLS_FILTER(){
@@ -2060,7 +2060,7 @@ MANUAL_ALLURLS_FILTER(){
     esac
 
     # Display the count of lines in filteredurls.txt
-    echo -e "${BGREEN}[+] MANUAL_ALLURLS_FILTER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/filteredurls.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+    echo -e "${BGREEN}[+] MANUAL_ALLURLS_FILTER${RESET}: $(wc -l 2>/dev/null < ${URLSDIR}/filteredurls.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2072,14 +2072,14 @@ CEWL(){
 	cat ${CEWL}/*.txt | unew -el -t -q ${ROOT_WORDLISTDIR}/cewl.params
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CEWL${RESET}: $(wc -l 2>/dev/null < ${ROOT_WORDLISTDIR}/cewl.params || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CEWL${RESET}: $(wc -l 2>/dev/null < ${ROOT_WORDLISTDIR}/cewl.params || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 UNFURL(){
 	START_SPINNER "${BGREEN}UNFURL${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] UNFURL${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/unfurl.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] UNFURL${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/unfurl.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 CUSTOM_PARAM(){
@@ -2089,14 +2089,14 @@ CUSTOM_PARAM(){
 	cat ${ROOT_URLSDIR}/allurls.txt | grep -aE '\.(php|jsp|jspa|asp|aspx)' | sed 's/\(\.\(php\|jsp\|jspa\|asp\|aspx\)\).*$/\1/' | rev | cut -d"/" -f1 | rev | cut -d"." -f1 | sed 's/[A-Z]\+/\n&/g' | unew -el -i -t -q ${ROOT_WORDLISTDIR}/custom_param.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] CUSTOM_PARAM${RESET}: $(wc -l 2>/dev/null < ${ROOT_WORDLISTDIR}/custom_param.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] CUSTOM_PARAM${RESET}: $(wc -l 2>/dev/null < ${ROOT_WORDLISTDIR}/custom_param.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 COOK(){
 	START_SPINNER "${BGREEN}COOK${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] COOK${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/cook.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] COOK${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/cook.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2105,7 +2105,7 @@ PYDICTOR(){
 	START_SPINNER "${BGREEN}PYDICTOR${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] PYDICTOR${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/pydictor.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] PYDICTOR${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/pydictor.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2116,7 +2116,7 @@ FFUF_CUSTOM_PARAM(){
 	ffuf -w ${ROOT_WORDLISTDIR}/custom_param.txt -X POST -d "FUZZ=rix4uni" -u "https://redacted.org/searchProgressCommitment.php"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FFUF_CUSTOM_PARAM${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ffuf_custom_param.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FFUF_CUSTOM_PARAM${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ffuf_custom_param.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2127,7 +2127,7 @@ SUBZY(){
 	subzy run --timeout $SUBZY_TIMEOUT --concurrency $SUBZY_CONCURRENCY --hide_fails --targets ${SUBDOMAINDIR}/alivesubs.txt 2>> >(sed "s/^/${FUNCNAME[0]}: /" >> "$ERRORLOGFILE") >/dev/null | sed -e 's/\x1b\[[0-9;]*m//g' | egrep -av "\[NOT VULNERABLE\]" | unew -el -q ${ROOT_VULNDIR}/subzy.takeover
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SUBZY${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/subzy.takeover || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SUBZY${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/subzy.takeover || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 NUCLEI(){
@@ -2136,7 +2136,7 @@ NUCLEI(){
 	cat ${SUBDOMAINDIR}/alivesubs.txt | nuclei -duc -silent -nc -nh -tags takeover -severity info,low,medium,high,critical -retries $NUCLEI_RETRIES -rl $NUCLEI_RATELIMIT -t templates/takeovers | unew -el -t -q ${ROOT_VULNDIR}/nuclei.takeover
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] NUCLEI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/nuclei.takeover || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] NUCLEI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/nuclei.takeover || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 # MX Takeover
@@ -2146,7 +2146,7 @@ MXTAKEOVER(){
 	cat ${SUBDOMAINDIR}/alivesubs.txt | mx-takeover -check-whois -w 20 -output ${ROOT_VULNDIR}/mxtakeover.json &>/dev/null
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] MXTAKEOVER${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/mxtakeover.takeover || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] MXTAKEOVER${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/mxtakeover.takeover || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 # DNS takeover
@@ -2156,7 +2156,7 @@ DNSTAKE(){
 	cat ${SUBDOMAINDIR}/withoutprotocolsubs.txt | dnstake --silent --concurrent 25 | unew -el -t -q ${ROOT_VULNDIR}/dnstake.takeover
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DNSTAKE${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/dnstake.takeover || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DNSTAKE${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/dnstake.takeover || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 # Zone Transfer
@@ -2164,7 +2164,7 @@ DIG(){
 	START_SPINNER "${BGREEN}DIG${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DIG${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/dig.takeover || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DIG${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/dig.takeover || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2190,7 +2190,7 @@ FTP(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] FTP${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ftp.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] FTP${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ftp.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SSH(){
@@ -2210,7 +2210,7 @@ SSH(){
 	# ssb -w wordlists/wordlist.txt -p 22 -t 1m -c 1000 -r 1 root@localhost
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SSH${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ssh.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SSH${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ssh.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 S3SCANNER(){
@@ -2219,7 +2219,7 @@ S3SCANNER(){
 	cat ${ROOT_SUBDOMAINDIR}/naabu.txt | s3scanner -bucket-file names.txt -enumerate | unew -el -t -q ${VULNDIR}/s3scanner.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] S3SCANNER${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ssh.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] S3SCANNER${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/ssh.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 VULNTECHX(){
@@ -2248,7 +2248,7 @@ VULNTECHX(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] VULNTECHX${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/vulntechx.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] VULNTECHX${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/vulntechx.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 XSS(){
@@ -2290,7 +2290,7 @@ XSS(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] XSS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/xss.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] XSS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/xss.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 ERRORBASEDSQLI(){
@@ -2310,7 +2310,7 @@ ERRORBASEDSQLI(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] ERRORBASEDSQLI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/errorbasedsqli.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] ERRORBASEDSQLI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/errorbasedsqli.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 TIMEBASEDSQLI(){
@@ -2337,7 +2337,7 @@ TIMEBASEDSQLI(){
 	# sqlmap
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] TIMEBASEDSQLI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/validsqli.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] TIMEBASEDSQLI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/validsqli.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 LFI(){
@@ -2364,7 +2364,7 @@ LFI(){
 	# WINDOWS LFI
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] LFI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/lfi.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] LFI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/lfi.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 RCE(){
@@ -2397,7 +2397,7 @@ RCE(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] RCE${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/rce.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] RCE${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/rce.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SSTI(){
@@ -2425,7 +2425,7 @@ OPEN_REDIRECT(){
 	cat ${VULNDIR}/open_redirect_pvreplace.txt | httpx -duc -silent -mc 301,302,303,307,308 | unew -ef -el -q ${ROOT_VULNDIR}/open_redirect.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] OPEN_REDIRECT${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/open_redirect.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] OPEN_REDIRECT${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/open_redirect.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 DOTGIT(){
@@ -2451,7 +2451,7 @@ DOTGIT(){
 	# git -C acc.net/ --no-pager log --pretty=format:%H | xargs -I{} git -C acc.net/ --no-pager show {} | tee -a git-command-logs.txt
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] DOTGIT${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/dotgit.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] DOTGIT${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/dotgit.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 PDFTOTEXT(){
@@ -2468,7 +2468,7 @@ PDFTOTEXT(){
 	find ${PDFTOTEXTDIR} -type f -print0 | xargs --null grep -a -Z -L -Eai 'internal use only|confidential' | xargs --null rm -rf
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] PDFTOTEXT${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/pdftotext.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] PDFTOTEXT${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/pdftotext.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JSLEAKS(){
@@ -2481,21 +2481,21 @@ JSLEAKS(){
 	mantra
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] JSLEAKS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/jsleaks.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] JSLEAKS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/jsleaks.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 JSONLEAKS(){
 	START_SPINNER "${BGREEN}JSONLEAKS${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] JSONLEAKS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/jsonleaks.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] JSONLEAKS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/jsonleaks.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 GITHUBLEAKS(){
 	START_SPINNER "${BGREEN}GITHUBLEAKS${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] GITHUBLEAKS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/githubleaks.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] GITHUBLEAKS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/githubleaks.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 IIS(){
@@ -2526,7 +2526,7 @@ IIS(){
 	find ${IISIDR}/*.txt -type f -print0 | xargs --null grep -a -Z -L 'Vulnerable: Yes' | xargs --null rm -rf
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] IIS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/iis.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] IIS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/iis.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 SWAGGERUI(){
@@ -2545,14 +2545,14 @@ SWAGGERUI(){
 	fi
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] SWAGGERUI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/swaggerui_xss.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] SWAGGERUI${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/swaggerui_xss.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 403_401_BYPASS(){
 	START_SPINNER "${BGREEN}403_401_BYPASS${RESET}"
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] 403_401_BYPASS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/403_401_bypass.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] 403_401_BYPASS${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/403_401_bypass.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2574,7 +2574,7 @@ LINKINSPECTOR(){
 	cat notaccessible_subs.txt | interlace --silent -threads ${INTERLACE_THREADS} -c "ffuf -s -u _target_/FUZZ -w wordlists/onelistforallshort.txt -mc ${FFUFDIRENUM_STATUS_MATCH} -o _output_/_cleantarget_.json" -o ${SUBDOMAINDIR}/ffufdirenum
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] LINKINSPECTOR${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/linkinspector.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] LINKINSPECTOR${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/linkinspector.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2586,7 +2586,7 @@ BRUTESPRAY(){
 	brutespray -f $dir/hosts/portscan_active.gnmap -T $BRUTESPRAY_CONCURRENCE -o $dir/vulns/brutespray 2>>"$ERRORLOGFILE" >/dev/null
 
 	STOP_SPINNER
-	echo -e "${BGREEN}[+] BRUTESPRAY${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/brutespray.txt || echo 0), ${TIME} seconds" | unew -a $SUMMARYLOGFILE
+	echo -e "${BGREEN}[+] BRUTESPRAY${RESET}: $(wc -l 2>/dev/null < ${ROOT_VULNDIR}/brutespray.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
 
 
@@ -2987,6 +2987,6 @@ END_EPOCH=$(date +%s)
 DURATION=$(( END_EPOCH - START_EPOCH ))
 TIMETOOK=$(printf "%02d:%02d:%02d" $((DURATION/3600)) $(( (DURATION%3600)/60 )) $((DURATION%60)) )
 
-echo -e "${BGREEN}[+] STARTED${RESET}: ${STARTED_AT}, ${BGREEN}FINISHED${RESET}: ${ENDED_AT}, ${BGREEN}TIMETOOK${RESET}: ${TIMETOOK}" | unew -a $SUMMARYLOGFILE
+echo -e "${BGREEN}[+] STARTED${RESET}: ${STARTED_AT}, ${BGREEN}FINISHED${RESET}: ${ENDED_AT}, ${BGREEN}TIMETOOK${RESET}: ${TIMETOOK}" | unew -a $RESUMELOGFILE
 
 echo -e "Scan finished: $TARGET" | notify -silent -duc -id xssnotify &>/dev/null
