@@ -138,6 +138,25 @@ Use "garudrecon [command] --help" for more information about a command.
   <summary><b>garudrecon install -h</b></summary>
 
 ```
+This command sets up GarudRecon by installing the required tools and dependencies for a specified reconnaissance function. It supports installation for various predefined scopes such as SMALLSCOPE, MEDIUMSCOPE, LARGESCOPE, and CRONJOBS, or you can install everything at once using ALL.
+
+You can also provide a custom configuration file and enable verbose output for more detailed installation logs.
+
+Usage:
+  garudrecon install [flags]
+
+Flags:
+  -f, --function        Function to run (e.g. MEDIUMSCOPE)
+  -c, --config          Custom configuration file path
+  -v, --verbose         enable verbose mode
+  -h, --help            help for install
+
+Example:
+  garudrecon install -f SMALLSCOPE
+  garudrecon install -f MEDIUMSCOPE
+  garudrecon install -f LARGESCOPE
+  garudrecon install -f CRONJOBS
+  garudrecon install -f ALL
 ```
 </details>
 

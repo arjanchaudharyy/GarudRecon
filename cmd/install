@@ -1,7 +1,79 @@
 #!/bin/bash
 
-# Define configuration file path
-source "configuration/garudrecon.cfg"
+# Default config file path
+CONFIG_PATH="configuration/garudrecon.cfg"
+
+# Help function
+function show_help() {
+  cat <<EOF
+This command sets up GarudRecon by installing the required tools and dependencies for a specified reconnaissance function. It supports installation for various predefined scopes such as SMALLSCOPE, MEDIUMSCOPE, LARGESCOPE, and CRONJOBS, or you can install everything at once using ALL.
+
+You can also provide a custom configuration file and enable verbose output for more detailed installation logs.
+
+Usage:
+  garudrecon install [flags]
+
+Flags:
+  -f, --function        Function to run (e.g. MEDIUMSCOPE)
+  -c, --config          Custom configuration file path
+  -v, --verbose         enable verbose mode
+  -h, --help            help for install
+
+Example:
+  garudrecon install -f SMALLSCOPE
+  garudrecon install -f MEDIUMSCOPE
+  garudrecon install -f LARGESCOPE
+  garudrecon install -f CRONJOBS
+  garudrecon install -f ALL
+EOF
+}
+
+# Check if no args
+if [[ $# -eq 0 ]]; then
+  show_help
+  exit 0
+fi
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    -f|--function)
+      if [[ -z "$2" || "$2" == -* ]]; then
+        echo "Error: -f requires a valid function argument"
+        exit 1
+      fi
+
+      FUNC="$2"
+      shift 2
+      ;;
+    -c|--config)
+      CONFIG_PATH="$2"
+      shift 2
+      ;;
+    -v|--verbose)
+      VERBOSE=true
+      shift
+      ;;
+    -h|--help)
+      show_help
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+done
+
+# Load configuration
+if [[ -f "$CONFIG_PATH" ]]; then
+    source "$CONFIG_PATH"
+else
+    echo "Error: Configuration file '$CONFIG_PATH' not found."
+    exit 1
+fi
+
+PRINTBANNER
 
 # Check root user
 AREUROOTUSER
@@ -40,6 +112,9 @@ STOP_SPINNER() {
     TIME=$(( $(date +%s) - START_TIME ))
     return $TIME
 }
+
+echo -e "Using $CONFIG_PATH"
+
 
 # VARIABLES
 VARIABLES() {
@@ -2808,8 +2883,33 @@ WORDLISTS() {
     echo -e "${BGREEN}[+] WORDLISTS - INSTALLED${RESET}: ${TIME} seconds"
 }
 
-# Install all tools even not releted to any scopes, means aditionals tools
-ALL_TOOLS() {
+
+# Install only those tools that used in smallscope
+SMALLSCOPE(){
+    HTTPX
+    NUCLEI
+}
+
+# Install only those tools that used in mediumscope
+MEDIUMSCOPE(){
+    HTTPX
+    NUCLEI
+}
+
+# Install only those tools that used in largescope
+LARGESCOPE(){
+    HTTPX
+    NUCLEI
+}
+
+# Install only those tools that used in cronjobs
+CRONJOBS(){
+    HTTPX
+    NUCLEI
+}
+
+# Install all tools that releted to smallscope, mediumscope, largescope, cronjobs
+ALL(){
     VARIABLES
     PACKAGES
     PYTHON3
@@ -3001,33 +3101,10 @@ ALL_TOOLS() {
     WORDLISTS
 }
 
-# Install all tools that releted to largescope, mediumscope, smallscope
-ALLSCOPES_TOOLS() {
-    HTTPX
-    NUCLEI
-}
 
-# Install only those tools that used in largescope
-LARGESCOPE_TOOLS() {
-    HTTPX
-    NUCLEI
-}
+# Dynamically call the selected function
+$FUNC
 
-# Install only those tools that used in mediumscope
-MEDIUMSCOPE_TOOLS() {
-    HTTPX
-    NUCLEI
-}
-
-# Install only those tools that used in smallscope
-SMALLSCOPE_TOOLS() {
-    HTTPX
-    NUCLEI
-}
-
-
-
-ALL_TOOLS
 # https://github.com/Screetsec/Sudomy
 
 # git clone https://github.com/GerbenJavado/LinkFinder.git --depth 1 && cd LinkFinder && pip3 install -r requirements.txt && cd .. && mv LinkFinder ~/bin && echo "alias linkfinder='python3 ~/bin/LinkFinder/linkfinder.py'" >> ~/.bashrc && source ~/.bashrc
