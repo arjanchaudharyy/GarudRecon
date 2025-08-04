@@ -158,6 +158,10 @@ Example:
   garudrecon install -f CRONJOBS
   garudrecon install -f ALL
 ```
+
+
+#### Output
+<img src="img/output/install.png"/>
 </details>
 
 
