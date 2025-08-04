@@ -184,6 +184,38 @@ Example:
   <summary><b>garudrecon smallscope -h</b></summary>
 
 ```
+Performs a minimal reconnaissance on the target domain, typically scoped as support.domain.com. This includes port scanning, url crawling, vulnerability checks (like XSS, SQLi, LFI, etc.).
+
+Usage:
+  garudrecon smallscope [flags]
+
+Flags:
+  -d, --domain                          Scan a domain (e.g. support.domain.com)
+  -ef, --exclude-functions              Exclude a function from running (e.g. WAYMORE)
+  -rx, --recon-xss                      Run full recon with XSS checks
+  -rs, --recon-sqli                     Run full recon with SQLi checks
+  -rl, --recon-lfi                      Run full recon with LFI checks
+  -rst, --recon-subtakeover             Run full recon with Subdomain Takeover checks
+  -rr, --recon-rce                      Run full recon with RCE checks
+  -ri, --recon-iis                      Run full recon with IIS checks
+  -c, --config                          Custom configuration file path
+  -h, --help                            help for smallscope
+
+Example:
+# Full recon
+  garudrecon smallscope -d support.domain.com
+
+# Recon with XSS only
+  garudrecon smallscope -d support.domain.com -rx
+
+# Recon with SQLi only
+  garudrecon smallscope -d support.domain.com -rs
+
+# Exclude functions manually
+  garudrecon smallscope -d support.domain.com -ef "GOSPIDER,WAYMORE"
+
+# Combined
+  garudrecon smallscope -d support.domain.com -rx -ef "WAYMORE"
 ```
 
 #### Output

@@ -1011,6 +1011,26 @@ NAABU() {
     echo -e "${BGREEN}[+] NAABU - INSTALLED${RESET}: ${TIME} seconds"
 }
 
+NMAP() {
+    START_SPINNER "${BGREEN}NMAP${RESET}"
+    git clone https://github.com/nmap/nmap.git --depth 1 &>/dev/null
+    cd nmap
+    ./configure &>/dev/null
+    make &>/dev/null
+    make install &>/dev/null
+    cd ..
+    rm -rf nmap
+
+    if ! command -v naabu &>/dev/null; then
+        echo -e "${BRED}[x] NMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        STOP_SPINNER
+        return
+    fi
+
+    STOP_SPINNER
+    echo -e "${BGREEN}[+] NMAP - INSTALLED${RESET}: ${TIME} seconds"
+}
+
 MAPCIDR() {
     START_SPINNER "${BGREEN}MAPCIDR${RESET}"
     gocl -i github.com/projectdiscovery/mapcidr &>/dev/null
@@ -2970,6 +2990,7 @@ ALL(){
     CVEMAP
     KATANA
     NAABU
+    NMAP
     MAPCIDR
     SHUFFLEDNS
     UNCOVER

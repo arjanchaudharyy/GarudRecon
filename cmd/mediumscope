@@ -1150,6 +1150,8 @@ RUSTSCAN(){
 
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | naabu -duc -silent -c ${NAABU_THREADS} -rate ${NAABU_RATELIMIT} -timeout ${NAABU_TIMEOUT} -retries ${NAABU_RETRIES} -top-ports 1000 | unew -el -i -t -q ${ROOT_SUBDOMAINDIR}/naabu.txt
 
+	rustscan -a ${ROOT_SUBDOMAINDIR}/allsubs.txt
+
 	STOP_SPINNER
 	echo -e "${BGREEN}[+] RUSTSCAN${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
 }
@@ -1158,6 +1160,8 @@ NMAP(){
 	START_SPINNER "${BGREEN}NMAP${RESET}"
 
 	cat ${ROOT_SUBDOMAINDIR}/allsubs.txt | naabu -duc -silent -c ${NAABU_THREADS} -rate ${NAABU_RATELIMIT} -timeout ${NAABU_TIMEOUT} -retries ${NAABU_RETRIES} -top-ports 1000 | unew -el -i -t -q ${ROOT_SUBDOMAINDIR}/naabu.txt
+
+	nmap -iL ${ROOT_SUBDOMAINDIR}/allsubs.txt -sS -T4 -Pn -p 1-1000 --open 2>/dev/null
 
 	STOP_SPINNER
 	echo -e "${BGREEN}[+] NMAP${RESET}: $(wc -l 2>/dev/null < ${ROOT_SUBDOMAINDIR}/naabu.txt || echo 0), ${TIME} seconds" | unew -a $RESUMELOGFILE
