@@ -2844,7 +2844,7 @@ CONFIGS() {
 TRICKESTCLOUD() {
     START_SPINNER "${BGREEN}TRICKESTCLOUD${RESET}"
     wget -q -O $WORDLIST_BASEDIR/trickestcloud.zip https://github.com/trickest/cloud/archive/refs/heads/main.zip
-    unzip -q $WORDLIST_BASEDIR/trickestcloud.zip -d wordlists
+    unzip -q $WORDLIST_BASEDIR/trickestcloud.zip -d $WORDLIST_BASEDIR
     mv $WORDLIST_BASEDIR/cloud-main $WORDLIST_BASEDIR/trickestcloud
     cat $WORDLIST_BASEDIR/trickestcloud/ssl/ssl*.csv | cut -d"," -f2,7 | tr "|" "\n" | tr "," "\n" | sed 's/"//g' | unew -el -i -t -q $WORDLIST_BASEDIR/trickestcloud_ssl.txt
 
