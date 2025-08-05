@@ -123,20 +123,24 @@ echo -e "Using $CONFIG_PATH"
 # VARIABLES
 VARIABLES() {
     START_SPINNER "${BGREEN}VARIABLES${RESET}"
-    echo -e "\n# xsel Variable" >> ~/.bashrc
-    echo -e "alias xc='xsel -i -b'" >> ~/.bashrc
-    echo -e "alias xp='xsel -o -b'" >> ~/.bashrc
-    echo -e "alias cfile='explorer.exe .'" >> ~/.bashrc
 
-    export PATH=$PATH:/usr/local/go/bin
-    export PATH=$PATH:~/go/bin
-    export PATH=$PATH:~/.local/bin
-    export PATH=$PATH:~/.cargo/bin
+    if ! grep -q "alias xc='xsel -i -b'" ~/.bashrc; then
+        echo -e "\n# xsel Variable" >> ~/.bashrc
+        echo -e "alias xc='xsel -i -b'" >> ~/.bashrc
+        echo -e "alias xp='xsel -o -b'" >> ~/.bashrc
+        echo -e "alias cfile='explorer.exe .'" >> ~/.bashrc
 
-    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
-    echo 'export PATH=$PATH:~/go/bin' >> ~/.bashrc
-    echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
-    echo 'export PATH=$PATH:~/.cargo/bin' >> ~/.bashrc
+        export PATH=$PATH:/usr/local/go/bin
+        export PATH=$PATH:~/go/bin
+        export PATH=$PATH:~/.local/bin
+        export PATH=$PATH:~/.cargo/bin
+
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:~/go/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:~/.cargo/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:/usr/bin/google-chrome' >> ~/.bashrc
+    fi
     source ~/.bashrc
 
     STOP_SPINNER
@@ -449,7 +453,6 @@ CHROME() {
     dpkg -i google-chrome-stable_current_amd64.deb &>/dev/null
     rm -rf google-chrome-stable_current_amd64.deb
     apt -f install -y &>/dev/null
-    echo 'export PATH=$PATH:/usr/bin/google-chrome' >> ~/.bashrc
     source ~/.bashrc
 
     if ! command -v google-chrome &>/dev/null; then
