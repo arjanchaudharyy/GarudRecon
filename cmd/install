@@ -81,6 +81,7 @@ AREUROOTUSER
 # Creating directories
 mkdir -p wordlists
 mkdir -p takeovers
+mkdir -p templates
 
 # Function to handle CLEANUP on Ctrl+C
 CLEANUP() {
@@ -97,7 +98,7 @@ START_SPINNER() {
     BRAILLE_STYLE_SPINNER_CHARS=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
 
     while true; do
-    	ELAPSED=$(( $(date +%s) - START_TIME ))
+        ELAPSED=$(( $(date +%s) - START_TIME ))
         for char in "${BRAILLE_STYLE_SPINNER_CHARS[@]}"; do
             printf "${YELLOW}[${char}]${RESET} ${processing} ${CYAN}(${ELAPSED} seconds)${RESET} 🔎"
             printf "                                    \r"
@@ -947,7 +948,6 @@ NUCLEI_TEMPLATE() {
     nuclei -silent -update-templates &>/dev/null
     git clone https://github.com/rix4uni/nucleihub-templates.git --depth 1 ~/nucleihub-templates &>/dev/null
 
-    mkdir -p templates
     cp -r ~/nuclei-templates/http/takeovers templates/takeovers
     sed -i '/- type: dsl/{N;N;/Host != ip/{N;/^$/d;d;}}' templates/takeovers/*.yaml &>/dev/null
 
@@ -2843,12 +2843,12 @@ CONFIGS() {
 # SOME DATA
 TRICKESTCLOUD() {
     START_SPINNER "${BGREEN}TRICKESTCLOUD${RESET}"
-    wget -q -O wordlists/trickestcloud.zip https://github.com/trickest/cloud/archive/refs/heads/main.zip
-    unzip -q wordlists/trickestcloud.zip -d wordlists
-    mv wordlists/cloud-main wordlists/trickestcloud
-    cat wordlists/trickestcloud/ssl/ssl*.csv | cut -d"," -f2,7 | tr "|" "\n" | tr "," "\n" | sed 's/"//g' | unew -el -i -t -q wordlists/trickestcloud_ssl.txt
+    wget -q -O $WORDLIST_BASEDIR/trickestcloud.zip https://github.com/trickest/cloud/archive/refs/heads/main.zip
+    unzip -q $WORDLIST_BASEDIR/trickestcloud.zip -d wordlists
+    mv $WORDLIST_BASEDIR/cloud-main $WORDLIST_BASEDIR/trickestcloud
+    cat $WORDLIST_BASEDIR/trickestcloud/ssl/ssl*.csv | cut -d"," -f2,7 | tr "|" "\n" | tr "," "\n" | sed 's/"//g' | unew -el -i -t -q $WORDLIST_BASEDIR/trickestcloud_ssl.txt
 
-    rm -rf wordlists/trickestcloud.zip wordlists/trickestcloud
+    rm -rf $WORDLIST_BASEDIR/trickestcloud.zip $WORDLIST_BASEDIR/trickestcloud
 
     STOP_SPINNER
     echo -e "${BGREEN}[+] TRICKESTCLOUD - INSTALLED${RESET}: ${TIME} seconds"
@@ -2858,46 +2858,44 @@ TRICKESTCLOUD() {
 # WORDLISTS
 WORDLISTS() {
     START_SPINNER "${BGREEN}WORDLISTS${RESET}"
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt" | unew -el -t -q wordlists/best-dns-wordlist.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/2m-subdomains.txt" | unew -el -t -q wordlists/2m-subdomains.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/kiterunner/swagger-wordlist.txt" | unew -el -t -q wordlists/swagger-wordlist.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/technologies/swagger-ui/swagger-ui.txt" | unew -el -t -q wordlists/swagger-wordlist.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/asp_lowercase.txt" | unew -el -t -q wordlists/asp_lowercase.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/aspx_lowercase.txt" | unew -el -t -q wordlists/aspx_lowercase.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/bak.txt" | unew -el -t -q wordlists/bak.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/do.txt" | unew -el -t -q wordlists/do.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/jsp.txt" | unew -el -t -q wordlists/jsp.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/php.txt" | unew -el -t -q wordlists/php.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/phpmillion.txt" | unew -el -t -q wordlists/phpmillion.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/pl.txt" | unew -el -t -q wordlists/pl.txt
-    curl -s "https://wordlists-cdn.assetnote.io/data/manual/xml_filenames.txt" | unew -el -t -q wordlists/xml_filenames.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/resolvers/refs/heads/main/resolvers.txt" | unew -el -t -q wordlists/resolvers.txt
-    curl -s "https://raw.githubusercontent.com/trickest/resolvers/refs/heads/main/resolvers-trusted.txt" | unew -el -t -q wordlists/resolvers-trusted.txt
-    curl -s "https://raw.githubusercontent.com/six2dez/OneListForAll/refs/heads/main/onelistforallshort.txt" | unew -el -t -q wordlists/onelistforallshort.txt
-    curl -s "https://raw.githubusercontent.com/six2dez/OneListForAll/refs/heads/main/onelistforallmicro.txt" | unew -el -t -q wordlists/onelistforallmicro.txt
-    curl -s "https://gist.github.com/six2dez/ffc2b14d283e8f8eff6ac83e20a3c4b4/raw" | unew -el -t -q wordlists/perms.txt
-    curl -s "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words.txt" | unew -el -t -q wordlists/words.txt
-    curl -s "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words_alpha.txt" | unew -el -t -q wordlists/words_alpha.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/ftpx/refs/heads/main/wordlists/ftp-username-password.txt" | unew -el -t -q wordlists/ftp-username-password.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/ftpx/refs/heads/main/wordlists/ftp-password.txt" | unew -el -t -q wordlists/ftp-password.txt
-    curl -s "https://raw.githubusercontent.com/cujanovic/Virtual-host-wordlist/refs/heads/master/virtual-host-wordlist.txt" | unew -el -t -q wordlists/virtual-host-wordlist.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-small.txt" | unew -el -t -q wordlists/xss-small.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-medium.txt" | unew -el -t -q wordlists/xss-medium.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-large.txt" | unew -el -t -q wordlists/xss-large.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/lfi/lfi-small.txt" | unew -el -t -q wordlists/lfi-small.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/lfi/lfi-medium.txt" | unew -el -t -q wordlists/lfi-medium.txt
-    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/lfi/lfi-large.txt" | unew -el -t -q wordlists/lfi-large.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt" | unew -el -t -q $WORDLIST_BASEDIR/best-dns-wordlist.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/2m-subdomains.txt" | unew -el -t -q $WORDLIST_BASEDIR/2m-subdomains.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/kiterunner/swagger-wordlist.txt" | unew -el -t -q $WORDLIST_BASEDIR/swagger-wordlist.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/technologies/swagger-ui/swagger-ui.txt" | unew -el -t -q $WORDLIST_BASEDIR/swagger-wordlist.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/asp_lowercase.txt" | unew -el -t -q $WORDLIST_BASEDIR/asp_lowercase.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/aspx_lowercase.txt" | unew -el -t -q $WORDLIST_BASEDIR/aspx_lowercase.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/bak.txt" | unew -el -t -q $WORDLIST_BASEDIR/bak.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/do.txt" | unew -el -t -q $WORDLIST_BASEDIR/do.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/jsp.txt" | unew -el -t -q $WORDLIST_BASEDIR/jsp.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/php.txt" | unew -el -t -q $WORDLIST_BASEDIR/php.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/phpmillion.txt" | unew -el -t -q $WORDLIST_BASEDIR/phpmillion.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/pl.txt" | unew -el -t -q $WORDLIST_BASEDIR/pl.txt
+    curl -s "https://wordlists-cdn.assetnote.io/data/manual/xml_filenames.txt" | unew -el -t -q $WORDLIST_BASEDIR/xml_filenames.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/resolvers/refs/heads/main/resolvers.txt" | unew -el -t -q $WORDLIST_BASEDIR/resolvers.txt
+    curl -s "https://raw.githubusercontent.com/trickest/resolvers/refs/heads/main/resolvers-trusted.txt" | unew -el -t -q $WORDLIST_BASEDIR/resolvers-trusted.txt
+    curl -s "https://raw.githubusercontent.com/six2dez/OneListForAll/refs/heads/main/onelistforallshort.txt" | unew -el -t -q $WORDLIST_BASEDIR/onelistforallshort.txt
+    curl -s "https://raw.githubusercontent.com/six2dez/OneListForAll/refs/heads/main/onelistforallmicro.txt" | unew -el -t -q $WORDLIST_BASEDIR/onelistforallmicro.txt
+    curl -s "https://gist.github.com/six2dez/ffc2b14d283e8f8eff6ac83e20a3c4b4/raw" | unew -el -t -q $WORDLIST_BASEDIR/perms.txt
+    curl -s "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words.txt" | unew -el -t -q $WORDLIST_BASEDIR/words.txt
+    curl -s "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words_alpha.txt" | unew -el -t -q $WORDLIST_BASEDIR/words_alpha.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/ftpx/refs/heads/main/wordlists/ftp-username-password.txt" | unew -el -t -q $WORDLIST_BASEDIR/ftp-username-password.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/ftpx/refs/heads/main/wordlists/ftp-password.txt" | unew -el -t -q $WORDLIST_BASEDIR/ftp-password.txt
+    curl -s "https://raw.githubusercontent.com/cujanovic/Virtual-host-wordlist/refs/heads/master/virtual-host-wordlist.txt" | unew -el -t -q $WORDLIST_BASEDIR/virtual-host-wordlist.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-small.txt" | unew -el -t -q $WORDLIST_BASEDIR/xss-small.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-medium.txt" | unew -el -t -q $WORDLIST_BASEDIR/xss-medium.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-large.txt" | unew -el -t -q $WORDLIST_BASEDIR/xss-large.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/lfi/lfi-small.txt" | unew -el -t -q $WORDLIST_BASEDIR/lfi-small.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/lfi/lfi-medium.txt" | unew -el -t -q $WORDLIST_BASEDIR/lfi-medium.txt
+    curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/lfi/lfi-large.txt" | unew -el -t -q $WORDLIST_BASEDIR/lfi-large.txt
 
 
-    rm -rf wordlists/top-subdomain-list
-    git clone https://github.com/jeancarlor/top-subdomain-list.git --depth 1 wordlists/top-subdomain-list &>/dev/null
-    cat wordlists/top-subdomain-list/*.txt | unew -el -t -q wordlists/all_hostnames.txt
-    rm -rf wordlists/top-subdomain-list
+    rm -rf $WORDLIST_BASEDIR/top-subdomain-list && git clone https://github.com/jeancarlor/top-subdomain-list.git --depth 1 $WORDLIST_BASEDIR/top-subdomain-list &>/dev/null
+    cat $WORDLIST_BASEDIR/top-subdomain-list/*.txt | unew -el -t -q $WORDLIST_BASEDIR/all_hostnames.txt
+    rm -rf $WORDLIST_BASEDIR/top-subdomain-list
 
-    rm -rf wordlists/n0kovo_subdomains
-    git clone https://github.com/n0kovo/n0kovo_subdomains.git --depth 1 wordlists/n0kovo_subdomains &>/dev/null
-    mv wordlists/n0kovo_subdomains/*.txt wordlists
-    rm -rf wordlists/n0kovo_subdomains
+    rm -rf $WORDLIST_BASEDIR/n0kovo_subdomains && git clone https://github.com/n0kovo/n0kovo_subdomains.git --depth 1 $WORDLIST_BASEDIR/n0kovo_subdomains &>/dev/null
+    mv $WORDLIST_BASEDIR/n0kovo_subdomains/*.txt wordlists
+    rm -rf $WORDLIST_BASEDIR/n0kovo_subdomains
 
     STOP_SPINNER
     echo -e "${BGREEN}[+] WORDLISTS - INSTALLED${RESET}: ${TIME} seconds"
