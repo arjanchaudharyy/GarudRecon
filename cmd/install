@@ -2908,32 +2908,8 @@ WORDLISTS() {
 }
 
 
-# Install only those tools that used in smallscope
-SMALLSCOPE(){
-    HTTPX
-    NUCLEI
-}
-
-# Install only those tools that used in mediumscope
-MEDIUMSCOPE(){
-    HTTPX
-    NUCLEI
-}
-
-# Install only those tools that used in largescope
-LARGESCOPE(){
-    HTTPX
-    NUCLEI
-}
-
-# Install only those tools that used in cronjobs
-CRONJOBS(){
-    HTTPX
-    NUCLEI
-}
-
-# Install all tools that releted to smallscope, mediumscope, largescope, cronjobs
-ALL(){
+# Required tools
+REQUIRED(){
     VARIABLES
     PACKAGES
     PYTHON3
@@ -2966,6 +2942,58 @@ ALL(){
     CEWL
     PROXYCHAINS_SETUP
     GO
+}
+
+# Install only those tools that used in smallscope
+SMALLSCOPE(){
+    REQUIRED
+
+    HTTPX
+    NUCLEI
+}
+
+# Install only those tools that used in mediumscope
+MEDIUMSCOPE(){
+    REQUIRED
+
+    HTTPX
+    NUCLEI
+}
+
+# Install only those tools that used in largescope
+LARGESCOPE(){
+    REQUIRED
+
+    HTTPX
+    NUCLEI
+}
+
+# Install only those tools that used in cronjobs
+CRONJOBS(){
+    REQUIRED
+    
+    UNEW
+    SUBFINDER
+    AMASS
+    SUBDOG
+    XSUBFIND3R
+    FINDOMAIN
+    CHAOS
+    SHOSUBGO
+    ASSETFINDER
+    HAKTRAILS
+    HAKTRAILSFREE
+    NOTIFY
+    NAABU
+    HTTPX
+    SUBJS
+    LINKINSPECTOR
+    NUCLEI
+}
+
+# Install all tools that releted to smallscope, mediumscope, largescope, cronjobs
+ALL(){
+    REQUIRED
     GOCL
     SHODAN
     ARJUN
