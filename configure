@@ -41,8 +41,13 @@ echo -e "\nAdd api keys to these files:"
 find .config -type f | sed 's|^|~/|'
 
 echo -e "\nOr if you have backup $HOME/.config in github:"
-echo -e "git clone https://github.com/yourusername/private-config.git --depth 1"
-echo -e "cp -r private-config/* $HOME/.config"
+git clone https://github.com/yourusername/private-config.git --depth 1
+cp -r private-config/* $HOME/.config && rm -rf private-config
+
+echo -e "\nOr if you have backup $HOME/.config in github but it's a private repo:"
+git clone https://<TOKEN>@github.com/yourusername/private-config.git --depth 1
+cp -r private-config/* $HOME/.config && rm -rf private-config
+
 
 cd ..
 
