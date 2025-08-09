@@ -122,27 +122,50 @@ START_EPOCH=$(date +%s)
 echo -e "Using $CONFIG_PATH"
 
 
-GOCL() {
-    START_SPINNER "${BGREEN}GOCL${RESET}"
-    wget -q https://github.com/rix4uni/gocl/releases/download/v0.0.4/gocl-linux-amd64-0.0.4.tgz
-    tar -xvzf gocl-linux-amd64-0.0.4.tgz &>/dev/null
-    rm -rf gocl-linux-amd64-0.0.4.tgz
-    mkdir -p ~/go/bin
-    mv gocl ~/go/bin/gocl
+# VARIABLES
+VARIABLES() {
+    START_SPINNER "${BGREEN}VARIABLES${RESET}"
 
-    if ! command -v gocl &>/dev/null; then
-        echo -e "${BRED}[x] GOCL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
+    if ! grep -q "alias xc='xsel -i -b'" ~/.bashrc; then
+        echo -e "\n# xsel Variable" >> ~/.bashrc
+        echo -e "alias xc='xsel -i -b'" >> ~/.bashrc
+        echo -e "alias xp='xsel -o -b'" >> ~/.bashrc
+        echo -e "alias cfile='explorer.exe .'" >> ~/.bashrc
+
+        export PATH=$PATH:/usr/local/go/bin
+        export PATH=$PATH:~/go/bin
+        export PATH=$PATH:~/.local/bin
+        export PATH=$PATH:~/.cargo/bin
+
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:~/go/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:~/.cargo/bin' >> ~/.bashrc
+        echo 'export PATH=$PATH:/usr/bin/google-chrome' >> ~/.bashrc
+    fi
+    source ~/.bashrc
+
+    STOP_SPINNER
+    echo -e "${BGREEN}[+] VARIABLES - SETUP${RESET}: ${TIME} seconds"
+}
+
+GO() {
+    START_SPINNER "${BGREEN}GO${RESET}"
+    curl -s "https://gist.githubusercontent.com/rix4uni/c412ca956ea3bfa114bf4b615a9762bc/raw/91e9c8c93afbad3f16bdc41eb581f3e428dea9df/go.sh" | bash &>/dev/null
+
+    if ! command -v go &>/dev/null; then
+        echo -e "${BRED}[x] GO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOCL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
+    echo -e "${BGREEN}[+] GO - INSTALLED${RESET}: ${TIME} seconds"
 }
 
 UNEW() {
     START_SPINNER "${BGREEN}UNEW${RESET}"
-    gocl -i github.com/rix4uni/unew &>/dev/null
+    go install github.com/rix4uni/unew@latest &>/dev/null
 
     if ! command -v unew &>/dev/null; then
         echo -e "${BRED}[x] UNEW - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
@@ -174,33 +197,6 @@ UNEWFLUSH() {
 
     STOP_SPINNER
     echo -e "${BGREEN}[+] UNEWFLUSH - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
-}
-
-# VARIABLES
-VARIABLES() {
-    START_SPINNER "${BGREEN}VARIABLES${RESET}"
-
-    if ! grep -q "alias xc='xsel -i -b'" ~/.bashrc; then
-        echo -e "\n# xsel Variable" >> ~/.bashrc
-        echo -e "alias xc='xsel -i -b'" >> ~/.bashrc
-        echo -e "alias xp='xsel -o -b'" >> ~/.bashrc
-        echo -e "alias cfile='explorer.exe .'" >> ~/.bashrc
-
-        export PATH=$PATH:/usr/local/go/bin
-        export PATH=$PATH:~/go/bin
-        export PATH=$PATH:~/.local/bin
-        export PATH=$PATH:~/.cargo/bin
-
-        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
-        echo 'export PATH=$PATH:~/go/bin' >> ~/.bashrc
-        echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
-        echo 'export PATH=$PATH:~/.cargo/bin' >> ~/.bashrc
-        echo 'export PATH=$PATH:/usr/bin/google-chrome' >> ~/.bashrc
-    fi
-    source ~/.bashrc
-
-    STOP_SPINNER
-    echo -e "${BGREEN}[+] VARIABLES - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 # PACKAGES
@@ -632,18 +628,22 @@ PROXYCHAINS_SETUP() {
     echo -e "${BGREEN}[+] PROXYCHAINS_SETUP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
-GO() {
-    START_SPINNER "${BGREEN}GO${RESET}"
-    curl -s "https://gist.githubusercontent.com/rix4uni/c412ca956ea3bfa114bf4b615a9762bc/raw/91e9c8c93afbad3f16bdc41eb581f3e428dea9df/go.sh" | bash &>/dev/null
+GOCL() {
+    START_SPINNER "${BGREEN}GOCL${RESET}"
+    wget -q https://github.com/rix4uni/gocl/releases/download/v0.0.4/gocl-linux-amd64-0.0.4.tgz
+    tar -xvzf gocl-linux-amd64-0.0.4.tgz &>/dev/null
+    rm -rf gocl-linux-amd64-0.0.4.tgz
+    mkdir -p ~/go/bin
+    mv gocl ~/go/bin/gocl
 
-    if ! command -v go &>/dev/null; then
-        echo -e "${BRED}[x] GO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
+    if ! command -v gocl &>/dev/null; then
+        echo -e "${BRED}[x] GOCL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
+    echo -e "${BGREEN}[+] GOCL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SHODAN() {
@@ -2912,8 +2912,6 @@ WORDLISTS() {
 
 # Required tools
 REQUIRED(){
-    VARIABLES
-    PACKAGES
     PYTHON3
     PYTHON3_PIP
     SETUPTOOLS
@@ -2943,11 +2941,15 @@ REQUIRED(){
     PARALLEL
     CEWL
     PROXYCHAINS_SETUP
-    GO
 }
 
 # Install only those tools that used in smallscope
 SMALLSCOPE(){
+    VARIABLES
+    GO
+    UNEW
+    UNEWFLUSH
+    PACKAGES
     REQUIRED
 
     HTTPX
@@ -2956,6 +2958,11 @@ SMALLSCOPE(){
 
 # Install only those tools that used in mediumscope
 MEDIUMSCOPE(){
+    VARIABLES
+    GO
+    UNEW
+    UNEWFLUSH
+    PACKAGES
     REQUIRED
 
     HTTPX
@@ -2964,6 +2971,11 @@ MEDIUMSCOPE(){
 
 # Install only those tools that used in largescope
 LARGESCOPE(){
+    VARIABLES
+    GO
+    UNEW
+    UNEWFLUSH
+    PACKAGES
     REQUIRED
 
     HTTPX
@@ -2972,9 +2984,13 @@ LARGESCOPE(){
 
 # Install only those tools that used in cronjobs
 CRONJOBS(){
+    VARIABLES
+    GO
     UNEW
+    UNEWFLUSH
+    PACKAGES
     REQUIRED
-    
+
     SUBFINDER
     AMASS
     SUBDOG
@@ -2995,10 +3011,14 @@ CRONJOBS(){
 
 # Install all tools that releted to smallscope, mediumscope, largescope, cronjobs
 ALL(){
-    GOCL
+    VARIABLES
+    GO
     UNEW
     UNEWFLUSH
+    PACKAGES
     REQUIRED
+
+    GOCL
     SHODAN
     ARJUN
     TLDINFO
