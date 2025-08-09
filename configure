@@ -19,7 +19,7 @@ chmod +x $HOME/.garudrecon/cmd/* /usr/bin/garudrecon
 
 # set path to access globally
 sed -i -e 's|source "configuration/garudrecon.cfg"|source "$HOME/.garudrecon/configuration/garudrecon.cfg"|' -e 's|bash "$(dirname "\$0")/cmd/\(.*\)"|bash "$HOME/.garudrecon/cmd/\1"|' /usr/bin/garudrecon
-sed -i -e 's|CONFIG_PATH="configuration/garudrecon.cfg"|CONFIG_PATH="$HOME/.garudrecon/configuration/garudrecon.cfg"|' -e 's|BASEDIR="scans"|BASEDIR="$HOME/.garudrecon/scans"|' $HOME/.garudrecon/cmd/install
+sed -i -e 's|CONFIG_PATH="configuration/garudrecon.cfg"|CONFIG_PATH="$HOME/.garudrecon/configuration/garudrecon.cfg"|' -e 's|INSTALLEDLOGFILE="installed.log"|INSTALLEDLOGFILE="$HOME/.garudrecon/installed.log"|' $HOME/.garudrecon/cmd/install
 sed -i -e 's|CONFIG_PATH="configuration/garudrecon.cfg"|CONFIG_PATH="$HOME/.garudrecon/configuration/garudrecon.cfg"|' -e 's|BASEDIR="scans"|BASEDIR="$HOME/.garudrecon/scans"|' $HOME/.garudrecon/cmd/smallscope
 sed -i -e 's|CONFIG_PATH="configuration/garudrecon.cfg"|CONFIG_PATH="$HOME/.garudrecon/configuration/garudrecon.cfg"|' -e 's|BASEDIR="scans"|BASEDIR="$HOME/.garudrecon/scans"|' $HOME/.garudrecon/cmd/mediumscope
 sed -i -e 's|CONFIG_PATH="configuration/garudrecon.cfg"|CONFIG_PATH="$HOME/.garudrecon/configuration/garudrecon.cfg"|' -e 's|BASEDIR="scans"|BASEDIR="$HOME/.garudrecon/scans"|' $HOME/.garudrecon/cmd/largescope

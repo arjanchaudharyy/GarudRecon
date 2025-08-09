@@ -83,6 +83,8 @@ mkdir -p wordlists
 mkdir -p takeovers
 mkdir -p templates
 
+INSTALLEDLOGFILE="installed.log"
+
 # Function to handle CLEANUP on Ctrl+C
 CLEANUP() {
     if [[ -n "$SPINNER_PID" ]]; then
@@ -144,7 +146,7 @@ VARIABLES() {
     source ~/.bashrc
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] VARIABLES - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] VARIABLES - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 # PACKAGES
@@ -157,7 +159,7 @@ PACKAGES() {
     rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PACKAGES - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PACKAGES - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PYTHON3() {
@@ -165,13 +167,13 @@ PYTHON3() {
     apt install python3 -y &>/dev/null
 
     if ! command -v python3 &>/dev/null; then
-        echo -e "${BRED}[x] PYTHON3 - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PYTHON3 - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PYTHON3 - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PYTHON3 - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PYTHON3_PIP() {
@@ -179,13 +181,13 @@ PYTHON3_PIP() {
     apt install python3-pip -y &>/dev/null
 
     if ! command -v pip3 &>/dev/null; then
-        echo -e "${BRED}[x] PYTHON3_PIP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PYTHON3_PIP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PYTHON3_PIP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PYTHON3_PIP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SETUPTOOLS() {
@@ -193,7 +195,7 @@ SETUPTOOLS() {
     pip3 install --upgrade setuptools --no-cache-dir &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SETUPTOOLS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SETUPTOOLS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GCC() {
@@ -201,13 +203,13 @@ GCC() {
     apt install gcc -y &>/dev/null
 
     if ! command -v gcc &>/dev/null; then
-        echo -e "${BRED}[x] GCC - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GCC - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GCC - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GCC - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GIT() {
@@ -215,13 +217,13 @@ GIT() {
     apt install git -y &>/dev/null
 
     if ! command -v git &>/dev/null; then
-        echo -e "${BRED}[x] GIT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GIT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GIT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GIT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PIPREQS() {
@@ -229,13 +231,13 @@ PIPREQS() {
     pip3 install pipreqs --no-cache-dir &>/dev/null
 
     if ! command -v pipreqs &>/dev/null; then
-        echo -e "${BRED}[x] PIPREQS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PIPREQS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PIPREQS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PIPREQS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SSHPASS() {
@@ -243,13 +245,13 @@ SSHPASS() {
     apt install sshpass &>/dev/null
 
     if ! command -v sshpass &>/dev/null; then
-        echo -e "${BRED}[x] SSHPASS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SSHPASS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SSHPASS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SSHPASS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CURL() {
@@ -257,13 +259,13 @@ CURL() {
     apt install curl -y &>/dev/null
 
     if ! command -v curl &>/dev/null; then
-        echo -e "${BRED}[x] CURL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CURL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CURL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CURL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DOS2UNIX() {
@@ -271,13 +273,13 @@ DOS2UNIX() {
     apt install dos2unix &>/dev/null
 
     if ! command -v dos2unix &>/dev/null; then
-        echo -e "${BRED}[x] DOS2UNIX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DOS2UNIX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DOS2UNIX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DOS2UNIX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 WGET() {
@@ -285,13 +287,13 @@ WGET() {
     apt install wget -y &>/dev/null
 
     if ! command -v wget &>/dev/null; then
-        echo -e "${BRED}[x] WGET - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] WGET - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] WGET - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] WGET - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ZIP() {
@@ -299,13 +301,13 @@ ZIP() {
     apt install zip -y &>/dev/null
 
     if ! command -v zip &>/dev/null; then
-        echo -e "${BRED}[x] ZIP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ZIP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ZIP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ZIP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 XSEL() {
@@ -313,13 +315,13 @@ XSEL() {
     apt install xsel &>/dev/null
 
     if ! command -v xsel &>/dev/null; then
-        echo -e "${BRED}[x] XSEL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] XSEL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] XSEL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] XSEL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 JQ() {
@@ -327,13 +329,13 @@ JQ() {
     apt install jq -y &>/dev/null
 
     if ! command -v jq &>/dev/null; then
-        echo -e "${BRED}[x] JQ - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] JQ - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] JQ - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] JQ - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 YQ() {
@@ -342,13 +344,13 @@ YQ() {
     chmod +x /usr/bin/yq
 
     if ! command -v yq &>/dev/null; then
-        echo -e "${BRED}[x] YQ - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] YQ - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] YQ - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] YQ - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 LIBPCAP_DEV() {
@@ -356,7 +358,7 @@ LIBPCAP_DEV() {
     apt install libpcap-dev -y &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] LIBPCAP_DEV - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] LIBPCAP_DEV - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 NPM() {
@@ -364,13 +366,13 @@ NPM() {
     apt install npm -y &>/dev/null
 
     if ! command -v npm &>/dev/null; then
-        echo -e "${BRED}[x] NPM - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] NPM - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] NPM - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] NPM - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CSV2JSON() {
@@ -382,13 +384,13 @@ CSV2JSON() {
     rm -rf csv2json_0.1.1_linux_amd64.tar.gz
 
     if ! command -v csv2json &>/dev/null; then
-        echo -e "${BRED}[x] CSV2JSON - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CSV2JSON - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CSV2JSON - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CSV2JSON - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CSVTK() {
@@ -400,13 +402,13 @@ CSVTK() {
     rm -rf csvtk_linux_amd64.tar.gz
 
     if ! command -v csvtk &>/dev/null; then
-        echo -e "${BRED}[x] CSVTK - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CSVTK - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CSVTK - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CSVTK - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PKG_CONFIG() {
@@ -414,7 +416,7 @@ PKG_CONFIG() {
     apt install pkg-config -y &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PKG_CONFIG - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PKG_CONFIG - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 LIBUDEV_DEV() {
@@ -422,7 +424,7 @@ LIBUDEV_DEV() {
     apt install libudev-dev -y &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] LIBUDEV_DEV - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] LIBUDEV_DEV - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 BUILD_ESSENTIAL() {
@@ -430,7 +432,7 @@ BUILD_ESSENTIAL() {
     apt install build-essential -y &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] BUILD_ESSENTIAL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] BUILD_ESSENTIAL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CHROMIUM() {
@@ -438,13 +440,13 @@ CHROMIUM() {
     apt install chromium -y &>/dev/null
 
     if ! command -v chromium &>/dev/null; then
-        echo -e "${BRED}[x] CHROMIUM - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CHROMIUM - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CHROMIUM - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CHROMIUM - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CHROME() {
@@ -456,13 +458,13 @@ CHROME() {
     source ~/.bashrc
 
     if ! command -v google-chrome &>/dev/null; then
-        echo -e "${BRED}[x] CHROME - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CHROME - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CHROME - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CHROME - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PIPX() {
@@ -470,13 +472,13 @@ PIPX() {
     apt install pipx -y &>/dev/null
 
     if ! command -v pipx &>/dev/null; then
-        echo -e "${BRED}[x] PIPX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PIPX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PIPX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PIPX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CMAKE() {
@@ -484,13 +486,13 @@ CMAKE() {
     apt install cmake -y &>/dev/null
 
     if ! command -v cmake &>/dev/null; then
-        echo -e "${BRED}[x] CMAKE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CMAKE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CMAKE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CMAKE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 RUST() {
@@ -499,25 +501,25 @@ RUST() {
     source ~/.bashrc
 
     if ! command -v rustup &>/dev/null; then
-        echo -e "${BRED}[x] RUSTUP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] RUSTUP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     if ! command -v rustc &>/dev/null; then
-        echo -e "${BRED}[x] RUSTC - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] RUSTC - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     if ! command -v cargo &>/dev/null; then
-        echo -e "${BRED}[x] CARGO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CARGO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] RUST - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] RUST - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PDFTOTEXT() {
@@ -525,13 +527,13 @@ PDFTOTEXT() {
     apt install poppler-utils -y &>/dev/null
 
     if ! command -v pdftotext &>/dev/null; then
-        echo -e "${BRED}[x] PDFTOTEXT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PDFTOTEXT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PDFTOTEXT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PDFTOTEXT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PARALLEL() {
@@ -539,13 +541,13 @@ PARALLEL() {
     apt install parallel -y &>/dev/null
 
     if ! command -v parallel &>/dev/null; then
-        echo -e "${BRED}[x] PARALLEL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PARALLEL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PARALLEL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PARALLEL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CEWL() {
@@ -553,13 +555,13 @@ CEWL() {
     apt install cewl -y &>/dev/null
 
     if ! command -v cewl &>/dev/null; then
-        echo -e "${BRED}[x] CEWL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CEWL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CEWL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CEWL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PROXYCHAINS_SETUP() {
@@ -567,13 +569,13 @@ PROXYCHAINS_SETUP() {
     curl -s "https://raw.githubusercontent.com/rix4uni/proxychains_setup/main/setup.sh" | bash &>/dev/null
 
     if ! command -v proxychains &>/dev/null; then
-        echo -e "${BRED}[x] PROXYCHAINS_SETUP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PROXYCHAINS_SETUP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PROXYCHAINS_SETUP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PROXYCHAINS_SETUP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GO() {
@@ -581,13 +583,13 @@ GO() {
     curl -s "https://gist.githubusercontent.com/rix4uni/c412ca956ea3bfa114bf4b615a9762bc/raw/91e9c8c93afbad3f16bdc41eb581f3e428dea9df/go.sh" | bash &>/dev/null
 
     if ! command -v go &>/dev/null; then
-        echo -e "${BRED}[x] GO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GO - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOCL() {
@@ -599,13 +601,13 @@ GOCL() {
     mv gocl ~/go/bin/gocl
 
     if ! command -v gocl &>/dev/null; then
-        echo -e "${BRED}[x] GOCL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOCL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOCL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOCL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SHODAN() {
@@ -613,13 +615,13 @@ SHODAN() {
     apt install python3-shodan -y &>/dev/null
 
     if ! command -v shodan &>/dev/null; then
-        echo -e "${BRED}[x] SHODAN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SHODAN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SHODAN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SHODAN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ARJUN() {
@@ -627,13 +629,13 @@ ARJUN() {
     pip3 install arjun --no-cache-dir &>/dev/null
 
     if ! command -v arjun &>/dev/null; then
-        echo -e "${BRED}[x] ARJUN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ARJUN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ARJUN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ARJUN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 TLDINFO() {
@@ -641,13 +643,13 @@ TLDINFO() {
     pipx install --force git+https://github.com/rix4uni/tldinfo.git &>/dev/null
 
     if ! command -v tldinfo &>/dev/null; then
-        echo -e "${BRED}[x] TLDINFO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] TLDINFO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] TLDINFO - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] TLDINFO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SUBWIZ() {
@@ -655,13 +657,13 @@ SUBWIZ() {
     pipx install --force git+https://github.com/hadriansecurity/subwiz.git &>/dev/null
 
     if ! command -v subwiz &>/dev/null; then
-        echo -e "${BRED}[x] SUBWIZ - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SUBWIZ - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SUBWIZ - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SUBWIZ - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 URO() {
@@ -669,13 +671,13 @@ URO() {
     pip3 install uro --no-cache-dir &>/dev/null
 
     if ! command -v uro &>/dev/null; then
-        echo -e "${BRED}[x] URO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] URO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] URO - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] URO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 X8() {
@@ -687,13 +689,13 @@ X8() {
     mv x8 /usr/local/bin
 
     if ! command -v x8 &>/dev/null; then
-        echo -e "${BRED}[x] X8 - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] X8 - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] X8 - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] X8 - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FINDOMAIN() {
@@ -705,13 +707,13 @@ FINDOMAIN() {
     mv findomain /usr/bin/
 
     if ! command -v findomain &>/dev/null; then
-        echo -e "${BRED}[x] FINDOMAIN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FINDOMAIN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FINDOMAIN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FINDOMAIN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 BBOT() {
@@ -719,13 +721,13 @@ BBOT() {
     pipx install --force bbot &>/dev/null
 
     if ! command -v bbot &>/dev/null; then
-        echo -e "${BRED}[x] BBOT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] BBOT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] BBOT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] BBOT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 WAYMORE() {
@@ -733,13 +735,13 @@ WAYMORE() {
     pip3 install waymore --no-cache-dir &>/dev/null
 
     if ! command -v waymore &>/dev/null; then
-        echo -e "${BRED}[x] WAYMORE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] WAYMORE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] WAYMORE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] WAYMORE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 XNLINKFINDER() {
@@ -747,13 +749,13 @@ XNLINKFINDER() {
     pip3 install xnLinkFinder --no-cache-dir &>/dev/null
 
     if ! command -v xnLinkFinder &>/dev/null; then
-        echo -e "${BRED}[x] XNLINKFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] XNLINKFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] XNLINKFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] XNLINKFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FEROXBUSTER() {
@@ -764,13 +766,13 @@ FEROXBUSTER() {
     rm -rf feroxbuster_amd64.deb.zip feroxbuster_2.11.0-1_amd64.deb
 
     if ! command -v feroxbuster &>/dev/null; then
-        echo -e "${BRED}[x] FEROXBUSTER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FEROXBUSTER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FEROXBUSTER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FEROXBUSTER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ALTDNS() {
@@ -778,13 +780,13 @@ ALTDNS() {
     pipx install --force git+https://github.com/infosec-au/altdns.git &>/dev/null
 
     if ! command -v altdns &>/dev/null; then
-        echo -e "${BRED}[x] ALTDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ALTDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ALTDNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ALTDNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 MASSCAN() {
@@ -797,13 +799,13 @@ MASSCAN() {
     rm -rf masscan
 
     if ! command -v masscan &>/dev/null; then
-        echo -e "${BRED}[x] MASSCAN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] MASSCAN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] MASSCAN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] MASSCAN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 MASSDNS() {
@@ -816,13 +818,13 @@ MASSDNS() {
     rm -rf massdns
 
     if ! command -v massdns &>/dev/null; then
-        echo -e "${BRED}[x] MASSDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] MASSDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] MASSDNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] MASSDNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 RUSTSCAN() {
@@ -834,13 +836,13 @@ RUSTSCAN() {
     rm -rf rustscan-2.3.0-x86_64-linux.zip tmp
 
     if ! command -v rustscan &>/dev/null; then
-        echo -e "${BRED}[x] RUSTSCAN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] RUSTSCAN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] RUSTSCAN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] RUSTSCAN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GHAURI() {
@@ -855,13 +857,13 @@ GHAURI() {
     rm -rf ghauri
 
     if ! command -v ghauri &>/dev/null; then
-        echo -e "${BRED}[x] GHAURI - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GHAURI - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GHAURI - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GHAURI - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SQLMAP() {
@@ -870,13 +872,13 @@ SQLMAP() {
     sed -i "s/kb.choices.redirect = REDIRECTION.YES if readInput(msg, default='Y', boolean=True) else REDIRECTION.NO/kb.choices.redirect = REDIRECTION.YES if readInput(msg, default='n', boolean=True) else REDIRECTION.NO/g" tools/sqlmap/lib/request/redirecthandler.py
 
     if ! command -v sqlmap &>/dev/null; then
-        echo -e "${BRED}[x] SQLMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SQLMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SQLMAP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SQLMAP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 INTERLACE() {
@@ -884,13 +886,13 @@ INTERLACE() {
     pipx install --force git+https://github.com/codingo/Interlace.git &>/dev/null
 
     if ! command -v interlace &>/dev/null; then
-        echo -e "${BRED}[x] INTERLACE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] INTERLACE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] INTERLACE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] INTERLACE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HTTPX() {
@@ -898,13 +900,13 @@ HTTPX() {
     gocl -i github.com/projectdiscovery/httpx &>/dev/null
 
     if ! command -v httpx &>/dev/null; then
-        echo -e "${BRED}[x] HTTPX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HTTPX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HTTPX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HTTPX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 XSUBFIND3R() {
@@ -912,13 +914,13 @@ XSUBFIND3R() {
     gocl -i github.com/hueristiq/xsubfind3r -c "cmd/xsubfind3r" &>/dev/null
 
     if ! command -v xsubfind3r &>/dev/null; then
-        echo -e "${BRED}[x] XSUBFIND3R - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] XSUBFIND3R - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] XSUBFIND3R - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] XSUBFIND3R - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 JSUBFINDER() {
@@ -926,13 +928,13 @@ JSUBFINDER() {
     gocl -i github.com/ThreatUnkown/jsubfinder &>/dev/null
 
     if ! command -v jsubfinder &>/dev/null; then
-        echo -e "${BRED}[x] JSUBFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] JSUBFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] JSUBFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] JSUBFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 NUCLEI() {
@@ -940,13 +942,13 @@ NUCLEI() {
     gocl -i github.com/projectdiscovery/nuclei &>/dev/null
 
     if ! command -v nuclei &>/dev/null; then
-        echo -e "${BRED}[x] NUCLEI - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] NUCLEI - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] NUCLEI - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] NUCLEI - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 NUCLEI_TEMPLATE() {
@@ -958,7 +960,7 @@ NUCLEI_TEMPLATE() {
     sed -i '/- type: dsl/{N;N;/Host != ip/{N;/^$/d;d;}}' templates/takeovers/*.yaml &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] NUCLEI_TEMPLATE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] NUCLEI_TEMPLATE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SUBFINDER() {
@@ -966,13 +968,13 @@ SUBFINDER() {
     gocl -i github.com/projectdiscovery/subfinder &>/dev/null
 
     if ! command -v subfinder &>/dev/null; then
-        echo -e "${BRED}[x] SUBFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SUBFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SUBFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SUBFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CVEMAP() {
@@ -980,13 +982,13 @@ CVEMAP() {
     gocl -i github.com/projectdiscovery/cvemap &>/dev/null
 
     if ! command -v cvemap &>/dev/null; then
-        echo -e "${BRED}[x] CVEMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CVEMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CVEMAP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CVEMAP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 KATANA() {
@@ -994,13 +996,13 @@ KATANA() {
     gocl -i github.com/projectdiscovery/katana &>/dev/null
 
     if ! command -v katana &>/dev/null; then
-        echo -e "${BRED}[x] KATANA - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] KATANA - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] KATANA - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] KATANA - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 NAABU() {
@@ -1008,13 +1010,13 @@ NAABU() {
     gocl -i github.com/projectdiscovery/naabu &>/dev/null
 
     if ! command -v naabu &>/dev/null; then
-        echo -e "${BRED}[x] NAABU - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] NAABU - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] NAABU - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] NAABU - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 NMAP() {
@@ -1028,13 +1030,13 @@ NMAP() {
     rm -rf nmap
 
     if ! command -v naabu &>/dev/null; then
-        echo -e "${BRED}[x] NMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] NMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] NMAP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] NMAP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 MAPCIDR() {
@@ -1042,13 +1044,13 @@ MAPCIDR() {
     gocl -i github.com/projectdiscovery/mapcidr &>/dev/null
 
     if ! command -v mapcidr &>/dev/null; then
-        echo -e "${BRED}[x] MAPCIDR - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] MAPCIDR - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] MAPCIDR - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] MAPCIDR - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SHUFFLEDNS() {
@@ -1056,13 +1058,13 @@ SHUFFLEDNS() {
     gocl -i github.com/projectdiscovery/shuffledns &>/dev/null
 
     if ! command -v shuffledns &>/dev/null; then
-        echo -e "${BRED}[x] SHUFFLEDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SHUFFLEDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SHUFFLEDNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SHUFFLEDNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 UNCOVER() {
@@ -1070,13 +1072,13 @@ UNCOVER() {
     gocl -i github.com/projectdiscovery/uncover &>/dev/null
 
     if ! command -v uncover &>/dev/null; then
-        echo -e "${BRED}[x] UNCOVER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] UNCOVER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] UNCOVER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] UNCOVER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ASNMAP() {
@@ -1084,13 +1086,13 @@ ASNMAP() {
     gocl -i github.com/projectdiscovery/asnmap &>/dev/null
 
     if ! command -v asnmap &>/dev/null; then
-        echo -e "${BRED}[x] ASNMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ASNMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ASNMAP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ASNMAP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CDNCHECK() {
@@ -1098,13 +1100,13 @@ CDNCHECK() {
     gocl -i github.com/projectdiscovery/cdncheck &>/dev/null
 
     if ! command -v cdncheck &>/dev/null; then
-        echo -e "${BRED}[x] CDNCHECK - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CDNCHECK - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CDNCHECK - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CDNCHECK - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DNSX() {
@@ -1112,13 +1114,13 @@ DNSX() {
     gocl -i github.com/projectdiscovery/dnsx &>/dev/null
 
     if ! command -v dnsx &>/dev/null; then
-        echo -e "${BRED}[x] DNSX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DNSX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DNSX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DNSX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CHAOS() {
@@ -1126,13 +1128,13 @@ CHAOS() {
     gocl -i github.com/projectdiscovery/chaos-client -c "cmd/chaos" &>/dev/null
 
     if ! command -v chaos &>/dev/null; then
-        echo -e "${BRED}[x] CHAOS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CHAOS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CHAOS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CHAOS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 TLDFINDER() {
@@ -1140,13 +1142,13 @@ TLDFINDER() {
     gocl -i github.com/projectdiscovery/tldfinder &>/dev/null
 
     if ! command -v tldfinder &>/dev/null; then
-        echo -e "${BRED}[x] TLDFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] TLDFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] TLDFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] TLDFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ALTERX() {
@@ -1154,13 +1156,13 @@ ALTERX() {
     gocl -i github.com/projectdiscovery/alterx &>/dev/null
 
     if ! command -v alterx &>/dev/null; then
-        echo -e "${BRED}[x] ALTERX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ALTERX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ALTERX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ALTERX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 TLSX() {
@@ -1168,13 +1170,13 @@ TLSX() {
     gocl -i github.com/projectdiscovery/tlsx &>/dev/null
 
     if ! command -v tlsx &>/dev/null; then
-        echo -e "${BRED}[x] TLSX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] TLSX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] TLSX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] TLSX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 INTERACTSH_CLIENT() {
@@ -1182,13 +1184,13 @@ INTERACTSH_CLIENT() {
     gocl -i github.com/projectdiscovery/interactsh -c "cmd/interactsh-client" &>/dev/null
 
     if ! command -v interactsh-client &>/dev/null; then
-        echo -e "${BRED}[x] INTERACTSH_CLIENT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] INTERACTSH_CLIENT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] INTERACTSH_CLIENT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] INTERACTSH_CLIENT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 NOTIFY() {
@@ -1196,13 +1198,13 @@ NOTIFY() {
     gocl -i github.com/projectdiscovery/notify &>/dev/null
 
     if ! command -v notify &>/dev/null; then
-        echo -e "${BRED}[x] NOTIFY - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] NOTIFY - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] NOTIFY - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] NOTIFY - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HTTPROBE() {
@@ -1210,13 +1212,13 @@ HTTPROBE() {
     gocl -i github.com/tomnomnom/httprobe &>/dev/null
 
     if ! command -v httprobe &>/dev/null; then
-        echo -e "${BRED}[x] HTTPROBE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HTTPROBE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HTTPROBE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HTTPROBE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ASSETFINDER() {
@@ -1224,13 +1226,13 @@ ASSETFINDER() {
     gocl -i github.com/tomnomnom/assetfinder &>/dev/null
 
     if ! command -v assetfinder &>/dev/null; then
-        echo -e "${BRED}[x] ASSETFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ASSETFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ASSETFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ASSETFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 WAYBACKURLS() {
@@ -1238,13 +1240,13 @@ WAYBACKURLS() {
     gocl -i github.com/tomnomnom/waybackurls &>/dev/null
 
     if ! command -v waybackurls &>/dev/null; then
-        echo -e "${BRED}[x] WAYBACKURLS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] WAYBACKURLS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] WAYBACKURLS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] WAYBACKURLS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FFF() {
@@ -1252,13 +1254,13 @@ FFF() {
     gocl -i github.com/tomnomnom/fff &>/dev/null
 
     if ! command -v fff &>/dev/null; then
-        echo -e "${BRED}[x] FFF - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FFF - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FFF - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FFF - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 MEG() {
@@ -1266,13 +1268,13 @@ MEG() {
     gocl -i github.com/tomnomnom/meg &>/dev/null
 
     if ! command -v meg &>/dev/null; then
-        echo -e "${BRED}[x] MEG - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] MEG - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] MEG - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] MEG - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ANEW() {
@@ -1280,13 +1282,13 @@ ANEW() {
     gocl -i github.com/tomnomnom/anew &>/dev/null
 
     if ! command -v anew &>/dev/null; then
-        echo -e "${BRED}[x] ANEW - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ANEW - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ANEW - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ANEW - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GRON() {
@@ -1294,13 +1296,13 @@ GRON() {
     gocl -i github.com/tomnomnom/gron &>/dev/null
 
     if ! command -v gron &>/dev/null; then
-        echo -e "${BRED}[x] GRON - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GRON - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GRON - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GRON - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 UNFURL() {
@@ -1308,13 +1310,13 @@ UNFURL() {
     gocl -i github.com/tomnomnom/unfurl &>/dev/null
 
     if ! command -v unfurl &>/dev/null; then
-        echo -e "${BRED}[x] UNFURL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] UNFURL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] UNFURL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] UNFURL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GF() {
@@ -1322,13 +1324,13 @@ GF() {
     gocl -i github.com/tomnomnom/gf &>/dev/null
 
     if ! command -v gf &>/dev/null; then
-        echo -e "${BRED}[x] GF - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GF - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GF - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GF - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GF_PATTERNS() {
@@ -1336,7 +1338,7 @@ GF_PATTERNS() {
     git clone https://github.com/rix4uni/gf-patterns.git --depth 1 ~/.gf &>/dev/null
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GF_PATTERNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GF_PATTERNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 QSREPLACE() {
@@ -1344,13 +1346,13 @@ QSREPLACE() {
     gocl -i github.com/tomnomnom/qsreplace &>/dev/null
 
     if ! command -v qsreplace &>/dev/null; then
-        echo -e "${BRED}[x] QSREPLACE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] QSREPLACE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] QSREPLACE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] QSREPLACE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SUBDOG() {
@@ -1358,13 +1360,13 @@ SUBDOG() {
     gocl -i github.com/rix4uni/subdog &>/dev/null
 
     if ! command -v subdog &>/dev/null; then
-        echo -e "${BRED}[x] SUBDOG - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SUBDOG - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SUBDOG - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SUBDOG - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKTRAILSFREE() {
@@ -1372,13 +1374,13 @@ HAKTRAILSFREE() {
     gocl -i github.com/rix4uni/haktrailsfree &>/dev/null
 
     if ! command -v haktrailsfree &>/dev/null; then
-        echo -e "${BRED}[x] HAKTRAILSFREE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKTRAILSFREE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKTRAILSFREE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKTRAILSFREE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ORG2ASN() {
@@ -1386,13 +1388,13 @@ ORG2ASN() {
     gocl -i github.com/rix4uni/org2asn &>/dev/null
 
     if ! command -v org2asn &>/dev/null; then
-        echo -e "${BRED}[x] ORG2ASN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ORG2ASN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ORG2ASN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ORG2ASN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 WHOXYSUBS() {
@@ -1400,13 +1402,13 @@ WHOXYSUBS() {
     gocl -i github.com/rix4uni/whoxysubs &>/dev/null
 
     if ! command -v whoxysubs &>/dev/null; then
-        echo -e "${BRED}[x] WHOXYSUBS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] WHOXYSUBS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] WHOXYSUBS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] WHOXYSUBS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 UDON() {
@@ -1414,13 +1416,13 @@ UDON() {
     gocl -i github.com/dhn/udon &>/dev/null
 
     if ! command -v udon &>/dev/null; then
-        echo -e "${BRED}[x] UDON - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] UDON - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] UDON - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] UDON - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 TECHX() {
@@ -1428,13 +1430,13 @@ TECHX() {
     gocl -i github.com/rix4uni/techx &>/dev/null
 
     if ! command -v techx &>/dev/null; then
-        echo -e "${BRED}[x] TECHX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] TECHX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] TECHX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] TECHX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 UNEW() {
@@ -1442,13 +1444,13 @@ UNEW() {
     gocl -i github.com/rix4uni/unew &>/dev/null
 
     if ! command -v unew &>/dev/null; then
-        echo -e "${BRED}[x] UNEW - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] UNEW - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] UNEW - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] UNEW - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 UNEWFLUSH() {
@@ -1464,13 +1466,13 @@ UNEWFLUSH() {
     rm -rf unewflush
 
     if ! command -v unewflush &>/dev/null; then
-        echo -e "${BRED}[x] UNEWFLUSH - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] UNEWFLUSH - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] UNEWFLUSH - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] UNEWFLUSH - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 IP2ORG() {
@@ -1478,13 +1480,13 @@ IP2ORG() {
     gocl -i github.com/rix4uni/ip2org &>/dev/null
 
     if ! command -v ip2org &>/dev/null; then
-        echo -e "${BRED}[x] IP2ORG - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] IP2ORG - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] IP2ORG - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] IP2ORG - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CERTINFO() {
@@ -1492,13 +1494,13 @@ CERTINFO() {
     gocl -i github.com/rix4uni/certinfo &>/dev/null
 
     if ! command -v certinfo &>/dev/null; then
-        echo -e "${BRED}[x] CERTINFO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CERTINFO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CERTINFO - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CERTINFO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 XSSCHECKER() {
@@ -1506,13 +1508,13 @@ XSSCHECKER() {
     gocl -i github.com/rix4uni/xsschecker &>/dev/null
 
     if ! command -v xsschecker &>/dev/null; then
-        echo -e "${BRED}[x] XSSCHECKER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] XSSCHECKER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] XSSCHECKER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] XSSCHECKER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PORTMAP() {
@@ -1520,13 +1522,13 @@ PORTMAP() {
     gocl -i github.com/rix4uni/portmap &>/dev/null
 
     if ! command -v portmap &>/dev/null; then
-        echo -e "${BRED}[x] PORTMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PORTMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PORTMAP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PORTMAP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PARAMFINDER() {
@@ -1534,13 +1536,13 @@ PARAMFINDER() {
     gocl -i github.com/rix4uni/paramfinder &>/dev/null
 
     if ! command -v paramfinder &>/dev/null; then
-        echo -e "${BRED}[x] PARAMFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PARAMFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PARAMFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PARAMFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GXSS() {
@@ -1548,13 +1550,13 @@ GXSS() {
     gocl -i github.com/rix4uni/Gxss &>/dev/null
 
     if ! command -v Gxss &>/dev/null; then
-        echo -e "${BRED}[x] GXSS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GXSS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GXSS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GXSS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 MSARJUN() {
@@ -1562,13 +1564,13 @@ MSARJUN() {
     gocl -i github.com/rix4uni/msarjun &>/dev/null
 
     if ! command -v msarjun &>/dev/null; then
-        echo -e "${BRED}[x] MSARJUN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] MSARJUN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] MSARJUN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] MSARJUN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKRAWLER() {
@@ -1576,13 +1578,13 @@ HAKRAWLER() {
     gocl -i github.com/hakluke/hakrawler &>/dev/null
 
     if ! command -v hakrawler &>/dev/null; then
-        echo -e "${BRED}[x] HAKRAWLER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKRAWLER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKRAWLER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKRAWLER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKREVDNS() {
@@ -1590,13 +1592,13 @@ HAKREVDNS() {
     gocl -i github.com/hakluke/hakrevdns &>/dev/null
 
     if ! command -v hakrevdns &>/dev/null; then
-        echo -e "${BRED}[x] HAKREVDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKREVDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKREVDNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKREVDNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKLISTGEN() {
@@ -1604,13 +1606,13 @@ HAKLISTGEN() {
     gocl -i github.com/hakluke/haklistgen &>/dev/null
 
     if ! command -v haklistgen &>/dev/null; then
-        echo -e "${BRED}[x] HAKLISTGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKLISTGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKLISTGEN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKLISTGEN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKORIGINFINDER() {
@@ -1618,13 +1620,13 @@ HAKORIGINFINDER() {
     gocl -i github.com/hakluke/hakoriginfinder &>/dev/null
 
     if ! command -v hakoriginfinder &>/dev/null; then
-        echo -e "${BRED}[x] HAKORIGINFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKORIGINFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKORIGINFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKORIGINFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKCHECKURL() {
@@ -1632,13 +1634,13 @@ HAKCHECKURL() {
     gocl -i github.com/hakluke/hakcheckurl &>/dev/null
 
     if ! command -v hakcheckurl &>/dev/null; then
-        echo -e "${BRED}[x] HAKCHECKURL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKCHECKURL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKCHECKURL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKCHECKURL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKTRAILS() {
@@ -1646,13 +1648,13 @@ HAKTRAILS() {
     gocl -i github.com/hakluke/haktrails &>/dev/null
 
     if ! command -v haktrails &>/dev/null; then
-        echo -e "${BRED}[x] HAKTRAILS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKTRAILS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKTRAILS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKTRAILS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 HAKIP2HOST() {
@@ -1660,13 +1662,13 @@ HAKIP2HOST() {
     gocl -i github.com/hakluke/hakip2host &>/dev/null
 
     if ! command -v hakip2host &>/dev/null; then
-        echo -e "${BRED}[x] HAKIP2HOST - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] HAKIP2HOST - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] HAKIP2HOST - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] HAKIP2HOST - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FFUF() {
@@ -1674,13 +1676,13 @@ FFUF() {
     gocl -i github.com/ffuf/ffuf &>/dev/null
 
     if ! command -v ffuf &>/dev/null; then
-        echo -e "${BRED}[x] FFUF - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FFUF - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FFUF - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FFUF - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DIRSEARCH() {
@@ -1688,13 +1690,13 @@ DIRSEARCH() {
     pipx install --force git+https://github.com/maurosoria/dirsearch.git &>/dev/null
 
     if ! command -v dirsearch &>/dev/null; then
-        echo -e "${BRED}[x] DIRSEARCH - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DIRSEARCH - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DIRSEARCH - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DIRSEARCH - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOWITNESS() {
@@ -1702,13 +1704,13 @@ GOWITNESS() {
     gocl -i github.com/sensepost/gowitness &>/dev/null
 
     if ! command -v gowitness &>/dev/null; then
-        echo -e "${BRED}[x] GOWITNESS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOWITNESS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOWITNESS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOWITNESS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GITHUB_SUBDOMAINS() {
@@ -1716,13 +1718,13 @@ GITHUB_SUBDOMAINS() {
     gocl -i github.com/gwen001/github-subdomains &>/dev/null
 
     if ! command -v github-subdomains &>/dev/null; then
-        echo -e "${BRED}[x] GITHUB_SUBDOMAINS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GITHUB_SUBDOMAINS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GITHUB_SUBDOMAINS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GITHUB_SUBDOMAINS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 AMASS() {
@@ -1730,13 +1732,13 @@ AMASS() {
     go install -v github.com/owasp-amass/amass/v3/...@master &>/dev/null
 
     if ! command -v amass &>/dev/null; then
-        echo -e "${BRED}[x] AMASS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] AMASS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] AMASS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] AMASS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SHOSUBGO() {
@@ -1744,13 +1746,13 @@ SHOSUBGO() {
     gocl -i github.com/incogbyte/shosubgo &>/dev/null
 
     if ! command -v shosubgo &>/dev/null; then
-        echo -e "${BRED}[x] SHOSUBGO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SHOSUBGO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SHOSUBGO - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SHOSUBGO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GAU() {
@@ -1758,13 +1760,13 @@ GAU() {
     gocl -i github.com/lc/gau &>/dev/null
 
     if ! command -v gau &>/dev/null; then
-        echo -e "${BRED}[x] GAU - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GAU - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GAU - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GAU - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SUBJS() {
@@ -1772,13 +1774,13 @@ SUBJS() {
     gocl -i github.com/lc/subjs &>/dev/null
 
     if ! command -v subjs &>/dev/null; then
-        echo -e "${BRED}[x] SUBJS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SUBJS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SUBJS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SUBJS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOSPIDER() {
@@ -1786,13 +1788,13 @@ GOSPIDER() {
     gocl -i github.com/jaeles-project/gospider &>/dev/null
 
     if ! command -v gospider &>/dev/null; then
-        echo -e "${BRED}[x] GOSPIDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOSPIDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOSPIDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOSPIDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 JAELES() {
@@ -1800,13 +1802,13 @@ JAELES() {
     gocl -i github.com/jaeles-project/jaeles &>/dev/null
 
     if ! command -v jaeles &>/dev/null; then
-        echo -e "${BRED}[x] JAELES - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] JAELES - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] JAELES - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] JAELES - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GETJS() {
@@ -1814,13 +1816,13 @@ GETJS() {
     gocl -i github.com/003random/getJS &>/dev/null
 
     if ! command -v getJS &>/dev/null; then
-        echo -e "${BRED}[x] GETJS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GETJS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GETJS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GETJS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 JSLUICE() {
@@ -1828,13 +1830,13 @@ JSLUICE() {
     gocl -i github.com/BishopFox/jsluice &>/dev/null
 
     if ! command -v jsluice &>/dev/null; then
-        echo -e "${BRED}[x] JSLUICE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] JSLUICE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] JSLUICE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] JSLUICE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SHORTSCAN() {
@@ -1842,13 +1844,13 @@ SHORTSCAN() {
     gocl -i github.com/bitquark/shortscan &>/dev/null
 
     if ! command -v shortscan &>/dev/null; then
-        echo -e "${BRED}[x] SHORTSCAN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SHORTSCAN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SHORTSCAN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SHORTSCAN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GUNGNIR() {
@@ -1856,13 +1858,13 @@ GUNGNIR() {
     gocl -i github.com/g0ldencybersec/gungnir &>/dev/null
 
     if ! command -v gungnir &>/dev/null; then
-        echo -e "${BRED}[x] GUNGNIR - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GUNGNIR - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GUNGNIR - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GUNGNIR - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SNS() {
@@ -1870,13 +1872,13 @@ SNS() {
     gocl -i github.com/sw33tLie/sns &>/dev/null
 
     if ! command -v sns &>/dev/null; then
-        echo -e "${BRED}[x] SNS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SNS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PUREDNS() {
@@ -1884,13 +1886,13 @@ PUREDNS() {
     gocl -i github.com/d3mondev/puredns &>/dev/null
 
     if ! command -v puredns &>/dev/null; then
-        echo -e "${BRED}[x] PUREDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PUREDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PUREDNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PUREDNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DMUT() {
@@ -1898,13 +1900,13 @@ DMUT() {
     gocl -i github.com/bp0lr/dmut &>/dev/null
 
     if ! command -v dmut &>/dev/null; then
-        echo -e "${BRED}[x] DMUT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DMUT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DMUT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DMUT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOBUSTER() {
@@ -1912,13 +1914,13 @@ GOBUSTER() {
     gocl -i github.com/OJ/gobuster &>/dev/null
 
     if ! command -v gobuster &>/dev/null; then
-        echo -e "${BRED}[x] GOBUSTER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOBUSTER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOBUSTER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOBUSTER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SMAP() {
@@ -1926,13 +1928,13 @@ SMAP() {
     gocl -i github.com/s0md3v/smap &>/dev/null
 
     if ! command -v smap &>/dev/null; then
-        echo -e "${BRED}[x] SMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SMAP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SMAP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SMAP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DALFOX() {
@@ -1940,13 +1942,13 @@ DALFOX() {
     gocl -i github.com/hahwul/dalfox &>/dev/null
 
     if ! command -v dalfox &>/dev/null; then
-        echo -e "${BRED}[x] DALFOX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DALFOX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DALFOX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DALFOX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CERO() {
@@ -1954,13 +1956,13 @@ CERO() {
     gocl -i github.com/glebarez/cero &>/dev/null
 
     if ! command -v cero &>/dev/null; then
-        echo -e "${BRED}[x] CERO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CERO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CERO - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CERO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOTATOR() {
@@ -1968,13 +1970,13 @@ GOTATOR() {
     gocl -i github.com/Josue87/gotator &>/dev/null
 
     if ! command -v gotator &>/dev/null; then
-        echo -e "${BRED}[x] GOTATOR - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOTATOR - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOTATOR - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOTATOR - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ANALYTICSRELATIONSHIPS() {
@@ -1982,13 +1984,13 @@ ANALYTICSRELATIONSHIPS() {
     gocl -i github.com/Josue87/analyticsrelationships &>/dev/null
 
     if ! command -v analyticsrelationships &>/dev/null; then
-        echo -e "${BRED}[x] ANALYTICSRELATIONSHIPS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ANALYTICSRELATIONSHIPS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ANALYTICSRELATIONSHIPS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ANALYTICSRELATIONSHIPS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 MANTRA() {
@@ -1996,13 +1998,13 @@ MANTRA() {
     gocl -i github.com/MrEmpy/mantra &>/dev/null
 
     if ! command -v mantra &>/dev/null; then
-        echo -e "${BRED}[x] MANTRA - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] MANTRA - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] MANTRA - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] MANTRA - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CRT() {
@@ -2010,13 +2012,13 @@ CRT() {
     gocl -i github.com/cemulus/crt &>/dev/null
 
     if ! command -v crt &>/dev/null; then
-        echo -e "${BRED}[x] CRT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CRT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CRT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CRT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 URLGRAB() {
@@ -2024,13 +2026,13 @@ URLGRAB() {
     gocl -i github.com/iamstoxe/urlgrab &>/dev/null
 
     if ! command -v urlgrab &>/dev/null; then
-        echo -e "${BRED}[x] URLGRAB - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] URLGRAB - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] URLGRAB - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] URLGRAB - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOLINKFINDER() {
@@ -2038,13 +2040,13 @@ GOLINKFINDER() {
     gocl -i github.com/rix4uni/GoLinkFinder &>/dev/null
 
     if ! command -v GoLinkFinder &>/dev/null; then
-        echo -e "${BRED}[x] GOLINKFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOLINKFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOLINKFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOLINKFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 LINX() {
@@ -2052,13 +2054,13 @@ LINX() {
     gocl -i github.com/riza/linx &>/dev/null
 
     if ! command -v linx &>/dev/null; then
-        echo -e "${BRED}[x] LINX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] LINX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] LINX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] LINX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 KXSS() {
@@ -2066,13 +2068,13 @@ KXSS() {
     gocl -i github.com/Emoe/kxss &>/dev/null
 
     if ! command -v kxss &>/dev/null; then
-        echo -e "${BRED}[x] KXSS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] KXSS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] KXSS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] KXSS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GALER() {
@@ -2080,13 +2082,13 @@ GALER() {
     gocl -i github.com/dwisiswant0/galer &>/dev/null
 
     if ! command -v galer &>/dev/null; then
-        echo -e "${BRED}[x] GALER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GALER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GALER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GALER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 JSFINDER() {
@@ -2094,13 +2096,13 @@ JSFINDER() {
     gocl -i github.com/kacakb/jsfinder &>/dev/null
 
     if ! command -v jsfinder &>/dev/null; then
-        echo -e "${BRED}[x] JSFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] JSFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] JSFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] JSFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PATHFINDER() {
@@ -2108,13 +2110,13 @@ PATHFINDER() {
     gocl -i github.com/Print3M/pathfinder &>/dev/null
 
     if ! command -v pathfinder &>/dev/null; then
-        echo -e "${BRED}[x] PATHFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PATHFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PATHFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PATHFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 TRUFFLEHOG() {
@@ -2122,13 +2124,13 @@ TRUFFLEHOG() {
     gocl -i github.com/trufflesecurity/trufflehog &>/dev/null
 
     if ! command -v trufflehog &>/dev/null; then
-        echo -e "${BRED}[x] TRUFFLEHOG - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] TRUFFLEHOG - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] TRUFFLEHOG - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] TRUFFLEHOG - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 JSHUNTER() {
@@ -2136,13 +2138,13 @@ JSHUNTER() {
     gocl -i github.com/cc1a2b/JShunter &>/dev/null
 
     if ! command -v jshunter &>/dev/null; then
-        echo -e "${BRED}[x] JSHUNTER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] JSHUNTER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] JSHUNTER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] JSHUNTER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PPFUZZ() {
@@ -2161,13 +2163,13 @@ PPFUZZ() {
     rm -rf ppfuzz-v1.0.2-x86_64-unknown-linux-musl.tar.gz
 
     if ! command -v ppfuzz &>/dev/null; then
-        echo -e "${BRED}[x] PPFUZZ - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PPFUZZ - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PPFUZZ - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PPFUZZ - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 BRUTESPRAY() {
@@ -2175,13 +2177,13 @@ BRUTESPRAY() {
     gocl -i github.com/x90skysn3k/brutespray &>/dev/null
 
     if ! command -v brutespray &>/dev/null; then
-        echo -e "${BRED}[x] BRUTESPRAY - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] BRUTESPRAY - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] BRUTESPRAY - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] BRUTESPRAY - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 LINKINSPECTOR() {
@@ -2189,13 +2191,13 @@ LINKINSPECTOR() {
     gocl -i github.com/rix4uni/linkinspector &>/dev/null
 
     if ! command -v linkinspector &>/dev/null; then
-        echo -e "${BRED}[x] LINKINSPECTOR - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] LINKINSPECTOR - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] LINKINSPECTOR - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] LINKINSPECTOR - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 WORDGEN() {
@@ -2203,13 +2205,13 @@ WORDGEN() {
     gocl -i github.com/rix4uni/wordgen &>/dev/null
 
     if ! command -v wordgen &>/dev/null; then
-        echo -e "${BRED}[x] WORDGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] WORDGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] WORDGEN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] WORDGEN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FUZZULI() {
@@ -2217,13 +2219,13 @@ FUZZULI() {
     gocl -i github.com/musana/fuzzuli &>/dev/null
 
     if ! command -v fuzzuli &>/dev/null; then
-        echo -e "${BRED}[x] FUZZULI - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FUZZULI - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FUZZULI - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FUZZULI - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PYXSS() {
@@ -2231,13 +2233,13 @@ PYXSS() {
     pipx install --force git+https://github.com/rix4uni/pyxss.git &>/dev/null
 
     if ! command -v pyxss &>/dev/null; then
-        echo -e "${BRED}[x] PYXSS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PYXSS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PYXSS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PYXSS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ARINRANGE() {
@@ -2245,13 +2247,13 @@ ARINRANGE() {
     pipx install --force git+https://github.com/rix4uni/arinrange.git &>/dev/null
 
     if ! command -v arinrange &>/dev/null; then
-        echo -e "${BRED}[x] ARINRANGE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ARINRANGE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ARINRANGE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ARINRANGE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 BUILTWITHSUBS() {
@@ -2259,13 +2261,13 @@ BUILTWITHSUBS() {
     pipx install --force git+https://github.com/rix4uni/BUILTWITHSUBS.git &>/dev/null
 
     if ! command -v builtwithsubs &>/dev/null; then
-        echo -e "${BRED}[x] BUILTWITHSUBS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] BUILTWITHSUBS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] BUILTWITHSUBS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] BUILTWITHSUBS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOOP() {
@@ -2273,13 +2275,13 @@ GOOP() {
     gocl -i github.com/nyancrimew/goop &>/dev/null
 
     if ! command -v goop &>/dev/null; then
-        echo -e "${BRED}[x] GOOP - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOOP - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOOP - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOOP - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 COMMIX() {
@@ -2292,13 +2294,13 @@ COMMIX() {
     rm -rf commix
 
     if ! command -v commix &>/dev/null; then
-        echo -e "${BRED}[x] COMMIX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] COMMIX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] COMMIX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] COMMIX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PVREPLACE() {
@@ -2306,13 +2308,13 @@ PVREPLACE() {
     gocl -i github.com/rix4uni/pvreplace &>/dev/null
 
     if ! command -v pvreplace &>/dev/null; then
-        echo -e "${BRED}[x] PVREPLACE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PVREPLACE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PVREPLACE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PVREPLACE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SSB() {
@@ -2320,13 +2322,13 @@ SSB() {
     gocl -i github.com/pwnesia/ssb &>/dev/null
 
     if ! command -v ssb &>/dev/null; then
-        echo -e "${BRED}[x] SSB - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SSB - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SSB - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SSB - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FTPX() {
@@ -2334,13 +2336,13 @@ FTPX() {
     gocl -i github.com/rix4uni/ftpx &>/dev/null
 
     if ! command -v ftpx &>/dev/null; then
-        echo -e "${BRED}[x] FTPX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FTPX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FTPX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FTPX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DNSTAKE() {
@@ -2348,13 +2350,13 @@ DNSTAKE() {
     gocl -i github.com/pwnesia/dnstake &>/dev/null
 
     if ! command -v dnstake &>/dev/null; then
-        echo -e "${BRED}[x] DNSTAKE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DNSTAKE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DNSTAKE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DNSTAKE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 MX_TAKEOVER() {
@@ -2362,13 +2364,13 @@ MX_TAKEOVER() {
     gocl -i github.com/musana/mx-takeover &>/dev/null
 
     if ! command -v mx-takeover &>/dev/null; then
-        echo -e "${BRED}[x] MX_TAKEOVER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] MX_TAKEOVER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] MX_TAKEOVER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] MX_TAKEOVER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SUBZY() {
@@ -2376,13 +2378,13 @@ SUBZY() {
     gocl -i github.com/rix4uni/subzy &>/dev/null
 
     if ! command -v subzy &>/dev/null; then
-        echo -e "${BRED}[x] SUBZY - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SUBZY - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SUBZY - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SUBZY - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 URLDEDUPE() {
@@ -2396,13 +2398,13 @@ URLDEDUPE() {
     rm -rf urldedupe
 
     if ! command -v urldedupe &>/dev/null; then
-        echo -e "${BRED}[x] URLDEDUPE - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] URLDEDUPE - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] URLDEDUPE - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] URLDEDUPE - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 TIMELIMITX() {
@@ -2410,13 +2412,13 @@ TIMELIMITX() {
     gocl -i github.com/rix4uni/timelimitx &>/dev/null
 
     if ! command -v timelimitx &>/dev/null; then
-        echo -e "${BRED}[x] TIMELIMITX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] TIMELIMITX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] TIMELIMITX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] TIMELIMITX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SOURCEMAPPER() {
@@ -2424,13 +2426,13 @@ SOURCEMAPPER() {
     gocl -i github.com/denandz/sourcemapper &>/dev/null
 
     if ! command -v sourcemapper &>/dev/null; then
-        echo -e "${BRED}[x] SOURCEMAPPER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SOURCEMAPPER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SOURCEMAPPER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SOURCEMAPPER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 JSCRAWLER() {
@@ -2438,13 +2440,13 @@ JSCRAWLER() {
     pipx install --force git+https://github.com/rix4uni/jscrawler.git &>/dev/null
 
     if ! command -v jscrawler &>/dev/null; then
-        echo -e "${BRED}[x] JSCRAWLER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] JSCRAWLER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] JSCRAWLER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] JSCRAWLER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GORKER() {
@@ -2452,13 +2454,13 @@ GORKER() {
     pipx install --force git+https://github.com/rix4uni/gorker.git &>/dev/null
 
     if ! command -v gorker &>/dev/null; then
-        echo -e "${BRED}[x] GORKER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GORKER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GORKER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GORKER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ROBOTXT() {
@@ -2466,13 +2468,13 @@ ROBOTXT() {
     gocl -i github.com/rix4uni/robotxt &>/dev/null
 
     if ! command -v robotxt &>/dev/null; then
-        echo -e "${BRED}[x] ROBOTXT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ROBOTXT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ROBOTXT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ROBOTXT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 ROBOXTRACTOR() {
@@ -2480,13 +2482,13 @@ ROBOXTRACTOR() {
     gocl -i github.com/Josue87/roboxtractor &>/dev/null
 
     if ! command -v roboxtractor &>/dev/null; then
-        echo -e "${BRED}[x] ROBOXTRACTOR - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] ROBOXTRACTOR - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] ROBOXTRACTOR - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] ROBOXTRACTOR - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 PATHCRAWLER() {
@@ -2494,13 +2496,13 @@ PATHCRAWLER() {
     gocl -i github.com/rix4uni/pathcrawler &>/dev/null
 
     if ! command -v pathcrawler &>/dev/null; then
-        echo -e "${BRED}[x] PATHCRAWLER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] PATHCRAWLER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] PATHCRAWLER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] PATHCRAWLER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CRAWLEY() {
@@ -2508,13 +2510,13 @@ CRAWLEY() {
     gocl -i github.com/s0rg/crawley &>/dev/null
 
     if ! command -v crawley &>/dev/null; then
-        echo -e "${BRED}[x] CRAWLEY - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CRAWLEY - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CRAWLEY - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CRAWLEY - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 XCRAWL3R() {
@@ -2522,13 +2524,13 @@ XCRAWL3R() {
     gocl -i github.com/hueristiq/xcrawl3r &>/dev/null
 
     if ! command -v xcrawl3r &>/dev/null; then
-        echo -e "${BRED}[x] XCRAWL3R - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] XCRAWL3R - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] XCRAWL3R - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] XCRAWL3R - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 XURLFIND3R() {
@@ -2536,13 +2538,13 @@ XURLFIND3R() {
     gocl -i github.com/hueristiq/xurlfind3r &>/dev/null
 
     if ! command -v xurlfind3r &>/dev/null; then
-        echo -e "${BRED}[x] XURLFIND3R - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] XURLFIND3R - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] XURLFIND3R - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] XURLFIND3R - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GITHUB_ENDPOINTS() {
@@ -2550,13 +2552,13 @@ GITHUB_ENDPOINTS() {
     gocl -i github.com/gwen001/github-endpoints &>/dev/null
 
     if ! command -v github-endpoints &>/dev/null; then
-        echo -e "${BRED}[x] GITHUB_ENDPOINTS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GITHUB_ENDPOINTS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GITHUB_ENDPOINTS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GITHUB_ENDPOINTS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 URLFINDER() {
@@ -2564,13 +2566,13 @@ URLFINDER() {
     gocl -i github.com/projectdiscovery/urlfinder &>/dev/null
 
     if ! command -v urlfinder &>/dev/null; then
-        echo -e "${BRED}[x] URLFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] URLFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] URLFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] URLFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CARIDDI() {
@@ -2578,13 +2580,13 @@ CARIDDI() {
     gocl -i github.com/edoardottt/cariddi &>/dev/null
 
     if ! command -v cariddi &>/dev/null; then
-        echo -e "${BRED}[x] CARIDDI - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CARIDDI - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CARIDDI - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CARIDDI - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 UFORALL() {
@@ -2592,13 +2594,13 @@ UFORALL() {
     gocl -i github.com/rix4uni/uforall &>/dev/null
 
     if ! command -v uforall &>/dev/null; then
-        echo -e "${BRED}[x] UFORALL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] UFORALL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] UFORALL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] UFORALL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 EMAILFINDER() {
@@ -2606,13 +2608,13 @@ EMAILFINDER() {
     gocl -i github.com/rix4uni/emailfinder &>/dev/null
 
     if ! command -v emailfinder &>/dev/null; then
-        echo -e "${BRED}[x] EMAILFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] EMAILFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] EMAILFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] EMAILFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FAVIRECON() {
@@ -2620,13 +2622,13 @@ FAVIRECON() {
     gocl -i github.com/edoardottt/favirecon &>/dev/null
 
     if ! command -v favirecon &>/dev/null; then
-        echo -e "${BRED}[x] FAVIRECON - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FAVIRECON - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FAVIRECON - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FAVIRECON - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 FAVINFO() {
@@ -2634,13 +2636,13 @@ FAVINFO() {
     gocl -i github.com/rix4uni/favinfo &>/dev/null
 
     if ! command -v favinfo &>/dev/null; then
-        echo -e "${BRED}[x] FAVINFO - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] FAVINFO - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] FAVINFO - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] FAVINFO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DLEVEL() {
@@ -2648,13 +2650,13 @@ DLEVEL() {
     gocl -i github.com/rix4uni/dlevel &>/dev/null
 
     if ! command -v dlevel &>/dev/null; then
-        echo -e "${BRED}[x] DLEVEL - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DLEVEL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DLEVEL - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DLEVEL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SUBDOMAINFUZZ() {
@@ -2662,13 +2664,13 @@ SUBDOMAINFUZZ() {
     gocl -i github.com/rix4uni/subdomainfuzz &>/dev/null
 
     if ! command -v subdomainfuzz &>/dev/null; then
-        echo -e "${BRED}[x] SUBDOMAINFUZZ - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SUBDOMAINFUZZ - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SUBDOMAINFUZZ - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SUBDOMAINFUZZ - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOURLEX() {
@@ -2676,13 +2678,13 @@ GOURLEX() {
     gocl -i github.com/trap-bytes/gourlex &>/dev/null
 
     if ! command -v gourlex &>/dev/null; then
-        echo -e "${BRED}[x] GOURLEX - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOURLEX - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOURLEX - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOURLEX - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CSPFINDER() {
@@ -2690,13 +2692,13 @@ CSPFINDER() {
     gocl -i github.com/rix4uni/cspfinder &>/dev/null
 
     if ! command -v cspfinder &>/dev/null; then
-        echo -e "${BRED}[x] CSPFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CSPFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CSPFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CSPFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 CSPRECON() {
@@ -2704,13 +2706,13 @@ CSPRECON() {
     gocl -i github.com/edoardottt/csprecon &>/dev/null
 
     if ! command -v csprecon &>/dev/null; then
-        echo -e "${BRED}[x] CSPRECON - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] CSPRECON - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CSPRECON - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CSPRECON - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GITREPOENUM() {
@@ -2718,13 +2720,13 @@ GITREPOENUM() {
     gocl -i github.com/rix4uni/gitrepoenum &>/dev/null
 
     if ! command -v gitrepoenum &>/dev/null; then
-        echo -e "${BRED}[x] GITREPOENUM - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GITREPOENUM - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GITREPOENUM - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GITREPOENUM - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 S3SCANNER() {
@@ -2732,13 +2734,13 @@ S3SCANNER() {
     go install -v github.com/sa7mon/s3scanner@latest &>/dev/null
 
     if ! command -v s3scanner &>/dev/null; then
-        echo -e "${BRED}[x] S3SCANNER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] S3SCANNER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] S3SCANNER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] S3SCANNER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SPK() {
@@ -2746,13 +2748,13 @@ SPK() {
     gocl -i github.com/dhn/spk &>/dev/null
 
     if ! command -v spk &>/dev/null; then
-        echo -e "${BRED}[x] SPK - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] SPK - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] SPK - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] SPK - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 RIPGEN() {
@@ -2760,13 +2762,13 @@ RIPGEN() {
     cargo install ripgen &>/dev/null
 
     if ! command -v ripgen &>/dev/null; then
-        echo -e "${BRED}[x] RIPGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] RIPGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] RIPGEN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] RIPGEN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 GOALTDNS() {
@@ -2774,13 +2776,13 @@ GOALTDNS() {
     go install -v github.com/subfinder/goaltdns@latest &>/dev/null
 
     if ! command -v goaltdns &>/dev/null; then
-        echo -e "${BRED}[x] GOALTDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] GOALTDNS - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] GOALTDNS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] GOALTDNS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 DNSGEN() {
@@ -2788,13 +2790,13 @@ DNSGEN() {
     python3 -m pip install dnsgen --no-cache-dir &>/dev/null
 
     if ! command -v dnsgen &>/dev/null; then
-        echo -e "${BRED}[x] DNSGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] DNSGEN - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] DNSGEN - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] DNSGEN - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 RCERT() {
@@ -2807,13 +2809,13 @@ RCERT() {
     rm -rf rcert
 
     if ! command -v rcert &>/dev/null; then
-        echo -e "${BRED}[x] RCERT - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] RCERT - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] RCERT - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] RCERT - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 IPFINDER() {
@@ -2821,13 +2823,13 @@ IPFINDER() {
     gocl -i github.com/rix4uni/ipfinder &>/dev/null
 
     if ! command -v ipfinder &>/dev/null; then
-        echo -e "${BRED}[x] IPFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds"
+        echo -e "${BRED}[x] IPFINDER - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
         STOP_SPINNER
         return
     fi
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] IPFINDER - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] IPFINDER - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 
@@ -2842,7 +2844,7 @@ CONFIGS() {
     mkdir -p ~/.config/shosubgo && touch ~/.config/shosubgo/shosubgo-api.txt
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] CONFIGS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] CONFIGS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 
@@ -2857,7 +2859,7 @@ TRICKESTCLOUD() {
     rm -rf $WORDLIST_BASEDIR/trickestcloud.zip $WORDLIST_BASEDIR/trickestcloud
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] TRICKESTCLOUD - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] TRICKESTCLOUD - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 
@@ -2904,7 +2906,7 @@ WORDLISTS() {
     rm -rf $WORDLIST_BASEDIR/n0kovo_subdomains
 
     STOP_SPINNER
-    echo -e "${BGREEN}[+] WORDLISTS - INSTALLED${RESET}: ${TIME} seconds"
+    echo -e "${BGREEN}[+] WORDLISTS - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 
@@ -3165,7 +3167,7 @@ END_EPOCH=$(date +%s)
 DURATION=$(( END_EPOCH - START_EPOCH ))
 TIMETOOK=$(printf "%02d:%02d:%02d" $((DURATION/3600)) $(( (DURATION%3600)/60 )) $((DURATION%60)) )
 
-echo -e "${BGREEN}[+] STARTED${RESET}: ${STARTED_AT}, ${BGREEN}FINISHED${RESET}: ${ENDED_AT}, ${BGREEN}TIMETOOK${RESET}: ${TIMETOOK}"
+echo -e "${BGREEN}[+] STARTED${RESET}: ${STARTED_AT}, ${BGREEN}FINISHED${RESET}: ${ENDED_AT}, ${BGREEN}TIMETOOK${RESET}: ${TIMETOOK}" | unew -a $INSTALLEDLOGFILE
 
 
 # https://github.com/Screetsec/Sudomy
