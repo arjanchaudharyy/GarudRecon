@@ -122,6 +122,24 @@ START_EPOCH=$(date +%s)
 echo -e "Using $CONFIG_PATH"
 
 
+GOCL() {
+    START_SPINNER "${BGREEN}GOCL${RESET}"
+    wget -q https://github.com/rix4uni/gocl/releases/download/v0.0.4/gocl-linux-amd64-0.0.4.tgz
+    tar -xvzf gocl-linux-amd64-0.0.4.tgz &>/dev/null
+    rm -rf gocl-linux-amd64-0.0.4.tgz
+    mkdir -p ~/go/bin
+    mv gocl ~/go/bin/gocl
+
+    if ! command -v gocl &>/dev/null; then
+        echo -e "${BRED}[x] GOCL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
+        STOP_SPINNER
+        return
+    fi
+
+    STOP_SPINNER
+    echo -e "${BGREEN}[+] GOCL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
+}
+
 UNEW() {
     START_SPINNER "${BGREEN}UNEW${RESET}"
     gocl -i github.com/rix4uni/unew &>/dev/null
@@ -626,24 +644,6 @@ GO() {
 
     STOP_SPINNER
     echo -e "${BGREEN}[+] GO - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
-}
-
-GOCL() {
-    START_SPINNER "${BGREEN}GOCL${RESET}"
-    wget -q https://github.com/rix4uni/gocl/releases/download/v0.0.4/gocl-linux-amd64-0.0.4.tgz
-    tar -xvzf gocl-linux-amd64-0.0.4.tgz &>/dev/null
-    rm -rf gocl-linux-amd64-0.0.4.tgz
-    mkdir -p ~/go/bin
-    mv gocl ~/go/bin/gocl
-
-    if ! command -v gocl &>/dev/null; then
-        echo -e "${BRED}[x] GOCL - INSTALLATION FAILED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
-        STOP_SPINNER
-        return
-    fi
-
-    STOP_SPINNER
-    echo -e "${BGREEN}[+] GOCL - INSTALLED${RESET}: ${TIME} seconds" | unew -a $INSTALLEDLOGFILE
 }
 
 SHODAN() {
@@ -2972,9 +2972,9 @@ LARGESCOPE(){
 
 # Install only those tools that used in cronjobs
 CRONJOBS(){
+    UNEW
     REQUIRED
     
-    UNEW
     SUBFINDER
     AMASS
     SUBDOG
@@ -2995,8 +2995,10 @@ CRONJOBS(){
 
 # Install all tools that releted to smallscope, mediumscope, largescope, cronjobs
 ALL(){
-    REQUIRED
     GOCL
+    UNEW
+    UNEWFLUSH
+    REQUIRED
     SHODAN
     ARJUN
     TLDINFO
@@ -3054,8 +3056,6 @@ ALL(){
     WHOXYSUBS
     UDON
     TECHX
-    UNEW
-    UNEWFLUSH
     IP2ORG
     CERTINFO
     XSSCHECKER
