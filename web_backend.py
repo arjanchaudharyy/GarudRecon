@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# CTXREC - Advanced Reconnaissance & Vulnerability Scanner
+# Created by: arjanchaudharyy
+# GitHub: https://github.com/arjanchaudharyy/GarudRecon
+
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import subprocess
@@ -10,6 +14,8 @@ import os
 import time
 from datetime import datetime
 from pathlib import Path
+import shutil
+import sys
 
 app = Flask(__name__, static_folder='web', static_url_path='')
 CORS(app)
@@ -21,6 +27,81 @@ SCANS_DIR.mkdir(exist_ok=True)
 # Store active scans in memory
 active_scans = {}
 scan_results = {}
+
+# Auto-install tools on startup
+def auto_install_tools():
+    """Automatically install missing tools on first run"""
+    print("\n" + "="*60)
+    print("CTXREC - Checking tool availability...")
+    print("="*60)
+    
+    essential_tools = ['dig', 'nmap', 'curl', 'httpx', 'subfinder', 'nuclei']
+    missing_tools = []
+    
+    for tool in essential_tools:
+        if not shutil.which(tool):
+            missing_tools.append(tool)
+    
+    if missing_tools:
+        print(f"\n⚠️  Missing tools detected: {', '.join(missing_tools)}")
+        print("\n🔧 Starting automatic tool installation...")
+        print("This may take 5-15 minutes depending on your system.\n")
+        
+        # Run auto-installer
+        installer_path = Path(__file__).parent / "auto_install_tools.sh"
+        if installer_path.exists():
+            try:
+                # Run installer in background
+                result = subprocess.run(
+                    ["bash", str(installer_path)],
+                    capture_output=True,
+                    text=True,
+                    timeout=900  # 15 minute timeout
+                )
+                
+                if result.returncode == 0:
+                    print("\n✅ Tool installation completed successfully!")
+                    print("Restarting PATH configuration...\n")
+                    
+                    # Add Go bin to PATH for current session
+                    go_bin = os.path.expanduser("~/go/bin")
+                    if go_bin not in os.environ.get('PATH', ''):
+                        os.environ['PATH'] = f"{os.environ.get('PATH', '')}:{go_bin}:/usr/local/go/bin"
+                else:
+                    print(f"\n⚠️  Auto-installation encountered issues.")
+                    print("You can manually install tools using:")
+                    print("  sudo ./install_basic_tools.sh")
+                    print("\nContinuing with available tools...\n")
+            except subprocess.TimeoutExpired:
+                print("\n⚠️  Installation timed out. Continuing with available tools...\n")
+            except Exception as e:
+                print(f"\n⚠️  Auto-installation failed: {e}")
+                print("You can manually install tools using:")
+                print("  sudo ./install_basic_tools.sh\n")
+        else:
+            print("⚠️  Auto-installer not found. Please run:")
+            print("  sudo ./install_basic_tools.sh\n")
+    else:
+        print("\n✅ All essential tools are installed!")
+        print(f"✓ Found: {', '.join(essential_tools)}\n")
+
+# Check for essential tools
+def check_tools():
+    """Check which essential tools are available"""
+    essential_tools = {
+        'light': ['dig', 'curl'],
+        'cool': ['subfinder', 'httpx', 'dnsx'],
+        'ultra': ['subfinder', 'httpx', 'nuclei', 'naabu']
+    }
+    
+    available_tools = {}
+    for scan_type, tools in essential_tools.items():
+        available_tools[scan_type] = []
+        for tool in tools:
+            if shutil.which(tool):
+                available_tools[scan_type].append(tool)
+    
+    return available_tools
 
 def run_scan(scan_id, domain, scan_type):
     """Execute scan in background thread"""
@@ -71,8 +152,17 @@ def run_scan(scan_id, domain, scan_type):
             # Load results
             result_file = scan_output_dir / 'results.json'
             if result_file.exists():
-                with open(result_file) as f:
-                    scan_results[scan_id] = json.load(f)
+                try:
+                    with open(result_file) as f:
+                        scan_results[scan_id] = json.load(f)
+                except json.JSONDecodeError as e:
+                    active_scans[scan_id]['status'] = 'failed'
+                    active_scans[scan_id]['error'] = f"JSON parse error: {str(e)}"
+                    active_scans[scan_id]['log'].append(f"ERROR: {str(e)}")
+                    scan_results[scan_id] = {
+                        'message': 'Scan completed but results file is invalid',
+                        'error': str(e)
+                    }
             else:
                 scan_results[scan_id] = {
                     'message': 'Scan completed but no results file found',
@@ -167,11 +257,33 @@ def list_scans():
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
-    return jsonify({'status': 'ok', 'message': 'GarudRecon Web API is running'})
+    tools = check_tools()
+    return jsonify({
+        'status': 'ok', 
+        'message': 'GarudRecon Web API is running',
+        'tools_available': tools
+    })
+
+@app.route('/api/tools', methods=['GET'])
+def get_tools():
+    """Get available tools status"""
+    tools = check_tools()
+    return jsonify({
+        'available_tools': tools,
+        'recommendations': {
+            'light': 'Install: dig, nmap, httpx, waybackurls',
+            'cool': 'Install: subfinder, httpx, dnsx, naabu, nuclei',
+            'ultra': 'Run: ./garudrecon install -f ALL'
+        }
+    })
 
 if __name__ == '__main__':
+    # Auto-install tools on startup
+    auto_install_tools()
+    
     print("=" * 60)
-    print("GarudRecon Web Interface")
+    print("CTXREC Web Interface")
+    print("Created by: arjanchaudharyy")
     print("=" * 60)
     print("\nStarting server on http://0.0.0.0:5000")
     print("\nScan Types Available:")

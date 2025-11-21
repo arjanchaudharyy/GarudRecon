@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# CTXREC Web Interface Launcher
+# Created by: arjanchaudharyy
+
 echo "=========================================="
-echo "   GarudRecon Web Interface Launcher"
+echo "   CTXREC Web Interface Launcher"
 echo "=========================================="
+echo "Created by: arjanchaudharyy"
 echo ""
 
 # Check if Python 3 is installed
@@ -40,7 +44,32 @@ fi
 
 echo ""
 echo "=========================================="
-echo "   Starting GarudRecon Web Server"
+echo "   Checking Tools Installation"
+echo "=========================================="
+echo ""
+
+# Quick tool check
+TOOL_COUNT=0
+for tool in dig curl httpx subfinder nuclei; do
+    command -v "$tool" &> /dev/null && ((TOOL_COUNT++))
+done
+
+if [ $TOOL_COUNT -eq 0 ]; then
+    echo "⚠️  WARNING: No reconnaissance tools installed!"
+    echo ""
+    echo "Scans will complete but show 0 results."
+    echo "To install basic tools, run:"
+    echo "  sudo ./install_basic_tools.sh"
+    echo ""
+    echo "Or check: ./check_tools.sh"
+    echo ""
+else
+    echo "✓ Found $TOOL_COUNT/5 basic tools installed"
+    echo ""
+fi
+
+echo "=========================================="
+echo "   Starting CTXREC Web Server"
 echo "=========================================="
 echo ""
 echo "Access the web interface at:"
