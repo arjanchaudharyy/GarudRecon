@@ -155,17 +155,30 @@ sudo ./install_basic_tools.sh
 ### Other Free Cloud Options
 
 <details>
-  <summary><b>Railway</b></summary>
+  <summary><b>Railway (Pre-configured Dockerfile)</b></summary>
+
+CTXREC includes a ready-to-use Dockerfile that pre-installs all reconnaissance tools during build.
 
 ```bash
-# Install Railway CLI
-npm i -g @railway/cli
+# Option 1: Deploy from GitHub (Recommended)
+# 1. Fork/clone this repository
+# 2. Go to Railway.app
+# 3. Click "New Project" → "Deploy from GitHub repo"
+# 4. Select your GarudRecon repository
+# 5. Wait 5-10 minutes for tools to install
+# 6. Access your deployment URL
 
-# Deploy
+# Option 2: Using Railway CLI
+npm i -g @railway/cli
 railway login
 railway init
 railway up
 ```
+
+**Important:** The Dockerfile automatically installs all tools (httpx, subfinder, nuclei, etc.) during build. This takes 5-10 minutes but ensures scans work correctly.
+
+📖 **Complete Railway Guide**: [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md)
+🔧 **Troubleshooting**: [RAILWAY_QUICK_FIX.md](RAILWAY_QUICK_FIX.md)
 </details>
 
 <details>

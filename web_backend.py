@@ -30,60 +30,47 @@ scan_results = {}
 
 # Auto-install tools on startup
 def auto_install_tools():
-    """Automatically install missing tools on first run"""
+    """Check tool availability and provide deployment info"""
     print("\n" + "="*60)
     print("CTXREC - Checking tool availability...")
     print("="*60)
     
+    # Check if running in Docker/Railway (tools should be pre-installed)
+    in_docker = os.path.exists('/.dockerenv') or os.environ.get('RAILWAY_ENVIRONMENT')
+    
     essential_tools = ['dig', 'nmap', 'curl', 'httpx', 'subfinder', 'nuclei']
+    found_tools = []
     missing_tools = []
     
     for tool in essential_tools:
-        if not shutil.which(tool):
+        if shutil.which(tool):
+            found_tools.append(tool)
+        else:
             missing_tools.append(tool)
     
     if missing_tools:
-        print(f"\n⚠️  Missing tools detected: {', '.join(missing_tools)}")
-        print("\n🔧 Starting automatic tool installation...")
-        print("This may take 5-15 minutes depending on your system.\n")
+        print(f"\n⚠️  Missing tools: {', '.join(missing_tools)}")
         
-        # Run auto-installer
-        installer_path = Path(__file__).parent / "auto_install_tools.sh"
-        if installer_path.exists():
-            try:
-                # Run installer in background
-                result = subprocess.run(
-                    ["bash", str(installer_path)],
-                    capture_output=True,
-                    text=True,
-                    timeout=900  # 15 minute timeout
-                )
-                
-                if result.returncode == 0:
-                    print("\n✅ Tool installation completed successfully!")
-                    print("Restarting PATH configuration...\n")
-                    
-                    # Add Go bin to PATH for current session
-                    go_bin = os.path.expanduser("~/go/bin")
-                    if go_bin not in os.environ.get('PATH', ''):
-                        os.environ['PATH'] = f"{os.environ.get('PATH', '')}:{go_bin}:/usr/local/go/bin"
-                else:
-                    print(f"\n⚠️  Auto-installation encountered issues.")
-                    print("You can manually install tools using:")
-                    print("  sudo ./install_basic_tools.sh")
-                    print("\nContinuing with available tools...\n")
-            except subprocess.TimeoutExpired:
-                print("\n⚠️  Installation timed out. Continuing with available tools...\n")
-            except Exception as e:
-                print(f"\n⚠️  Auto-installation failed: {e}")
-                print("You can manually install tools using:")
-                print("  sudo ./install_basic_tools.sh\n")
+        if in_docker:
+            print("\n📦 Running in containerized environment (Docker/Railway)")
+            print("⚠️  Tools should be pre-installed in the Docker image.")
+            print("If tools are missing, the Docker build may have failed.")
+            print("Please check the build logs on Railway dashboard.\n")
+            print("Expected tools location:")
+            print(f"  - System tools: /usr/bin/")
+            print(f"  - Go tools: {os.environ.get('GOPATH', '/root/go')}/bin/")
+            print(f"  - Current PATH: {os.environ.get('PATH', 'Not set')}\n")
         else:
-            print("⚠️  Auto-installer not found. Please run:")
-            print("  sudo ./install_basic_tools.sh\n")
+            print("\n🔧 To install missing tools, run:")
+            print("  sudo ./install_basic_tools.sh")
+            print("or for full installation:")
+            print("  ./garudrecon install -f ALL\n")
     else:
         print("\n✅ All essential tools are installed!")
-        print(f"✓ Found: {', '.join(essential_tools)}\n")
+        print(f"✓ Found: {', '.join(found_tools)}\n")
+        
+    if found_tools:
+        print(f"✓ Available tools ({len(found_tools)}/{len(essential_tools)}): {', '.join(found_tools)}")
 
 # Check for essential tools
 def check_tools():
