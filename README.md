@@ -64,17 +64,26 @@ GarudRecon now includes a modern web interface with **three optimized scan modes
 
 ### 🚀 Quick Deployment
 
-**Local/Development:**
+**☁️ FREE Cloud Deployment (Recommended for Beginners):**
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon)
+
+- No credit card required
+- Always-on free tier
+- Auto SSL & domain
+- [See all free options →](DEPLOY_FREE_CLOUD.md)
+
+**💻 Local/Development:**
 ```bash
 ./start_web.sh
 ```
 
-**Production (Automated):**
+**🏭 Production VPS (Automated):**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | sudo bash
 ```
 
-**Docker:**
+**🐳 Docker:**
 ```bash
 docker-compose up -d
 ```

@@ -1,0 +1,46 @@
+# Render.com deployment configuration for GarudRecon
+# This file enables one-click deployment to Render.com (FREE tier available)
+#
+# Deploy with one click:
+# https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon
+
+services:
+  # Web Service
+  - type: web
+    name: garudrecon-web
+    env: docker
+    plan: free  # Use free tier
+    region: oregon  # Choose your region
+    
+    # Build configuration
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    
+    # Environment variables
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: HOST
+        value: 0.0.0.0
+      - key: SECRET_KEY
+        generateValue: true  # Auto-generate secret
+      - key: CORS_ORIGINS
+        value: "*"  # Update with your domain after deployment
+    
+    # Health check
+    healthCheckPath: /api/health
+    
+    # Disk for persistent storage (scans)
+    disk:
+      name: garudrecon-scans
+      mountPath: /app/scans
+      sizeGB: 1  # Free tier allows up to 1GB
+
+# Note: Render free tier limitations:
+# - 750 hours/month (enough for always-on)
+# - Sleeps after 15 min of inactivity
+# - Wakes up on request (adds ~30s delay)
+# - 512 MB RAM (enough for Light scans, limited for Cool/Ultra)
+# - 1 GB disk storage
