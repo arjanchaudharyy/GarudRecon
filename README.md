@@ -37,6 +37,30 @@ and `largescope`, depending on your coverage needs. You can customize scans,
 exclude specific functions, provide configuration files, and automate cron jobs
 for continuous monitoring.
 
+## 🆕 Web Interface (NEW!)
+
+GarudRecon now includes a modern web interface with **three optimized scan modes**:
+
+- **⚡ Light** - Fast scan with basic recon (~5-10 minutes)
+- **🔥 Cool** - Medium-level comprehensive scan (~20-30 minutes)  
+- **🚀 Ultra** - Full deep reconnaissance scan (~1-2 hours)
+
+### Quick Start Web Interface
+
+```bash
+# Start the web server
+./start_web.sh
+
+# Or use the garudrecon command
+./garudrecon web
+
+# Access at: http://localhost:5000
+```
+
+📚 **Documentation:**
+- **Beginners**: See [QUICKSTART.md](QUICKSTART.md) for step-by-step guide
+- **Web Interface**: See [WEB_INTERFACE.md](WEB_INTERFACE.md) for detailed docs
+
 ## History
 I created GarudRecon in 2022 but I deleted because some of api keys leaked here someone forked [GarudRecon](https://github.com/polling-repo-continua/GarudRecon)
 
@@ -317,9 +341,9 @@ Example:
 | ---------- | --------- | ------------ | ------------- |
 | Ubuntu     | Yes       | Yes          | Ubuntu 24.04  |
 | Kali       | Yes       | Yes          | Kali 2025.2   |
-| Debian     | Yes       | Yes          | No		    |
-| Windows    | Yes       | Yes          | WSL Ubuntu 	|
-| MacOS      | Yes       | Yes          | No    		|
+| Debian     | Yes       | Yes          | No            |
+| Windows    | Yes       | Yes          | WSL Ubuntu     |
+| MacOS      | Yes       | Yes          | No            |
 | Arch Linux | Yes       | No           | No            |
 |            |           |              |               |
 

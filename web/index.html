@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GarudRecon - Web Scanner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ GarudRecon</h1>
+            <p class="subtitle">Advanced Reconnaissance & Vulnerability Scanner</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Scan Form -->
+            <div class="card scan-form-card">
+                <h2>Start New Scan</h2>
+                <form id="scanForm">
+                    <div class="form-group">
+                        <label for="domain">Target Domain</label>
+                        <input 
+                            type="text" 
+                            id="domain" 
+                            name="domain" 
+                            placeholder="example.com or support.example.com"
+                            required
+                        >
+                        <small>Enter domain without http:// or https://</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Scan Type</label>
+                        <div class="scan-types">
+                            <div class="scan-type-option">
+                                <input type="radio" id="light" name="scan_type" value="light" checked>
+                                <label for="light" class="scan-type-label">
+                                    <div class="scan-type-icon">⚡</div>
+                                    <div class="scan-type-name">Light</div>
+                                    <div class="scan-type-desc">Fast scan with basic recon and vulnerability checks</div>
+                                    <div class="scan-type-time">~5-10 minutes</div>
+                                </label>
+                            </div>
+
+                            <div class="scan-type-option">
+                                <input type="radio" id="cool" name="scan_type" value="cool">
+                                <label for="cool" class="scan-type-label">
+                                    <div class="scan-type-icon">🔥</div>
+                                    <div class="scan-type-name">Cool</div>
+                                    <div class="scan-type-desc">Medium scan with subdomain enumeration and extensive checks</div>
+                                    <div class="scan-type-time">~20-30 minutes</div>
+                                </label>
+                            </div>
+
+                            <div class="scan-type-option">
+                                <input type="radio" id="ultra" name="scan_type" value="ultra">
+                                <label for="ultra" class="scan-type-label">
+                                    <div class="scan-type-icon">🚀</div>
+                                    <div class="scan-type-name">Ultra</div>
+                                    <div class="scan-type-desc">Comprehensive deep scan with all tools and techniques</div>
+                                    <div class="scan-type-time">~1-2 hours</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="startScanBtn">
+                        Start Scan
+                    </button>
+                </form>
+            </div>
+
+            <!-- Scan Progress -->
+            <div class="card scan-progress-card" id="scanProgressCard" style="display: none;">
+                <h2>Scan Progress</h2>
+                <div class="progress-info">
+                    <div class="progress-item">
+                        <strong>Scan ID:</strong> <span id="scanId">-</span>
+                    </div>
+                    <div class="progress-item">
+                        <strong>Domain:</strong> <span id="scanDomain">-</span>
+                    </div>
+                    <div class="progress-item">
+                        <strong>Type:</strong> <span id="scanType">-</span>
+                    </div>
+                    <div class="progress-item">
+                        <strong>Status:</strong> <span id="scanStatus" class="status-badge">-</span>
+                    </div>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+
+                <div class="log-container">
+                    <h3>Scan Log</h3>
+                    <div class="log-output" id="logOutput">
+                        <div class="log-line">Initializing scan...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scan Results -->
+            <div class="card scan-results-card" id="scanResultsCard" style="display: none;">
+                <h2>Scan Results</h2>
+                <div id="scanResults"></div>
+                <button class="btn btn-secondary" onclick="downloadResults()">
+                    Download Results
+                </button>
+            </div>
+
+            <!-- Recent Scans -->
+            <div class="card recent-scans-card">
+                <h2>Recent Scans</h2>
+                <div id="recentScans">
+                    <p class="text-muted">No recent scans</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>GarudRecon Web Interface | Made with ❤️ for Security Researchers</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

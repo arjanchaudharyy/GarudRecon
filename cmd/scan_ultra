@@ -1,0 +1,364 @@
+#!/bin/bash
+
+# Ultra Scan Mode - Full comprehensive deep reconnaissance
+# Uses all available tools for maximum coverage
+
+CONFIG_PATH="configuration/garudrecon.cfg"
+source "$CONFIG_PATH" 2>/dev/null || true
+
+DOMAIN=""
+OUTPUT_DIR=""
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -d|--domain)
+            DOMAIN="$2"
+            shift 2
+            ;;
+        -o|--output)
+            OUTPUT_DIR="$2"
+            shift 2
+            ;;
+        *)
+            echo "Unknown parameter: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# Validate input
+if [[ -z "$DOMAIN" ]]; then
+    echo "Error: Domain is required (-d)"
+    exit 1
+fi
+
+if [[ -z "$OUTPUT_DIR" ]]; then
+    OUTPUT_DIR="scans/ultra-$(date +%Y%m%d-%H%M%S)-$DOMAIN"
+fi
+
+# Create output directory structure
+mkdir -p "$OUTPUT_DIR"/{subdomains,reconnaissance,vulnerabilities,screenshots}
+
+# Initialize results JSON
+RESULTS_FILE="$OUTPUT_DIR/results.json"
+echo "{" > "$RESULTS_FILE"
+echo "  \"scan_type\": \"ultra\"," >> "$RESULTS_FILE"
+echo "  \"domain\": \"$DOMAIN\"," >> "$RESULTS_FILE"
+echo "  \"start_time\": \"$(date -Iseconds)\"," >> "$RESULTS_FILE"
+echo "  \"findings\": {" >> "$RESULTS_FILE"
+
+# Logging function
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+}
+
+log "Starting ULTRA scan for $DOMAIN"
+log "Output directory: $OUTPUT_DIR"
+log "This is a comprehensive scan - may take 1-2 hours"
+
+# Step 1: Aggressive Subdomain Enumeration
+log "[1/15] Aggressive Subdomain Enumeration..."
+SUBDOMAINS_FILE="$OUTPUT_DIR/subdomains/all_subdomains.txt"
+touch "$SUBDOMAINS_FILE"
+
+# Subfinder
+if command -v subfinder &> /dev/null; then
+    log "Running subfinder..."
+    subfinder -d "$DOMAIN" -all -silent -o "$OUTPUT_DIR/subdomains/subfinder.txt" 2>/dev/null
+    cat "$OUTPUT_DIR/subdomains/subfinder.txt" >> "$SUBDOMAINS_FILE" 2>/dev/null
+fi
+
+# Assetfinder
+if command -v assetfinder &> /dev/null; then
+    log "Running assetfinder..."
+    assetfinder --subs-only "$DOMAIN" 2>/dev/null >> "$SUBDOMAINS_FILE"
+fi
+
+# Amass
+if command -v amass &> /dev/null; then
+    log "Running amass (active enumeration)..."
+    timeout 900 amass enum -active -d "$DOMAIN" -o "$OUTPUT_DIR/subdomains/amass.txt" 2>/dev/null
+    cat "$OUTPUT_DIR/subdomains/amass.txt" >> "$SUBDOMAINS_FILE" 2>/dev/null
+fi
+
+# Findomain
+if command -v findomain &> /dev/null; then
+    log "Running findomain..."
+    findomain -t "$DOMAIN" -u "$OUTPUT_DIR/subdomains/findomain.txt" 2>/dev/null
+    cat "$OUTPUT_DIR/subdomains/findomain.txt" >> "$SUBDOMAINS_FILE" 2>/dev/null
+fi
+
+# Chaos
+if command -v chaos &> /dev/null; then
+    log "Running chaos..."
+    chaos -d "$DOMAIN" -silent 2>/dev/null >> "$SUBDOMAINS_FILE"
+fi
+
+# Certificate Transparency
+if command -v cero &> /dev/null; then
+    log "Running cero (CT logs)..."
+    cero "$DOMAIN" 2>/dev/null >> "$SUBDOMAINS_FILE"
+fi
+
+# Deduplicate
+sort -u "$SUBDOMAINS_FILE" -o "$SUBDOMAINS_FILE"
+SUBDOMAIN_COUNT=$(wc -l < "$SUBDOMAINS_FILE")
+log "Found $SUBDOMAIN_COUNT unique subdomains"
+
+# Step 2: Subdomain Permutations
+log "[2/15] Subdomain Permutations..."
+if command -v alterx &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    cat "$SUBDOMAINS_FILE" | head -100 | alterx -silent 2>/dev/null > "$OUTPUT_DIR/subdomains/permutations.txt"
+    cat "$OUTPUT_DIR/subdomains/permutations.txt" >> "$SUBDOMAINS_FILE"
+    sort -u "$SUBDOMAINS_FILE" -o "$SUBDOMAINS_FILE"
+elif command -v altdns &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    altdns -i "$SUBDOMAINS_FILE" -o "$OUTPUT_DIR/subdomains/permutations.txt" -w /usr/share/wordlists/altdns.txt 2>/dev/null
+    cat "$OUTPUT_DIR/subdomains/permutations.txt" >> "$SUBDOMAINS_FILE" 2>/dev/null
+fi
+
+# Step 3: DNS Resolution with multiple resolvers
+log "[3/15] DNS Resolution..."
+if command -v puredns &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    puredns resolve "$SUBDOMAINS_FILE" -r /usr/share/wordlists/resolvers.txt --write "$OUTPUT_DIR/reconnaissance/resolved.txt" 2>/dev/null
+elif command -v dnsx &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    cat "$SUBDOMAINS_FILE" | dnsx -silent -a -resp -o "$OUTPUT_DIR/reconnaissance/resolved.txt" 2>/dev/null
+fi
+
+RESOLVED_COUNT=$(wc -l < "$OUTPUT_DIR/reconnaissance/resolved.txt" 2>/dev/null || echo "0")
+log "Resolved $RESOLVED_COUNT subdomains"
+
+# Step 4: HTTP Probing
+log "[4/15] HTTP Probing with full headers..."
+if command -v httpx &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/resolved.txt" ]]; then
+    cat "$OUTPUT_DIR/reconnaissance/resolved.txt" | cut -d' ' -f1 | httpx -silent -title -tech-detect -status-code -content-length -web-server -o "$OUTPUT_DIR/reconnaissance/httpx.txt" 2>/dev/null
+    LIVE_HOSTS=$(wc -l < "$OUTPUT_DIR/reconnaissance/httpx.txt" 2>/dev/null || echo "0")
+    log "Found $LIVE_HOSTS live hosts"
+fi
+
+# Step 5: Comprehensive Port Scanning
+log "[5/15] Comprehensive Port Scanning..."
+if command -v naabu &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/resolved.txt" ]]; then
+    cat "$OUTPUT_DIR/reconnaissance/resolved.txt" | cut -d' ' -f1 | naabu -silent -top-ports 1000 -o "$OUTPUT_DIR/reconnaissance/ports.txt" 2>/dev/null &
+    PORT_PID=$!
+elif command -v masscan &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/resolved.txt" ]]; then
+    masscan -iL "$OUTPUT_DIR/reconnaissance/resolved.txt" -p1-65535 --rate=10000 -oL "$OUTPUT_DIR/reconnaissance/ports.txt" 2>/dev/null &
+    PORT_PID=$!
+fi
+
+# Step 6: Extensive URL Discovery
+log "[6/15] Extensive URL Discovery..."
+URLS_FILE="$OUTPUT_DIR/reconnaissance/urls.txt"
+touch "$URLS_FILE"
+
+if command -v waybackurls &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    log "Fetching URLs from Wayback Machine..."
+    cat "$SUBDOMAINS_FILE" | head -50 | waybackurls 2>/dev/null >> "$URLS_FILE"
+fi
+
+if command -v gau &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    log "Fetching URLs from Common Crawl..."
+    cat "$SUBDOMAINS_FILE" | head -50 | gau --threads 20 2>/dev/null >> "$URLS_FILE"
+fi
+
+if command -v katana &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    log "Crawling with Katana..."
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | head -30 | katana -silent -d 5 -jc -kf all 2>/dev/null >> "$URLS_FILE"
+fi
+
+if command -v hakrawler &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    log "Crawling with Hakrawler..."
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | head -30 | hakrawler -subs -u -insecure 2>/dev/null >> "$URLS_FILE"
+fi
+
+if command -v gospider &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    log "Crawling with GoSpider..."
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | head -20 | gospider -t 10 -d 3 --sitemap --robots 2>/dev/null | grep -oP 'https?://[^\s]+' >> "$URLS_FILE"
+fi
+
+sort -u "$URLS_FILE" -o "$URLS_FILE"
+URL_COUNT=$(wc -l < "$URLS_FILE")
+log "Found $URL_COUNT unique URLs"
+
+# Step 7: JavaScript Discovery & Analysis
+log "[7/15] JavaScript Discovery & Analysis..."
+if command -v subjs &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    cat "$SUBDOMAINS_FILE" | subjs 2>/dev/null | sort -u > "$OUTPUT_DIR/reconnaissance/js_files.txt"
+fi
+
+if command -v linkfinder &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/js_files.txt" ]]; then
+    log "Analyzing JavaScript files..."
+    cat "$OUTPUT_DIR/reconnaissance/js_files.txt" | head -50 | while read js_url; do
+        timeout 30 linkfinder -i "$js_url" -o cli 2>/dev/null
+    done > "$OUTPUT_DIR/reconnaissance/js_endpoints.txt" 2>/dev/null &
+    JS_PID=$!
+fi
+
+JS_COUNT=$(wc -l < "$OUTPUT_DIR/reconnaissance/js_files.txt" 2>/dev/null || echo "0")
+log "Found $JS_COUNT JavaScript files"
+
+# Step 8: Parameter Discovery
+log "[8/15] Parameter Discovery..."
+if command -v paramspider &> /dev/null; then
+    paramspider -d "$DOMAIN" --output "$OUTPUT_DIR/reconnaissance/parameters.txt" 2>/dev/null &
+    PARAM_PID=$!
+fi
+
+# Step 9: Directory & File Enumeration
+log "[9/15] Directory Enumeration..."
+if command -v ffuf &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | head -10 | while read target; do
+        url=$(echo "$target" | awk '{print $1}')
+        timeout 300 ffuf -u "$url/FUZZ" -w /usr/share/wordlists/dirb/common.txt -mc 200,301,302,403 -o "$OUTPUT_DIR/reconnaissance/dirs_${url//[^a-zA-Z0-9]/_}.json" -s 2>/dev/null
+    done &
+    DIR_PID=$!
+fi
+
+# Step 10: XSS Testing (Comprehensive)
+log "[10/15] Comprehensive XSS Testing..."
+if [[ -f "$URLS_FILE" ]] && command -v dalfox &> /dev/null; then
+    grep "=" "$URLS_FILE" | head -200 | dalfox pipe --silence --no-color --skip-bav -o "$OUTPUT_DIR/vulnerabilities/xss_findings.txt" 2>/dev/null &
+    XSS_PID=$!
+fi
+
+# Step 11: SQL Injection Testing (Comprehensive)
+log "[11/15] Comprehensive SQLi Testing..."
+if [[ -f "$URLS_FILE" ]] && command -v sqlmap &> /dev/null; then
+    grep "=" "$URLS_FILE" | head -50 > "$OUTPUT_DIR/vulnerabilities/urls_with_params.txt"
+    if [[ -s "$OUTPUT_DIR/vulnerabilities/urls_with_params.txt" ]]; then
+        log "Testing for SQL Injection..."
+        while IFS= read -r url; do
+            timeout 120 sqlmap -u "$url" --batch --level=3 --risk=2 --threads=5 --answers="follow=N" 2>/dev/null | grep -i "parameter.*vulnerable" >> "$OUTPUT_DIR/vulnerabilities/sqli_findings.txt" 2>/dev/null
+        done < "$OUTPUT_DIR/vulnerabilities/urls_with_params.txt" &
+        SQLI_PID=$!
+    fi
+fi
+
+# Step 12: Nuclei Vulnerability Scanning
+log "[12/15] Nuclei Vulnerability Scanning..."
+if command -v nuclei &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    log "Running Nuclei with all templates..."
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | nuclei -silent -t cves/ -t vulnerabilities/ -t exposures/ -t takeovers/ -o "$OUTPUT_DIR/vulnerabilities/nuclei_findings.txt" 2>/dev/null &
+    NUCLEI_PID=$!
+fi
+
+# Step 13: Subdomain Takeover
+log "[13/15] Subdomain Takeover Check..."
+if command -v subzy &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
+    subzy run --targets "$SUBDOMAINS_FILE" --hide_fails --timeout 10 2>/dev/null | grep -i "vulnerable" > "$OUTPUT_DIR/vulnerabilities/subdomain_takeover.txt" 2>/dev/null &
+    TAKEOVER_PID=$!
+fi
+
+# Step 14: Screenshots
+log "[14/15] Taking Screenshots..."
+if command -v gowitness &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | head -50 | gowitness file -f - --screenshot-path "$OUTPUT_DIR/screenshots" --disable-logging 2>/dev/null &
+    SCREENSHOT_PID=$!
+elif command -v aquatone &> /dev/null && [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | head -50 | aquatone -out "$OUTPUT_DIR/screenshots" -silent 2>/dev/null &
+    SCREENSHOT_PID=$!
+fi
+
+# Step 15: Security Headers & SSL Analysis
+log "[15/15] Security Headers & SSL Analysis..."
+if [[ -s "$OUTPUT_DIR/reconnaissance/httpx.txt" ]]; then
+    cat "$OUTPUT_DIR/reconnaissance/httpx.txt" | head -50 > "$OUTPUT_DIR/reconnaissance/targets_for_security.txt"
+    
+    {
+        echo "Security Headers Analysis"
+        echo "=========================="
+        while IFS= read -r target; do
+            url=$(echo "$target" | awk '{print $1}')
+            echo ""
+            echo "Target: $url"
+            curl -sI "$url" 2>/dev/null | grep -i -E "(strict-transport-security|x-frame-options|x-content-type-options|content-security-policy|x-xss-protection|permissions-policy)"
+        done < "$OUTPUT_DIR/reconnaissance/targets_for_security.txt"
+    } > "$OUTPUT_DIR/vulnerabilities/security_headers.txt" 2>/dev/null
+fi
+
+# Wait for all background jobs
+log "Waiting for all scans to complete..."
+[[ -n "$PORT_PID" ]] && timeout 300 wait $PORT_PID 2>/dev/null
+[[ -n "$JS_PID" ]] && timeout 180 wait $JS_PID 2>/dev/null
+[[ -n "$PARAM_PID" ]] && timeout 180 wait $PARAM_PID 2>/dev/null
+[[ -n "$DIR_PID" ]] && timeout 300 wait $DIR_PID 2>/dev/null
+[[ -n "$XSS_PID" ]] && timeout 300 wait $XSS_PID 2>/dev/null
+[[ -n "$SQLI_PID" ]] && timeout 600 wait $SQLI_PID 2>/dev/null
+[[ -n "$NUCLEI_PID" ]] && timeout 600 wait $NUCLEI_PID 2>/dev/null
+[[ -n "$TAKEOVER_PID" ]] && timeout 180 wait $TAKEOVER_PID 2>/dev/null
+[[ -n "$SCREENSHOT_PID" ]] && timeout 300 wait $SCREENSHOT_PID 2>/dev/null
+
+# Generate Summary
+log "Generating comprehensive summary..."
+
+# Count findings
+XSS_COUNT=0
+SQLI_COUNT=0
+NUCLEI_COUNT=0
+TAKEOVER_COUNT=0
+SCREENSHOT_COUNT=0
+[[ -f "$OUTPUT_DIR/vulnerabilities/xss_findings.txt" ]] && XSS_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/xss_findings.txt")
+[[ -f "$OUTPUT_DIR/vulnerabilities/sqli_findings.txt" ]] && SQLI_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/sqli_findings.txt")
+[[ -f "$OUTPUT_DIR/vulnerabilities/nuclei_findings.txt" ]] && NUCLEI_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/nuclei_findings.txt")
+[[ -f "$OUTPUT_DIR/vulnerabilities/subdomain_takeover.txt" ]] && TAKEOVER_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/subdomain_takeover.txt")
+[[ -d "$OUTPUT_DIR/screenshots" ]] && SCREENSHOT_COUNT=$(ls -1 "$OUTPUT_DIR/screenshots" 2>/dev/null | wc -l)
+
+# Complete results JSON
+cat >> "$RESULTS_FILE" << EOF
+    "subdomains": $SUBDOMAIN_COUNT,
+    "resolved_hosts": $RESOLVED_COUNT,
+    "live_hosts": $LIVE_HOSTS,
+    "urls_found": $URL_COUNT,
+    "js_files": $JS_COUNT,
+    "xss_findings": $XSS_COUNT,
+    "sqli_findings": $SQLI_COUNT,
+    "nuclei_findings": $NUCLEI_COUNT,
+    "subdomain_takeover": $TAKEOVER_COUNT,
+    "screenshots": $SCREENSHOT_COUNT
+  },
+  "end_time": "$(date -Iseconds)",
+  "status": "completed"
+}
+EOF
+
+# Summary
+cat > "$OUTPUT_DIR/summary.txt" << EOF
+========================================
+GarudRecon - ULTRA Scan Summary
+========================================
+Domain: $DOMAIN
+Scan Type: Ultra (Full Deep Reconnaissance)
+Completed: $(date)
+
+RECONNAISSANCE:
+--------------
+Subdomains: $SUBDOMAIN_COUNT
+Resolved Hosts: $RESOLVED_COUNT
+Live Hosts: $LIVE_HOSTS
+URLs Discovered: $URL_COUNT
+JavaScript Files: $JS_COUNT
+Screenshots: $SCREENSHOT_COUNT
+
+VULNERABILITIES:
+---------------
+XSS Findings: $XSS_COUNT
+SQLi Findings: $SQLI_COUNT
+Nuclei Findings: $NUCLEI_COUNT
+Subdomain Takeover: $TAKEOVER_COUNT
+
+OUTPUT STRUCTURE:
+----------------
+$OUTPUT_DIR/
+  ├── subdomains/      (subdomain enumeration results)
+  ├── reconnaissance/  (URLs, ports, JS files)
+  ├── vulnerabilities/ (security findings)
+  └── screenshots/     (visual captures)
+
+========================================
+EOF
+
+cat "$OUTPUT_DIR/summary.txt"
+log "Ultra scan completed successfully!"
+log "Results saved to: $OUTPUT_DIR"
+
+exit 0
