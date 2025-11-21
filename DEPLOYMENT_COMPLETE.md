@@ -83,7 +83,7 @@ I've created a comprehensive deployment package for GarudRecon that makes it eas
 ### Option 1: One-Command VPS Deployment (Easiest)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh -o deploy.sh
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh -o deploy.sh
 chmod +x deploy.sh
 sudo ./deploy.sh
 ```
@@ -104,7 +104,7 @@ sudo ./deploy.sh
 
 ```bash
 # Clone repository
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # Deploy with Docker Compose
@@ -133,7 +133,7 @@ Follow the comprehensive guide in `DEPLOYMENT.md`
 #### For VPS:
 ```bash
 # 1. Download deployment script
-wget https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh
+wget https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh
 
 # 2. Make executable
 chmod +x deploy.sh
@@ -154,7 +154,7 @@ sudo ./deploy.sh
 #### For Docker:
 ```bash
 # 1. Clone repository
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # 2. Start with Docker Compose
@@ -167,7 +167,7 @@ docker-compose up -d
 #### For Local Development:
 ```bash
 # 1. Clone repository
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # 2. Start web interface
@@ -197,7 +197,7 @@ cd GarudRecon
 ssh root@your-droplet-ip
 
 # 3. Run deployment
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | bash
 
 # 4. Access
 # http://your-droplet-ip or https://your-domain.com
@@ -218,7 +218,7 @@ ssh -i your-key.pem ubuntu@your-ec2-ip
 
 # 4. Run deployment
 sudo su
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | bash
 
 # 5. Access
 # http://your-ec2-ip or https://your-domain.com
@@ -237,7 +237,7 @@ gcloud compute ssh your-instance-name
 
 # 4. Run deployment
 sudo su
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | bash
 
 # 5. Access
 # http://your-instance-ip or https://your-domain.com
@@ -252,7 +252,7 @@ curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/
 ssh root@your-linode-ip
 
 # 3. Run deployment
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | bash
 
 # 4. Access
 # http://your-linode-ip or https://your-domain.com
@@ -273,7 +273,7 @@ ssh azureuser@your-vm-ip
 
 # 4. Run deployment
 sudo su
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | bash
 
 # 5. Access
 # http://your-vm-ip or https://your-domain.com
@@ -283,7 +283,7 @@ curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # 2. Option A: Quick start
@@ -306,7 +306,7 @@ sudo ./deployment/deploy.sh
 brew install python3
 
 # 3. Clone and start
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 ./start_web.sh
 
@@ -504,7 +504,7 @@ You now have **everything needed** to deploy GarudRecon anywhere:
 
 ```bash
 # Automated VPS Deployment
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | sudo bash
 
 # Docker Deployment
 docker-compose up -d

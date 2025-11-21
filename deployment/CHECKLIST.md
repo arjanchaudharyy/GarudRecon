@@ -35,7 +35,7 @@ Use this checklist to ensure successful deployment.
 
 - [ ] **Download script**
   ```bash
-  curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh -o deploy.sh
+  curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh -o deploy.sh
   chmod +x deploy.sh
   ```
 
@@ -73,7 +73,7 @@ Use this checklist to ensure successful deployment.
 
 - [ ] **Clone repository**
   ```bash
-  git clone https://github.com/rix4uni/GarudRecon.git
+  git clone https://github.com/arjanchaudharyy/GarudRecon.git
   cd GarudRecon
   ```
 
@@ -93,7 +93,7 @@ Use this checklist to ensure successful deployment.
 
 - [ ] **Clone repository**
   ```bash
-  git clone https://github.com/rix4uni/GarudRecon.git
+  git clone https://github.com/arjanchaudharyy/GarudRecon.git
   cd GarudRecon
   ```
 

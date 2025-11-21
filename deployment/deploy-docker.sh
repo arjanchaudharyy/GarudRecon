@@ -56,7 +56,7 @@ check_docker_compose() {
 clone_repository() {
     if [ ! -d "GarudRecon" ]; then
         print_message "Cloning GarudRecon..." "$BLUE"
-        git clone https://github.com/rix4uni/GarudRecon.git
+        git clone https://github.com/arjanchaudharyy/GarudRecon.git
         cd GarudRecon
     else
         print_message "Repository already exists, pulling latest..." "$BLUE"

@@ -28,7 +28,7 @@ Deploy everything automatically on a fresh Ubuntu/Debian server:
 
 ```bash
 # Download and run the deployment script
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh -o deploy.sh
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh -o deploy.sh
 chmod +x deploy.sh
 sudo ./deploy.sh
 ```
@@ -50,7 +50,7 @@ Quick deployment using Docker:
 
 ```bash
 # Download and run
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy-docker.sh -o deploy-docker.sh
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy-docker.sh -o deploy-docker.sh
 chmod +x deploy-docker.sh
 ./deploy-docker.sh
 ```

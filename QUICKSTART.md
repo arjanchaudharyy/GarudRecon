@@ -6,7 +6,7 @@ Get started with GarudRecon in 3 easy steps!
 
 ### Step 1: Clone & Install
 ```bash
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 ```
 

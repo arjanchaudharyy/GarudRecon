@@ -115,7 +115,7 @@ setup_application() {
         
         # Clone if not exists
         if [ ! -d "GarudRecon" ]; then
-            git clone https://github.com/rix4uni/GarudRecon.git
+            git clone https://github.com/arjanchaudharyy/GarudRecon.git
         else
             cd GarudRecon
             git pull
