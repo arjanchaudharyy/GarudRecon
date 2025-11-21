@@ -2,7 +2,7 @@
 # This file enables one-click deployment to Render.com (FREE tier available)
 #
 # Deploy with one click:
-# https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon
+# https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon
 
 services:
   # Web Service

@@ -63,7 +63,7 @@ Complete comparison of free cloud platforms for deploying GarudRecon.
 - Small teams
 
 #### Deploy:
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
 
 ---
 

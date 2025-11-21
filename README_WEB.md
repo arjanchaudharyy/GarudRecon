@@ -176,7 +176,7 @@ print(status.json())
 ### Quick Setup
 ```bash
 # Clone (if not already)
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # Start (handles everything automatically)

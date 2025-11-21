@@ -6,8 +6,8 @@
 <a href="#"><img src="https://madewithlove.org.in/badge.svg"></a>
 <a href="https://ko-fi.com/rix4uni"><img src="https://img.shields.io/badge/buy%20me%20a%20ko--fi%20-donate-red"></a>
 <a href="https://x.com/rix4uni"><img src="https://img.shields.io/badge/twitter-%40rix4uni-blue.svg"></a>
-<a href="https://github.com/rix4uni/GarudRecon/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
-<a href="https://github.com/rix4uni/GarudRecon/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+<a href="https://github.com/arjanchaudharyy/GarudRecon/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+<a href="https://github.com/arjanchaudharyy/GarudRecon/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
 <a href="#"><img src="https://img.shields.io/badge/Made%20with-Bash-1f425f.svg"></a>
 <a href="https://github.com/rix4uni?tab=followers"><img src="https://img.shields.io/badge/github-%40rix4uni-orange"></a>
 </p>
@@ -66,7 +66,7 @@ GarudRecon now includes a modern web interface with **three optimized scan modes
 
 **☁️ FREE Cloud Deployment (Recommended for Beginners):**
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
 
 - No credit card required
 - Always-on free tier
@@ -80,7 +80,7 @@ GarudRecon now includes a modern web interface with **three optimized scan modes
 
 **🏭 Production VPS (Automated):**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | sudo bash
 ```
 
 **🐳 Docker:**
@@ -134,12 +134,12 @@ After that i tried in python, golang but i did'nt liked "String Concatenation", 
 
 ### Easy Install `Recommended`
 ```
-bash <(curl -s https://raw.githubusercontent.com/rix4uni/GarudRecon/main/configure)
+bash <(curl -s https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/configure)
 ```
 
 ### Download prebuilt binaries
 ```
-wget -q https://github.com/rix4uni/GarudRecon/archive/refs/tags/v0.0.6.zip
+wget -q https://github.com/arjanchaudharyy/GarudRecon/archive/refs/tags/v0.0.6.zip
 unzip v0.0.6.zip
 cd GarudRecon
 garudrecon install -f ALL
@@ -147,7 +147,7 @@ garudrecon install -f ALL
 
 ### Using Git Clone
 ```
-git clone --depth 1 https://github.com/rix4uni/GarudRecon.git
+git clone --depth 1 https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 garudrecon install -f ALL
 ```

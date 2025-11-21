@@ -10,7 +10,7 @@ Deploy GarudRecon to the cloud for **FREE** in just 5 minutes!
 
 1. Click button → 2. Sign up → 3. Deploy → 4. Done! ✅
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
 
 **Your app will be live at:** `https://garudrecon-xxx.onrender.com`
 
@@ -40,7 +40,7 @@ Deploy GarudRecon to the cloud for **FREE** in just 5 minutes!
 
 1. **Click deploy button:**
    
-   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon)
+   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
 
 2. **Sign up** (GitHub/GitLab/Email)
 
@@ -104,7 +104,7 @@ Free tier sleeps after 15 min. Keep it awake with:
 npm i -g @railway/cli
 
 # Clone repo
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # Login & deploy
@@ -134,7 +134,7 @@ curl -L https://fly.io/install.sh | sh
 fly auth signup
 
 # 3. Clone repo
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # 4. Launch (follow prompts)

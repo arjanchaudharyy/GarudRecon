@@ -30,7 +30,7 @@ Deploy GarudRecon for **FREE** using these cloud platforms. No credit card requi
 
 1. **Click this button:**
 
-   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon)
+   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
 
 2. **Sign up/Login** to Render.com
 
@@ -109,7 +109,7 @@ Render free tier sleeps after 15 minutes. To keep it awake:
 2. **Clone & Deploy:**
    ```bash
    # Clone repo
-   git clone https://github.com/rix4uni/GarudRecon.git
+   git clone https://github.com/arjanchaudharyy/GarudRecon.git
    cd GarudRecon
 
    # Login to Railway
@@ -178,7 +178,7 @@ Render free tier sleeps after 15 minutes. To keep it awake:
 
 3. **Clone repo:**
    ```bash
-   git clone https://github.com/rix4uni/GarudRecon.git
+   git clone https://github.com/arjanchaudharyy/GarudRecon.git
    cd GarudRecon
    ```
 
@@ -323,7 +323,7 @@ Most free tiers sleep after inactivity. Use:
 
 ### Fastest Deployment (Render.com):
 
-1. **Click:** [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rix4uni/GarudRecon)
+1. **Click:** [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
 2. **Sign up** (no credit card)
 3. **Deploy** (automatic)
 4. **Access** your app!
@@ -332,7 +332,7 @@ Most free tiers sleep after inactivity. Use:
 
 ```bash
 npm i -g @railway/cli
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 railway login
 railway init
@@ -344,7 +344,7 @@ railway domain
 
 ```bash
 curl -L https://fly.io/install.sh | sh
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 fly launch
 fly deploy

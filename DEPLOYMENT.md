@@ -25,7 +25,7 @@ This guide covers everything from local testing to production deployment on VPS/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # 2. Make scripts executable
@@ -110,7 +110,7 @@ su - garudrecon
 ```bash
 # Clone repository
 cd /home/garudrecon
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # Make scripts executable
@@ -180,7 +180,7 @@ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 
 # 3. Clone and deploy
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 
 # 4. Build and run
@@ -787,7 +787,7 @@ ps aux | grep gunicorn
 
 ### For Development (Local)
 ```bash
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 ./start_web.sh
 ```
@@ -795,7 +795,7 @@ cd GarudRecon
 ### For Production (VPS)
 ```bash
 # On server
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 python3 -m venv venv
 source venv/bin/activate
@@ -808,7 +808,7 @@ sudo systemctl start garudrecon
 
 ### For Docker
 ```bash
-git clone https://github.com/rix4uni/GarudRecon.git
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
 docker-compose up -d
 ```
