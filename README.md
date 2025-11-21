@@ -1,599 +1,988 @@
-<h1 align="center">
-  <img src="img/GarudRecon_banner2.png" alt="GarudRecon"></a>
-</h1>
+# CTXREC
 
 <p align="center">
-<a href="#"><img src="https://madewithlove.org.in/badge.svg"></a>
-<a href="https://ko-fi.com/rix4uni"><img src="https://img.shields.io/badge/buy%20me%20a%20ko--fi%20-donate-red"></a>
-<a href="https://x.com/rix4uni"><img src="https://img.shields.io/badge/twitter-%40rix4uni-blue.svg"></a>
+<a href="#"><img src="https://img.shields.io/badge/Made%20with-Bash%20%26%20Python-blue.svg"></a>
 <a href="https://github.com/arjanchaudharyy/GarudRecon/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 <a href="https://github.com/arjanchaudharyy/GarudRecon/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
-<a href="#"><img src="https://img.shields.io/badge/Made%20with-Bash-1f425f.svg"></a>
-<a href="https://github.com/rix4uni?tab=followers"><img src="https://img.shields.io/badge/github-%40rix4uni-orange"></a>
+<a href="https://github.com/arjanchaudharyy?tab=followers"><img src="https://img.shields.io/badge/github-%40arjanchaudharyy-orange"></a>
 </p>
 
-## CTXREC
+---
 
-CTXREC - Advanced Reconnaissance Automation Framework
+## 🎯 About CTXREC
 
-**Created by:** [arjanchaudharyy](https://github.com/arjanchaudharyy)
+**CTXREC** (Context Reconnaissance) is a cutting-edge automated reconnaissance framework built for security professionals, penetration testers, and bug bounty hunters. Combining the power of Bash automation with a modern Python Flask web interface, CTXREC delivers comprehensive asset discovery, vulnerability detection, and continuous monitoring in one unified platform.
 
-CTXREC is an automated reconnaissance framework designed for asset discovery,
-vulnerability detection, and continuous monitoring. It leverages a wide range of
-open-source tools to scan domains, collect subdomains, and check for various
-vulnerabilities such as:
+**Developed by:** [arjanchaudharyy](https://github.com/arjanchaudharyy)
 
-- XSS (Cross-Site Scripting)
-- SQLi (SQL Injection)
-- LFI (Local File Inclusion)
-- RCE (Remote Code Execution)
-- IIS misconfigurations
-- Subdomain Takeover
-- Open Redirects
-- Swagger UI exposures
-- .git directory leaks
-- JavaScript secrets and more.
+---
 
-The tool supports scoped recon with flexible modes like `smallscope`, `mediumscope`,
-and `largescope`, depending on your coverage needs. You can customize scans,
-exclude specific functions, provide configuration files, and automate cron jobs
-for continuous monitoring.
+## ✨ Key Features
 
-## 🆕 Web Interface (NEW!)
+### 🔍 Comprehensive Reconnaissance
+- **Subdomain Discovery** - Advanced enumeration using 15+ tools
+- **Port Scanning** - Fast and accurate with multiple scanning engines
+- **URL Crawling** - Deep web crawling and endpoint discovery
+- **JavaScript Analysis** - Extract secrets, endpoints, and API keys
+- **DNS Enumeration** - Certificate transparency and DNS bruteforcing
+- **Parameter Discovery** - Hidden parameter and endpoint fuzzing
 
-CTXREC now includes a modern web interface with **three optimized scan modes** and **automatic tool installation**:
+### 🛡️ Vulnerability Detection
+- ✅ **XSS (Cross-Site Scripting)** - Automated payload testing
+- ✅ **SQL Injection** - Database vulnerability scanning
+- ✅ **LFI/RFI** - File inclusion vulnerability checks
+- ✅ **RCE** - Remote code execution detection
+- ✅ **Subdomain Takeover** - Identify dangling DNS records
+- ✅ **Open Redirects** - Unvalidated redirect detection
+- ✅ **SSRF** - Server-side request forgery scanning
+- ✅ **Secret Exposure** - API keys, tokens, credentials in JS/HTML
+- ✅ **.git Directory Leaks** - Exposed repository detection
+- ✅ **CORS Misconfiguration** - Cross-origin policy issues
 
-- **⚡ Light** - Fast scan with basic recon (~5-10 minutes)
-- **🔥 Cool** - Medium-level comprehensive scan (~20-30 minutes)  
-- **🚀 Ultra** - Full deep reconnaissance scan (~1-2 hours)
+### 🌐 Modern Web Interface
+- 📊 **Real-time Dashboard** - Live scan progress monitoring
+- 📈 **Visual Analytics** - Comprehensive result visualization
+- 🔄 **Scan History** - Track and compare historical scans
+- 📥 **Export Results** - Download in JSON, CSV, or TXT format
+- 🎨 **Responsive Design** - Works on desktop and mobile
+- 🔔 **Notifications** - Discord, Slack, Telegram integration
 
-### 🚀 Automatic Tool Installation!
+### ⚡ Three Optimized Scan Modes
+- **🚀 Light Mode** (~5-10 minutes) - Quick reconnaissance for rapid assessment
+- **💪 Cool Mode** (~20-30 minutes) - Balanced depth and speed
+- **🔥 Ultra Mode** (~1-2 hours) - Comprehensive deep-dive analysis
 
-**CTXREC automatically installs required tools on first run!**
+### 🔧 Advanced Capabilities
+- 🐳 **Docker Support** - Containerized deployment
+- 📡 **API Access** - RESTful API for automation
+- ⏰ **Continuous Monitoring** - Scheduled cron jobs
+- 🎯 **Custom Scopes** - Flexible inclusion/exclusion rules
+- 📋 **60+ Tool Integration** - Best-in-class security tools
+- 🔐 **Secure by Design** - Built with security best practices
 
-When you start the web interface, CTXREC will:
-1. ✅ Check for missing reconnaissance tools
-2. 🔧 Automatically download and install them
-3. ⚡ Configure your environment
-4. 🎯 Ready to scan in 5-15 minutes!
+---
 
-**Manual installation (optional):**
+## 🚀 Quick Start
+
+### Web Interface (Recommended)
 
 ```bash
-# Check which tools you have
-./check_tools.sh
+# Start the web interface
+./start_web.sh
 
-# Quick install (recommended - 10 minutes)
+# Access the dashboard at:
+# http://localhost:5000
+```
+
+That's it! Open your browser and start scanning immediately.
+
+### Command Line Interface
+
+```bash
+# Simple scan
+./ctxrec -d example.com
+
+# Advanced scan with all vulnerability checks
+./ctxrec -d example.com --vuln-all
+
+# Light mode scan
+./ctxrec light -d example.com
+```
+
+---
+
+## 📦 Installation
+
+### Method 1: Quick Install (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/arjanchaudharyy/GarudRecon.git
+cd GarudRecon
+
+# Install essential tools (takes 10-15 minutes)
 sudo ./install_basic_tools.sh
 
-# OR full install (30-60 minutes)
-./garudrecon install -f ALL
-```
-
-📖 **See [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md) for complete setup guide**
-
-### Quick Start Web Interface
-
-```bash
-# Start the web server
-./start_web.sh
-
-# Or use the garudrecon command
-./garudrecon web
-
-# Access at: http://localhost:5000
-```
-
-📚 **Documentation:**
-- **🔧 Tool Setup**: [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md) - **START HERE**
-- **🚀 Beginners**: [QUICKSTART.md](QUICKSTART.md) for step-by-step guide
-- **🌐 Web Interface**: [WEB_INTERFACE.md](WEB_INTERFACE.md) for detailed docs
-- **📦 Deployment**: [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
-
-### 🚀 Quick Deployment
-
-**☁️ FREE Cloud Deployment (Recommended for Beginners):**
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
-
-- No credit card required
-- Always-on free tier
-- Auto SSL & domain
-- [See all free options →](DEPLOY_FREE_CLOUD.md)
-
-**💻 Local/Development:**
-```bash
+# Start using CTXREC
 ./start_web.sh
 ```
 
-**🏭 Production VPS (Automated):**
+### Method 2: One-Line Install
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | sudo bash
-```
-
-**🐳 Docker:**
-```bash
-docker-compose up -d
-```
-
-## History
-I created GarudRecon in 2022 but I deleted because some of api keys leaked here someone forked [GarudRecon](https://github.com/polling-repo-continua/GarudRecon)
-
-After that i tried in python, golang but i did'nt liked "String Concatenation", so i came back to bash again.
-
-### Referral Links
-
-<p align="center">
-<a href="https://m.do.co/c/43c704381b79" target="_blank">
-<img src="img/referrals/digitalocean_200.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://login.linode.com/signup" target="_blank">
-<img src="img/referrals/linode.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://cloud.ibm.com/docs/overview?topic=overview-tutorial-try-for-free" target="_blank">
-<img src="img/referrals/ibm_cloud.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://aws.com" target="_blank">
-<img src="img/referrals/aws.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://azure.com" target="_blank">
-<img src="img/referrals/azure.png"/>
-</a>
-</p>
-
-## Installation
-
-### Docker
-```
-
-```
-
-### Easy Install `Recommended`
-```
 bash <(curl -s https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/configure)
 ```
 
-### Download prebuilt binaries
+### Method 3: Docker (Production Ready)
+
+```bash
+# Using Docker Compose
+docker-compose up -d
+
+# Access at http://localhost:5000
 ```
-wget -q https://github.com/arjanchaudharyy/GarudRecon/archive/refs/tags/v0.0.6.zip
+
+### Method 4: Manual Installation
+
+```bash
+# Download latest release
+wget https://github.com/arjanchaudharyy/GarudRecon/archive/refs/tags/v0.0.6.zip
 unzip v0.0.6.zip
+cd GarudRecon-0.0.6
+
+# Check required tools
+./check_tools.sh
+
+# Install all tools
+sudo ./install_basic_tools.sh
+```
+
+---
+
+## ☁️ Cloud Deployment
+
+### Deploy to Render (Free - No Credit Card)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
+
+**Why Render?**
+- ✅ 100% Free tier (no credit card required)
+- ✅ Auto SSL certificate
+- ✅ Custom domain support
+- ✅ Always-on instances
+- ✅ Automatic deployments from GitHub
+
+### Other Free Cloud Options
+
+<details>
+  <summary><b>Railway</b></summary>
+
+```bash
+# Install Railway CLI
+npm i -g @railway/cli
+
+# Deploy
+railway login
+railway init
+railway up
+```
+</details>
+
+<details>
+  <summary><b>Fly.io</b></summary>
+
+```bash
+# Install Fly CLI
+curl -L https://fly.io/install.sh | sh
+
+# Deploy
+fly launch
+fly deploy
+```
+</details>
+
+<details>
+  <summary><b>Heroku</b></summary>
+
+```bash
+# Install Heroku CLI
+curl https://cli-assets.heroku.com/install.sh | sh
+
+# Deploy
+heroku create your-ctxrec-app
+git push heroku main
+```
+</details>
+
+### VPS Deployment (Automated)
+
+For production VPS deployment with Nginx, SSL, and systemd:
+
+```bash
+# One-command deployment
+curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | sudo bash
+```
+
+This will:
+- Install all dependencies
+- Set up Nginx reverse proxy
+- Configure SSL with Let's Encrypt
+- Create systemd service
+- Configure firewall
+- Set up auto-restart on failure
+
+📖 **Complete Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
+
+---
+
+## 🎮 How CTXREC Works
+
+### Scan Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. Domain Input                                            │
+│     └─> example.com                                         │
+└─────────────────────────────────────────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  2. Subdomain Enumeration                                   │
+│     ├─> DNS Bruteforcing (5+ tools)                        │
+│     ├─> Certificate Transparency                           │
+│     ├─> Search Engines (Google, Bing, etc)                 │
+│     └─> Third-party APIs (Shodan, Censys, etc)             │
+└─────────────────────────────────────────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  3. DNS Resolution & Filtering                              │
+│     └─> Verify active subdomains                           │
+└─────────────────────────────────────────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  4. Port Scanning                                           │
+│     ├─> Common ports (80, 443, 8080, etc)                  │
+│     ├─> Service detection                                  │
+│     └─> Banner grabbing                                    │
+└─────────────────────────────────────────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  5. Web Probing                                             │
+│     ├─> HTTP/HTTPS detection                               │
+│     ├─> Technology fingerprinting                          │
+│     └─> Response analysis                                  │
+└─────────────────────────────────────────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  6. URL & Endpoint Discovery                                │
+│     ├─> Wayback Machine archives                           │
+│     ├─> CommonCrawl data                                   │
+│     ├─> Spider crawling                                    │
+│     └─> JavaScript parsing                                 │
+└─────────────────────────────────────────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  7. Vulnerability Scanning                                  │
+│     ├─> XSS injection points                               │
+│     ├─> SQL injection testing                              │
+│     ├─> LFI/RFI attempts                                   │
+│     ├─> RCE detection                                      │
+│     ├─> Subdomain takeover checks                          │
+│     └─> Secret exposure analysis                           │
+└─────────────────────────────────────────────────────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  8. Results & Reporting                                     │
+│     ├─> JSON export                                        │
+│     ├─> HTML report                                        │
+│     ├─> Notifications                                      │
+│     └─> Database storage                                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Scan Modes Explained
+
+#### ⚡ Light Mode (Fast)
+**Time:** 5-10 minutes  
+**Best for:** Quick checks, bug bounty triage, initial reconnaissance
+
+**What it does:**
+- Basic subdomain enumeration (2-3 tools)
+- Essential port scanning (top 100 ports)
+- URL crawling (waybackurls, gau)
+- Quick XSS/SQLi checks
+- JavaScript secrets scanning
+
+**Output:** DNS records, open ports, URLs, basic vulnerabilities
+
+---
+
+#### 💪 Cool Mode (Balanced)
+**Time:** 20-30 minutes  
+**Best for:** Thorough reconnaissance, most bug bounty programs
+
+**What it does:**
+- Comprehensive subdomain enumeration (10+ tools)
+- Full port scanning (top 1000 ports)
+- Deep URL crawling (multiple sources)
+- Advanced vulnerability scanning
+- Parameter discovery
+- Directory bruteforcing
+- Nuclei template scanning
+
+**Output:** Complete asset inventory, detailed vulnerabilities, endpoints
+
+---
+
+#### 🔥 Ultra Mode (Deep)
+**Time:** 1-2 hours  
+**Best for:** Pentest engagements, comprehensive audits, large targets
+
+**What it does:**
+- All Cool Mode features +
+- Subdomain permutation attacks
+- Full port scanning (65535 ports)
+- Extensive JS analysis
+- VHOST discovery
+- Favicon analysis
+- Screenshot capture
+- Full directory enumeration
+- Extensive nuclei scanning
+- All vulnerability checks enabled
+
+**Output:** Exhaustive reconnaissance data, maximum vulnerability coverage
+
+---
+
+## 💻 Web Interface Features
+
+### Dashboard
+- 📊 Live scan progress with percentage complete
+- 📈 Real-time statistics (subdomains, URLs, vulnerabilities)
+- 🔴 Live log streaming
+- 🎯 Quick action buttons
+
+### Scan Management
+- ▶️ Start new scans with custom options
+- ⏸️ Pause/Resume running scans
+- ⏹️ Stop scans
+- 🗑️ Delete old scan results
+- 📥 Download results in multiple formats
+
+### Results Viewer
+- 🔍 Filter and search results
+- 📋 Categorized findings
+- 🎨 Syntax highlighting for code/URLs
+- 📊 Visual charts and graphs
+- 🔗 One-click copy to clipboard
+
+### Settings
+- ⚙️ Configure tool preferences
+- 🔔 Set up notifications (Discord, Slack, Telegram)
+- 🎯 Define custom wordlists
+- 🔑 Add API keys (Shodan, Censys, etc)
+- 💾 Export/Import configurations
+
+---
+
+## 📡 API Documentation
+
+CTXREC provides a RESTful API for automation and integration:
+
+### Authentication
+```bash
+# No authentication required for local use
+# For production, set API_KEY in environment
+export CTXREC_API_KEY="your-secret-key"
+```
+
+### Endpoints
+
+#### Start a Scan
+```bash
+POST /api/scan
+Content-Type: application/json
+
+{
+  "domain": "example.com",
+  "scan_mode": "cool",
+  "options": {
+    "enable_xss": true,
+    "enable_sqli": true,
+    "depth": "medium"
+  }
+}
+
+# Response
+{
+  "scan_id": "abc123",
+  "status": "started",
+  "estimated_time": "20-30 minutes"
+}
+```
+
+#### Get Scan Status
+```bash
+GET /api/scan/{scan_id}
+
+# Response
+{
+  "scan_id": "abc123",
+  "status": "running",
+  "progress": 45,
+  "stats": {
+    "subdomains": 127,
+    "urls": 3421,
+    "vulnerabilities": 12
+  }
+}
+```
+
+#### List All Scans
+```bash
+GET /api/scans
+
+# Response
+{
+  "scans": [
+    {
+      "id": "abc123",
+      "domain": "example.com",
+      "mode": "cool",
+      "status": "completed",
+      "started_at": "2025-01-15T10:30:00Z",
+      "completed_at": "2025-01-15T10:52:00Z"
+    }
+  ]
+}
+```
+
+#### Get Scan Results
+```bash
+GET /api/scan/{scan_id}/results
+
+# Response (JSON with complete scan data)
+{
+  "domain": "example.com",
+  "subdomains": [...],
+  "urls": [...],
+  "vulnerabilities": [...]
+}
+```
+
+#### Health Check
+```bash
+GET /api/health
+
+# Response
+{
+  "status": "healthy",
+  "version": "1.0.0",
+  "tools_available": 52,
+  "active_scans": 2
+}
+```
+
+#### Check Available Tools
+```bash
+GET /api/tools
+
+# Response
+{
+  "installed": ["subfinder", "httpx", "nuclei", ...],
+  "missing": ["amass", "bbot"],
+  "total": 60
+}
+```
+
+---
+
+## 🔧 Configuration
+
+### Basic Configuration
+
+Edit `configuration/ctxrec.cfg`:
+
+```bash
+# VPS Mode (reduces memory usage)
+IS_U_USING_VPS="FALSE"  # Set to TRUE for VPS
+
+# Notification Settings
+DISCORD_WEBHOOK=""
+SLACK_WEBHOOK=""
+TELEGRAM_BOT_TOKEN=""
+TELEGRAM_CHAT_ID=""
+
+# API Keys (optional but recommended)
+SHODAN_API_KEY=""
+CENSYS_API_ID=""
+CENSYS_API_SECRET=""
+GITHUB_TOKEN=""
+
+# Tool Preferences
+ENABLE_AMASS="TRUE"
+ENABLE_BBOT="TRUE"
+ENABLE_NUCLEI="TRUE"
+
+# Scan Settings
+DEFAULT_THREADS=20
+TIMEOUT=300
+MAX_RETRIES=3
+```
+
+### Advanced Configuration
+
+<details>
+  <summary><b>Custom Wordlists</b></summary>
+
+```bash
+# Subdomain wordlist
+SUBDOMAIN_WORDLIST="/path/to/subdomains.txt"
+
+# Directory wordlist
+DIRECTORY_WORDLIST="/path/to/directories.txt"
+
+# Parameter wordlist
+PARAMETER_WORDLIST="/path/to/parameters.txt"
+```
+</details>
+
+<details>
+  <summary><b>Exclusion Rules</b></summary>
+
+```bash
+# Exclude specific subdomains
+OUT_OF_SCOPE="admin.example.com,vpn.example.com"
+
+# Exclude tools
+EXCLUDE_TOOLS="amass,bbot"
+
+# Exclude vulnerability checks
+EXCLUDE_VULNS="sqli,rce"
+```
+</details>
+
+<details>
+  <summary><b>Output Settings</b></summary>
+
+```bash
+# Output directory
+OUTPUT_DIR="./scans"
+
+# Output format
+OUTPUT_FORMAT="json"  # json, csv, txt, html
+
+# Keep raw tool outputs
+KEEP_RAW_OUTPUT="TRUE"
+
+# Compress results
+COMPRESS_RESULTS="TRUE"
+```
+</details>
+
+---
+
+## 🖥️ System Requirements
+
+### Minimum Requirements
+- **OS:** Linux (Ubuntu 20.04+, Kali, Debian)
+- **RAM:** 2GB (Light mode only)
+- **Storage:** 5GB free space
+- **CPU:** 2 cores
+
+### Recommended for Full Features
+- **OS:** Ubuntu 24.04 / Kali 2025
+- **RAM:** 4GB+ (8GB for Ultra mode)
+- **Storage:** 20GB+ free space
+- **CPU:** 4+ cores
+- **Network:** Stable internet connection
+
+### RAM-Based Tool Configuration
+
+| RAM | Recommended Configuration |
+|-----|---------------------------|
+| **1GB** | Light mode only. Disable: AMASS, BBOT, FFUFBRUTE |
+| **2GB** | Light + Cool modes. Enable: AMASS, PYXSS |
+| **4GB** | All modes. Enable: VULNTECHX, GALER |
+| **8GB+** | Full tool suite with maximum concurrency |
+
+---
+
+## 🐧 Operating System Support
+
+| OS | Status | Installation | Tested Version |
+|----|--------|--------------|----------------|
+| **Ubuntu** | ✅ Fully Supported | `sudo ./install_basic_tools.sh` | 24.04 LTS |
+| **Kali Linux** | ✅ Fully Supported | `sudo ./install_basic_tools.sh` | 2025.2 |
+| **Debian** | ✅ Fully Supported | `sudo ./install_basic_tools.sh` | 12 (Bookworm) |
+| **Arch Linux** | ✅ Supported | Manual (see docs) | Rolling |
+| **macOS** | ✅ Supported | `./install_basic_tools.sh` | 14+ (Sonoma) |
+| **Windows** | ✅ Via WSL | WSL2 + Ubuntu | WSL2 |
+| **Docker** | ✅ Recommended | `docker-compose up` | Any OS |
+
+---
+
+## 🛠️ Integrated Security Tools (60+)
+
+CTXREC integrates the best open-source security tools:
+
+<details>
+  <summary><b>📡 Subdomain Enumeration (18 tools)</b></summary>
+
+- **subfinder** - Fast passive subdomain enumeration
+- **amass** - In-depth DNS enumeration and network mapping
+- **assetfinder** - Find domains and subdomains
+- **findomain** - Fast cross-platform subdomain enumerator
+- **chaos** - ProjectDiscovery's subdomain dataset
+- **github-subdomains** - Search GitHub for subdomains
+- **bbot** - Recursive internet scanner
+- **oneforall** - Powerful subdomain collection tool
+- **shosubgo** - Shodan-based subdomain finder
+- **haktrails** - SecurityTrails subdomain enumeration
+- **subdog** - DNS subdomain scanner
+- **xsubfind3r** - Fast subdomain scanner
+- **org2asn** - Organization to ASN mapping
+- **ipfinder** - IP and domain information
+- **analyticsrelationships** - Find related domains
+- **udon** - Domain OSINT tool
+- **builtwithsubs** - BuiltWith subdomain finder
+- **whoxysubs** - WHOXY API integration
+</details>
+
+<details>
+  <summary><b>🔐 DNS & Certificate Tools (11 tools)</b></summary>
+
+- **dnsx** - Fast DNS toolkit
+- **puredns** - Fast domain resolver
+- **shuffledns** - Wrapper around massdns
+- **massdns** - High-performance DNS resolver
+- **kaeferjaeger** - Certificate transparency monitor
+- **cero** - Certificate transparency scanner
+- **certinfo** - Certificate information extractor
+- **csprecon** - CSP header analyzer
+- **jsubfinder** - JS subdomain finder
+- **dnsxbrute** - DNS bruteforcer
+- **subwiz** - DNS record analyzer
+</details>
+
+<details>
+  <summary><b>🔄 Subdomain Permutations (8 tools)</b></summary>
+
+- **altdns** - Subdomain permutation generator
+- **puredns** - DNS resolver with wildcard filtering
+- **alterx** - Fast subdomain wordlist generator
+- **gotator** - Subdomain permutation tool
+- **dnsgen** - Generate DNS permutations
+- **goaltdns** - Permutation generator in Go
+- **ripgen** - Permutation wordlist generator
+- **dmut** - Fast DNS resolver
+</details>
+
+<details>
+  <summary><b>🔍 Port Scanning (4 tools)</b></summary>
+
+- **naabu** - Fast port scanner by ProjectDiscovery
+- **nmap** - Network exploration tool
+- **masscan** - Fastest port scanner
+- **rustscan** - Modern port scanner
+</details>
+
+<details>
+  <summary><b>🌐 Web Probing (4 tools)</b></summary>
+
+- **httpx** - Fast HTTP toolkit
+- **gowitness** - Web screenshot utility
+- **aquatone** - Visual inspection tool
+- **eyewitness** - Screenshot web applications
+</details>
+
+<details>
+  <summary><b>🔗 URL Discovery (15 tools)</b></summary>
+
+- **waymore** - Wayback Machine downloader
+- **hakrawler** - Fast web crawler
+- **waybackurls** - Wayback Machine URL fetcher
+- **katana** - Next-gen crawling framework
+- **gau** - Get All URLs
+- **gospider** - Fast web spider
+- **cariddi** - Crawler with secrets detection
+- **urlfinder** - Extract URLs from files
+- **github-endpoints** - GitHub endpoint finder
+- **xurlfind3r** - URL discovery tool
+- **xcrawl3r** - Web crawler
+- **galer** - Fast URL fetcher
+- **pathfinder** - Path discovery tool
+- **roboxtractor** - Extract robots.txt URLs
+</details>
+
+<details>
+  <summary><b>📜 JavaScript Analysis (9 tools)</b></summary>
+
+- **subjs** - Fetch JavaScript files
+- **getJS** - JavaScript file downloader
+- **jscrawler** - JS file crawler
+- **linkfinder** - Discover endpoints in JS
+- **xnLinkFinder** - Advanced JS endpoint finder
+- **getjswords** - Extract words from JS
+- **sourcemapper** - JS source map analyzer
+- **jsluice** - Extract URLs from JS
+- **javascript-deobfuscator** - Deobfuscate JS code
+</details>
+
+<details>
+  <summary><b>📂 Directory Enumeration (4 tools)</b></summary>
+
+- **ffuf** - Fast web fuzzer
+- **dirsearch** - Web path scanner
+- **feroxbuster** - Fast content discovery
+- **wfuzz** - Web application fuzzer
+</details>
+
+<details>
+  <summary><b>🔎 Parameter Discovery (3 tools)</b></summary>
+
+- **paramfinder** - Parameter miner
+- **x8** - Hidden parameter discovery
+- **arjun** - HTTP parameter scanner
+</details>
+
+<details>
+  <summary><b>⚠️ Vulnerability Scanning (8 tools)</b></summary>
+
+- **nuclei** - Fast vulnerability scanner (1000+ templates)
+- **dalfox** - Advanced XSS scanner
+- **sqlmap** - SQL injection exploitation
+- **commix** - Command injection toolkit
+- **trufflehog** - Secret scanner
+- **shortscan** - Quick vulnerability checker
+- **linkinspector** - Link analyzer
+- **subzy** - Subdomain takeover scanner
+</details>
+
+---
+
+## 📊 Project Structure
+
+```
+CTXREC/
+├── ctxrec                      # Main CLI entry point
+├── garudrecon                  # Legacy CLI (symlink)
+├── start_web.sh                # Web server launcher
+├── web_backend.py              # Flask API server
+│
+├── cmd/                        # Scan mode scripts
+│   ├── scan_light             # Light scan implementation
+│   ├── scan_cool              # Cool scan implementation
+│   └── scan_ultra             # Ultra scan implementation
+│
+├── web/                        # Frontend files
+│   ├── index.html             # Main dashboard
+│   ├── style.css              # Styling
+│   └── script.js              # Frontend logic
+│
+├── configuration/              # Configuration files
+│   └── ctxrec.cfg             # Main config file
+│
+├── scans/                      # Scan output directory
+│   └── [domain]/              # Per-domain results
+│       ├── results.json       # Structured results
+│       ├── subdomains.txt     # Discovered subdomains
+│       ├── urls.txt           # Found URLs
+│       └── vulnerabilities.txt # Detected issues
+│
+├── tools/                      # Security tool installers
+├── wordlists/                  # Custom wordlists
+├── templates/                  # Nuclei templates
+├── docs/                       # Documentation
+│
+├── check_tools.sh              # Verify installed tools
+├── install_basic_tools.sh      # Quick installer
+├── requirements.txt            # Python dependencies
+├── docker-compose.yml          # Docker configuration
+└── Dockerfile                  # Docker image definition
+```
+
+---
+
+## 🎓 Usage Examples
+
+### Example 1: Quick Bug Bounty Scan
+```bash
+# Fast scan for quick triage
+./ctxrec light -d bugcrowd-target.com
+
+# Results in: scans/bugcrowd-target.com/results.json
+```
+
+### Example 2: Comprehensive Pentest
+```bash
+# Full deep scan with all checks
+./ctxrec ultra -d client-target.com --vuln-all
+
+# Enable notifications
+export DISCORD_WEBHOOK="your-webhook-url"
+```
+
+### Example 3: Continuous Monitoring
+```bash
+# Monitor for new subdomains every hour
+./ctxrec cronjobs -d important-target.com \
+  -f MONITOR_SUBDOMAIN \
+  -i 3600
+```
+
+### Example 4: API Automation
+```bash
+# Start scan via API
+curl -X POST http://localhost:5000/api/scan \
+  -H "Content-Type: application/json" \
+  -d '{
+    "domain": "example.com",
+    "scan_mode": "cool"
+  }'
+
+# Check status
+curl http://localhost:5000/api/scan/abc123
+```
+
+### Example 5: Custom Configuration
+```bash
+# Use custom config and wordlists
+./ctxrec cool -d target.com \
+  -c ~/my-config.cfg \
+  --subdomain-wordlist ~/subdomains.txt \
+  --exclude-tools "amass,bbot"
+```
+
+---
+
+## 🔒 Security & Privacy
+
+CTXREC is built with security in mind:
+
+- ✅ **No data collection** - All scans are local
+- ✅ **No telemetry** - Zero tracking or analytics
+- ✅ **Open source** - Fully auditable code
+- ✅ **API key protection** - Credentials stored securely
+- ✅ **Rate limiting** - Respects target servers
+- ✅ **User-agent rotation** - Avoid detection/blocking
+
+**Ethical Use Only:** CTXREC is intended for authorized security testing only. Users are responsible for obtaining proper authorization before scanning any targets.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+### Reporting Issues
+- 🐛 Bug reports: [GitHub Issues](https://github.com/arjanchaudharyy/GarudRecon/issues)
+- 💡 Feature requests: [GitHub Discussions](https://github.com/arjanchaudharyy/GarudRecon/discussions)
+
+### Contributing Code
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Setup
+```bash
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/GarudRecon.git
 cd GarudRecon
-garudrecon install -f ALL
+
+# Install dependencies
+pip3 install -r requirements.txt
+
+# Run in development mode
+python3 web_backend.py
 ```
 
-### Using Git Clone
-```
-git clone --depth 1 https://github.com/arjanchaudharyy/GarudRecon.git
-cd GarudRecon
-garudrecon install -f ALL
-```
+📖 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
-## Usage
+---
 
-<details>
-  <summary><b>garudrecon -h</b></summary>
+## 📚 Documentation
 
-```
-GarudRecon - Recon Automation Framework
+- **📖 [QUICKSTART.md](QUICKSTART.md)** - Beginner-friendly guide
+- **🌐 [WEB_INTERFACE.md](WEB_INTERFACE.md)** - Web dashboard documentation
+- **🔧 [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md)** - Complete tool setup
+- **📦 [DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment guide
+- **☁️ [DEPLOY_FREE_CLOUD.md](DEPLOY_FREE_CLOUD.md)** - Free cloud hosting options
+- **🐛 [BUGFIX_SUMMARY.md](BUGFIX_SUMMARY.md)** - Recent fixes and improvements
+- **📝 [CHANGELOG.md](CHANGELOG.md)** - Version history
 
-GarudRecon is an automated reconnaissance framework designed for asset discovery,
-vulnerability detection, and continuous monitoring. It leverages a wide range of
-open-source tools to scan domains, collect subdomains, and check for various
-vulnerabilities such as:
+---
 
-  • XSS (Cross-Site Scripting)
-  • SQLi (SQL Injection)
-  • LFI (Local File Inclusion)
-  • RCE (Remote Code Execution)
-  • IIS misconfigurations
-  • Subdomain Takeover
-  • Open Redirects
-  • Swagger UI exposures
-  • .git directory leaks
-  • JavaScript secrets and more.
+## 📝 License
 
-The tool supports scoped recon with flexible modes like smallscope, mediumscope,
-and largescope, depending on your coverage needs. You can customize scans,
-exclude specific functions, provide configuration files, and automate cron jobs
-for continuous monitoring.
-
-Usage:
-  garudrecon [command]
-
-Available Commands:
-  install                 Set up the tool and dependencies
-  smallscope              Run minimal recon for subdomain (e.g. support.domain.com)
-  mediumscope             Perform moderate recon with optional vulnerability checks for wildcard domain (e.g. *.domain.com)
-  largescope              Full-scale recon for deep visibility for organisation
-  cronjobs                Automate recurring recon tasks
-
-Flags:
-  -h, --help     help for garudrecon
-  -v, --version  Display the current version
-
-Use "garudrecon [command] --help" for more information about a command.
-```
-</details>
-
-
-<details>
-  <summary><b>garudrecon install -h</b></summary>
+CTXREC is released under the **MIT License**.
 
 ```
-This command sets up GarudRecon by installing the required tools and dependencies for a specified reconnaissance function. It supports installation for various predefined scopes such as SMALLSCOPE, MEDIUMSCOPE, LARGESCOPE, and CRONJOBS, or you can install everything at once using ALL.
+MIT License
 
-You can also provide a custom configuration file and enable verbose output for more detailed installation logs.
+Copyright (c) 2025 arjanchaudharyy
 
-Usage:
-  garudrecon install [flags]
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Flags:
-  -f, --function        Function to run (e.g. MEDIUMSCOPE)
-  -c, --config          Custom configuration file path
-  -v, --verbose         enable verbose mode
-  -h, --help            help for install
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Example:
-  garudrecon install -f SMALLSCOPE
-  garudrecon install -f MEDIUMSCOPE
-  garudrecon install -f LARGESCOPE
-  garudrecon install -f CRONJOBS
-  garudrecon install -f ALL
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
+---
 
-#### Output
-<img src="img/output/install.png"/>
-</details>
+## 🙏 Acknowledgments
 
+CTXREC stands on the shoulders of giants. We're grateful to the security community and the creators of all integrated tools:
 
-<details>
-  <summary><b>garudrecon smallscope -h</b></summary>
+- **ProjectDiscovery Team** - subfinder, httpx, nuclei, katana, naabu
+- **OWASP** - ZAP, sqlmap
+- **Tom Hudson (tomnomnom)** - waybackurls, httprobe, assetfinder
+- **Jeff Foley** - amass
+- **And many more...**
 
-```
-Performs a minimal reconnaissance on the target domain, typically scoped as support.domain.com. This includes port scanning, url crawling, vulnerability checks (like XSS, SQLi, LFI, etc.).
+See [docs/Thanks.md](docs/Thanks.md) for the complete list.
 
-Usage:
-  garudrecon smallscope [flags]
+---
 
-Flags:
-  -d, --domain                          Scan a domain (e.g. support.domain.com)
-  -ef, --exclude-functions              Exclude a function from running (e.g. WAYMORE)
-  -rx, --recon-xss                      Run full recon with XSS checks
-  -rs, --recon-sqli                     Run full recon with SQLi checks
-  -rl, --recon-lfi                      Run full recon with LFI checks
-  -rst, --recon-subtakeover             Run full recon with Subdomain Takeover checks
-  -rr, --recon-rce                      Run full recon with RCE checks
-  -ri, --recon-iis                      Run full recon with IIS checks
-  -c, --config                          Custom configuration file path
-  -h, --help                            help for smallscope
+## 💬 Support & Community
 
-Example:
-# Full recon
-  garudrecon smallscope -d support.domain.com
+- 📖 **Documentation**: Browse the `/docs` folder
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/arjanchaudharyy/GarudRecon/issues)
+- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/arjanchaudharyy/GarudRecon/discussions)
+- 📧 **Email**: arjanchaudharyy@gmail.com
+- 🐦 **Twitter**: [@arjanchaudharyy](https://twitter.com/arjanchaudharyy)
 
-# Recon with XSS only
-  garudrecon smallscope -d support.domain.com -rx
+---
 
-# Recon with SQLi only
-  garudrecon smallscope -d support.domain.com -rs
+## ⚠️ Disclaimer
 
-# Exclude functions manually
-  garudrecon smallscope -d support.domain.com -ef "GOSPIDER,WAYMORE"
+**LEGAL NOTICE:** CTXREC is designed for authorized security testing and educational purposes only.
 
-# Combined
-  garudrecon smallscope -d support.domain.com -rx -ef "WAYMORE"
-```
+- ✅ **DO** obtain written permission before scanning
+- ✅ **DO** respect scope boundaries and exclusions
+- ✅ **DO** follow bug bounty program rules
+- ✅ **DO** use responsibly and ethically
 
-#### Output
-<img src="img/output/smallscope.png"/>
-</details>
+- ❌ **DO NOT** scan targets without authorization
+- ❌ **DO NOT** use for malicious purposes
+- ❌ **DO NOT** ignore rate limits or cause service disruption
+- ❌ **DO NOT** violate laws or regulations
 
+**Unauthorized access to computer systems is illegal.** Users are solely responsible for their actions. The developers of CTXREC assume no liability for misuse or damages caused by this tool.
 
-<details>
-  <summary><b>garudrecon mediumscope -h</b></summary>
+---
 
-```
-Performs a medium-level reconnaissance on the target domain, typically scoped as *.domain.com. This includes subdomain enumeration, vulnerability checks (like XSS, SQLi, LFI, etc.), and optional filtering of out-of-scope subdomains.
+## 🌟 Star History
 
-Usage:
-  garudrecon mediumscope [flags]
+If you find CTXREC useful, please consider giving it a star ⭐
 
-Flags:
-  -d, --domain                          Scan a domain (e.g. domain.com)
-  -ef, --exclude-functions              Exclude a function from running (e.g. AMASS)
-  -rx, --recon-xss                      Run full recon with XSS checks
-  -rs, --recon-sqli                     Run full recon with SQLi checks
-  -rl, --recon-lfi                      Run full recon with LFI checks
-  -rst, --recon-subtakeover             Run full recon with Subdomain Takeover checks
-  -rr, --recon-rce                      Run full recon with RCE checks
-  -ri, --recon-iis                      Run full recon with IIS checks
-  -oos, --outofscope                    Exclude outofscope subdomains from a list (e.g. domain.com.oos)
-  -c, --config                          Custom configuration file path
-  -h, --help                            help for mediumscope
-
-Example:
-# Full recon
-  garudrecon mediumscope -d domain.com
-
-# Recon with XSS only
-  garudrecon mediumscope -d domain.com -rx
-
-# Recon with SQLi only
-  garudrecon mediumscope -d domain.com -rs
-
-# Exclude functions manually
-  garudrecon mediumscope -d domain.com -ef "SUBFINDER,AMASS"
-
-# Combined
-  garudrecon mediumscope -d domain.com -rx -ef "AMASS"
-```
-
-#### Output
-<img src="img/output/mediumscope.png"/>
-</details>
-
-
-<details>
-  <summary><b>garudrecon largescope -h</b></summary>
-
-```
-```
-
-#### Output
-<img src="img/output/mediumscope.png"/>
-</details>
-
-
-<details>
-  <summary><b>garudrecon cronjobs -h</b></summary>
-
-```
-This command runs scheduled reconnaissance tasks on a specified domain, such as monitoring subdomains, ports, JavaScript files, and live hosts. It supports various monitoring functions and can be customized with configuration files and verbose output.
-
-Usage:
-  garudrecon cronjobs [flags]
-
-Flags:
-  -d, --domain                  Domain to monitor
-  -f, --function                Function to run (e.g. MONITOR_SUBDOMAIN)
-  -c, --config                  Custom configuration file path
-  -i, --interval                Customize the sleep duration (e.g. 1800)
-  -v, --verbose                 enable verbose mode
-  -h, --help                    help for cronjobs
-
-Example:
-  garudrecon cronjobs -d domain.com -f MONITOR_SUBDOMAIN
-  garudrecon cronjobs -d domain.com -f MONITOR_PORTS
-  garudrecon cronjobs -d domain.com -f MONITOR_ALIVESUBD
-  garudrecon cronjobs -d domain.com -f MONITOR_JS
-  garudrecon cronjobs -d domain.com -f MONITOR_JSLEAKS
-```
-
-#### Output
-<img src="img/output/cronjobs.png"/>
-<img src="img/output/cronjobs_discord.png"/>
-</details>
-
-
-## Demo
-
-## Operating Systems Supported
-
-| OS         | Supported | Easy Install | Tested        |
-| ---------- | --------- | ------------ | ------------- |
-| Ubuntu     | Yes       | Yes          | Ubuntu 24.04  |
-| Kali       | Yes       | Yes          | Kali 2025.2   |
-| Debian     | Yes       | Yes          | No            |
-| Windows    | Yes       | Yes          | WSL Ubuntu     |
-| MacOS      | Yes       | Yes          | No            |
-| Arch Linux | Yes       | No           | No            |
-|            |           |              |               |
-
-## Change Values According to you systems ram
-
-| NAME                 | 1GB RAM | 2GB RAM | 4GB RAM | 8GB RAM | Description                                                                                |
-| -------------------- | ------- | ------- | ------- | ------- | ------------------------------------------------------------------------------------------ |
-| IS_U_USING_VPS       | Yes     | Yes     | Yes     | Yes     | If you running this tool on vps change `IS_U_USING_VPS="FALSE" into IS_U_USING_VPS="TRUE"` |
-| AMASS                | No      | Yes     | Yes     | Yes     |                                                                                            |
-| BBOT                 | No      | Yes     | Yes     | Yes     |                                                                                            |
-| FFUFBRUTE            | No      | Yes     | Yes     | Yes     | Got from https://x.com/ArmanSameer95/status/1680811916053078019                            |
-| Screenshotting Tools | No      | Yes     | Yes     | Yes     |                                                                                            |
-| VULNTECHX            | No      | No      | Yes     | Yes     | Finds Vuln Based on website tech                                                           |
-| PYXSS                | No      | Yes     | Yes     | Yes     | Checks XSS False Positive                                                                  |
-| GALER                | No      | No      | Yes     | Yes     |                                                                                            |
-
-## Tools
-
-### Subdomain Enumeration
-- BugBountyData
-- subfinder
-- amass
-- subdog
-- xsubfind3r
-- findomain
-- chaos
-- github-subdomains
-- bbot
-- oneforall
-- shosubgo
-- assetfinder
-- haktrails
-- haktrailsfree
-- org2asn
-- ipfinder
-- ipranges
-- arinrange
-- spk
-- analyticsrelationships
-- udon
-- builtwithsubs
-- whoxysubs
-
-### Certificate Transperency
-- kaeferjaeger
-- trickestcloud
-- cero
-- certinfo
-- csprecon
-- cspfinder
-- jsubfinder
-- dnsxbrute
-- subwiz
-
-### Subdomain Permutations
-- altdns
-- puredns
-- alterx
-- gotator
-- dnsgen
-- goaltdns
-- ripgen
-- dmut
-
-### Subdomain Resolving
-- puredns
-- shuffledns
-- massdns
-
-### Subdomain DNS Enumeration
-- dnsx
-
-### Port Scanning
-- naabu
-- masscan
-- rustscan
-- nmap
-
-### Subdomain Probing
-- httpx
-
-### Subdomain Bruteforcing
-- subdomainfuzz
-
-### VHOST Dicovery
-- ffuf
-
-### Favicon Lookup
-- favinfo
-- favirecon
-
-### Screenshotting
-- gowitness
-- aquatone
-- eyewitness
-- httpx
-
-### Directory Enumeration
-- ffuf
-- dirsearch
-- feroxbuster
-- wfuzz
-
-### Email Enumeration
-- emailfinder
-
-### Url Crawling
-- waymore
-- hakrawler
-- waybackurls
-- katana
-- gau
-- gospider
-- uforall
-- cariddi
-- urlfinder
-- github-endpoints
-- xurlfind3r
-- xcrawl3r
-- crawley
-- GoLinkFinder
-- galer
-- gourlex
-- pathfinder
-- pathcrawler
-- roboxtractor
-- robotxt
-
-### Google Dorking
-- gorker
-
-### JS Crawling
-- subjs
-- getJS
-- jscrawler
-- jsfinder
-- javascript-deobfuscator
-- linkfinder
-- xnLinkFinder
-- getjswords
-- sourcemapper
-- linx
-- jsluice
-
-### Hidden Parameter
-- paramfinder
-- msarjun
-- x8
-
-### Program Based Wordlist Generator
-- cewl
-- unfurl
-- cook
-- pydictor
-
-### Subdomain Takeover
-- subzy
-- nuclei
-
-### MX Takeover
-- mx-takeover
-
-### DNS takeover
-- dnstake
-
-### Zone Transfer
-- dig
-
-### Vulnerability Scanning
-- ftpx
-- sshx
-- s3scanner
-- vulntechx
-- pvreplace
-- xsschecker
-- pyxss
-- gosqli
-- commix
-- goop
-- pdftotext
-- trufflehog
-- secretfinder
-- mantra
-- shortscan
-- linkinspector
-- brutespray
-
-## Thanks 🙏
-_Thanks for creating awesome tools [Thanks](docs/Thanks.md)_
-
-## Mindmap/Workflow
-_See Workflow in different format [Workflow](Workflow)_
-
-<p align="center"> 
-<a href="Workflow/Scope-Based-Recon.png" target="_blank"> 
-<img src="Workflow/Scope-Based-Recon.png"/>
-</a>  
+[![Star History Chart](https://api.star-history.com/svg?repos=arjanchaudharyy/GarudRecon&type=Date)](https://star-history.com/#arjanchaudharyy/GarudRecon&Date)
+
+---
+
+<p align="center">
+  <b>Made with ❤️ for the Security Community</b><br>
+  <sub>CTXREC - Context Reconnaissance Framework</sub>
+</p>
+
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-installation">Installation</a> •
+  <a href="#-cloud-deployment">Cloud Deploy</a> •
+  <a href="#-documentation">Docs</a> •
+  <a href="#-contributing">Contribute</a>
 </p>
