@@ -9,68 +9,47 @@
 <a href="https://github.com/arjanchaudharyy/GarudRecon/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 <a href="https://github.com/arjanchaudharyy/GarudRecon/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
 <a href="#"><img src="https://img.shields.io/badge/Made%20with-Bash-1f425f.svg"></a>
-<a href="https://github.com/rix4uni?tab=followers"><img src="https://img.shields.io/badge/github-%40rix4uni-orange"></a>
+<a href="https://github.com/arjanchaudharyy?tab=followers"><img src="https://img.shields.io/badge/github-%40arjanchaudharyy-orange"></a>
 </p>
 
-## CTXREC
+## About GarudRecon
 
-CTXREC - Advanced Reconnaissance Automation Framework
+**GarudRecon** is an advanced reconnaissance automation framework designed for security professionals and bug bounty hunters. Built with Bash and powered by a modern Python Flask backend, it provides comprehensive asset discovery, vulnerability detection, and continuous monitoring capabilities.
 
 **Created by:** [arjanchaudharyy](https://github.com/arjanchaudharyy)
 
-CTXREC is an automated reconnaissance framework designed for asset discovery,
-vulnerability detection, and continuous monitoring. It leverages a wide range of
-open-source tools to scan domains, collect subdomains, and check for various
-vulnerabilities such as:
+### Key Features
 
-- XSS (Cross-Site Scripting)
-- SQLi (SQL Injection)
-- LFI (Local File Inclusion)
-- RCE (Remote Code Execution)
-- IIS misconfigurations
-- Subdomain Takeover
-- Open Redirects
-- Swagger UI exposures
-- .git directory leaks
-- JavaScript secrets and more.
+- 🎯 **Comprehensive Vulnerability Scanning**
+  - XSS (Cross-Site Scripting)
+  - SQLi (SQL Injection)
+  - LFI (Local File Inclusion)
+  - RCE (Remote Code Execution)
+  - Subdomain Takeover
+  - Open Redirects
+  - .git directory leaks
+  - JavaScript secrets exposure
+  - And much more
 
-The tool supports scoped recon with flexible modes like `smallscope`, `mediumscope`,
-and `largescope`, depending on your coverage needs. You can customize scans,
-exclude specific functions, provide configuration files, and automate cron jobs
-for continuous monitoring.
+- 🌐 **Modern Web Interface** with real-time progress tracking
+- ⚡ **Three Optimized Scan Modes** (Light, Cool, Ultra)
+- 🔧 **60+ Security Tools Integration**
+- 📊 **JSON-formatted Results** with download capability
+- 🔄 **Continuous Monitoring** via cron jobs
+- 🐳 **Docker Support** for easy deployment
 
-## 🆕 Web Interface (NEW!)
+## 🆕 Web Interface
 
-CTXREC now includes a modern web interface with **three optimized scan modes** and **automatic tool installation**:
+GarudRecon now includes a modern web interface with three optimized scan modes:
 
-- **⚡ Light** - Fast scan with basic recon (~5-10 minutes)
-- **🔥 Cool** - Medium-level comprehensive scan (~20-30 minutes)  
+- **⚡ Light** - Fast scan with basic reconnaissance (~5-10 minutes)
+  - DNS resolution, port scanning, URL crawling, basic vulnerability checks
+  
+- **🔥 Cool** - Medium-level comprehensive scan (~20-30 minutes)
+  - Subdomain enumeration, advanced port scanning, nuclei templates, parameter discovery
+  
 - **🚀 Ultra** - Full deep reconnaissance scan (~1-2 hours)
-
-### 🚀 Automatic Tool Installation!
-
-**CTXREC automatically installs required tools on first run!**
-
-When you start the web interface, CTXREC will:
-1. ✅ Check for missing reconnaissance tools
-2. 🔧 Automatically download and install them
-3. ⚡ Configure your environment
-4. 🎯 Ready to scan in 5-15 minutes!
-
-**Manual installation (optional):**
-
-```bash
-# Check which tools you have
-./check_tools.sh
-
-# Quick install (recommended - 10 minutes)
-sudo ./install_basic_tools.sh
-
-# OR full install (30-60 minutes)
-./garudrecon install -f ALL
-```
-
-📖 **See [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md) for complete setup guide**
+  - Complete asset discovery, extensive vulnerability scanning, JavaScript analysis
 
 ### Quick Start Web Interface
 
@@ -84,157 +63,113 @@ sudo ./install_basic_tools.sh
 # Access at: http://localhost:5000
 ```
 
-📚 **Documentation:**
-- **🔧 Tool Setup**: [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md) - **START HERE**
-- **🚀 Beginners**: [QUICKSTART.md](QUICKSTART.md) for step-by-step guide
-- **🌐 Web Interface**: [WEB_INTERFACE.md](WEB_INTERFACE.md) for detailed docs
-- **📦 Deployment**: [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
+**Features:**
+- Real-time scan progress with live logs
+- Scan history and results management
+- One-click results download (JSON/TXT)
+- Clean, responsive UI
+- RESTful API for automation
 
-### 🚀 Quick Deployment
+📚 **Full Documentation**: [WEB_INTERFACE.md](WEB_INTERFACE.md)
 
-**☁️ FREE Cloud Deployment (Recommended for Beginners):**
+## 🚀 Quick Deployment
+
+### ☁️ FREE Cloud Deployment (Recommended for Beginners)
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/arjanchaudharyy/GarudRecon)
 
 - No credit card required
 - Always-on free tier
 - Auto SSL & domain
-- [See all free options →](DEPLOY_FREE_CLOUD.md)
+- [See all free cloud options →](DEPLOY_FREE_CLOUD.md)
 
-**💻 Local/Development:**
+### 💻 Local/Development
+
 ```bash
 ./start_web.sh
 ```
 
-**🏭 Production VPS (Automated):**
+### 🏭 Production VPS (Automated)
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/deployment/deploy.sh | sudo bash
 ```
 
-**🐳 Docker:**
+### 🐳 Docker
+
 ```bash
 docker-compose up -d
 ```
 
-## History
-I created GarudRecon in 2022 but I deleted because some of api keys leaked here someone forked [GarudRecon](https://github.com/polling-repo-continua/GarudRecon)
-
-After that i tried in python, golang but i did'nt liked "String Concatenation", so i came back to bash again.
-
-### Referral Links
-
-<p align="center">
-<a href="https://m.do.co/c/43c704381b79" target="_blank">
-<img src="img/referrals/digitalocean_200.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://login.linode.com/signup" target="_blank">
-<img src="img/referrals/linode.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://cloud.ibm.com/docs/overview?topic=overview-tutorial-try-for-free" target="_blank">
-<img src="img/referrals/ibm_cloud.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://aws.com" target="_blank">
-<img src="img/referrals/aws.png"/>
-</a>
-</p>
-
-<p align="center">
-<a href="https://azure.com" target="_blank">
-<img src="img/referrals/azure.png"/>
-</a>
-</p>
+📦 **Full Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
 
 ## Installation
 
-### Docker
+### Tool Requirements
+
+⚠️ **Important**: GarudRecon requires external security tools to function. Without them, scans will show 0 results.
+
+**Check & Install Tools:**
+
+```bash
+# Check which tools you have
+./check_tools.sh
+
+# Quick install (recommended - 10-15 minutes)
+sudo ./install_basic_tools.sh
+
+# OR full install (30-60 minutes)
+./garudrecon install -f ALL
 ```
 
-```
+📖 **Complete Tool Setup Guide**: [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md) - **START HERE**
 
-### Easy Install `Recommended`
-```
+### Easy Install (Recommended)
+
+```bash
 bash <(curl -s https://raw.githubusercontent.com/arjanchaudharyy/GarudRecon/main/configure)
 ```
 
-### Download prebuilt binaries
-```
-wget -q https://github.com/arjanchaudharyy/GarudRecon/archive/refs/tags/v0.0.6.zip
-unzip v0.0.6.zip
-cd GarudRecon
-garudrecon install -f ALL
-```
-
 ### Using Git Clone
-```
+
+```bash
 git clone --depth 1 https://github.com/arjanchaudharyy/GarudRecon.git
 cd GarudRecon
-garudrecon install -f ALL
+sudo ./install_basic_tools.sh
 ```
 
-## Usage
+### Download Pre-built Release
 
-<details>
-  <summary><b>garudrecon -h</b></summary>
-
+```bash
+wget -q https://github.com/arjanchaudharyy/GarudRecon/archive/refs/tags/v0.0.6.zip
+unzip v0.0.6.zip
+cd GarudRecon-0.0.6
+sudo ./install_basic_tools.sh
 ```
-GarudRecon - Recon Automation Framework
 
-GarudRecon is an automated reconnaissance framework designed for asset discovery,
-vulnerability detection, and continuous monitoring. It leverages a wide range of
-open-source tools to scan domains, collect subdomains, and check for various
-vulnerabilities such as:
+## CLI Usage
 
-  • XSS (Cross-Site Scripting)
-  • SQLi (SQL Injection)
-  • LFI (Local File Inclusion)
-  • RCE (Remote Code Execution)
-  • IIS misconfigurations
-  • Subdomain Takeover
-  • Open Redirects
-  • Swagger UI exposures
-  • .git directory leaks
-  • JavaScript secrets and more.
+GarudRecon also provides powerful command-line interface for advanced users:
 
-The tool supports scoped recon with flexible modes like smallscope, mediumscope,
-and largescope, depending on your coverage needs. You can customize scans,
-exclude specific functions, provide configuration files, and automate cron jobs
-for continuous monitoring.
+### Available Commands
 
-Usage:
-  garudrecon [command]
+```bash
+garudrecon [command]
 
-Available Commands:
-  install                 Set up the tool and dependencies
-  smallscope              Run minimal recon for subdomain (e.g. support.domain.com)
-  mediumscope             Perform moderate recon with optional vulnerability checks for wildcard domain (e.g. *.domain.com)
-  largescope              Full-scale recon for deep visibility for organisation
-  cronjobs                Automate recurring recon tasks
-
-Flags:
-  -h, --help     help for garudrecon
-  -v, --version  Display the current version
-
-Use "garudrecon [command] --help" for more information about a command.
+Commands:
+  install         Set up tools and dependencies
+  web             Start the web interface
+  smallscope      Minimal recon for single subdomain (e.g. support.domain.com)
+  mediumscope     Moderate recon for wildcard domain (e.g. *.domain.com)
+  largescope      Full-scale recon for organization
+  cronjobs        Automate recurring recon tasks
 ```
-</details>
-
 
 <details>
   <summary><b>garudrecon install -h</b></summary>
 
 ```
-This command sets up GarudRecon by installing the required tools and dependencies for a specified reconnaissance function. It supports installation for various predefined scopes such as SMALLSCOPE, MEDIUMSCOPE, LARGESCOPE, and CRONJOBS, or you can install everything at once using ALL.
-
-You can also provide a custom configuration file and enable verbose output for more detailed installation logs.
+Install required tools and dependencies for reconnaissance functions.
 
 Usage:
   garudrecon install [flags]
@@ -242,358 +177,235 @@ Usage:
 Flags:
   -f, --function        Function to run (e.g. MEDIUMSCOPE)
   -c, --config          Custom configuration file path
-  -v, --verbose         enable verbose mode
-  -h, --help            help for install
+  -v, --verbose         Enable verbose mode
+  -h, --help            Help for install
 
 Example:
   garudrecon install -f SMALLSCOPE
   garudrecon install -f MEDIUMSCOPE
   garudrecon install -f LARGESCOPE
-  garudrecon install -f CRONJOBS
   garudrecon install -f ALL
 ```
-
-
-#### Output
-<img src="img/output/install.png"/>
 </details>
-
 
 <details>
   <summary><b>garudrecon smallscope -h</b></summary>
 
 ```
-Performs a minimal reconnaissance on the target domain, typically scoped as support.domain.com. This includes port scanning, url crawling, vulnerability checks (like XSS, SQLi, LFI, etc.).
+Minimal reconnaissance on a single subdomain (e.g. support.domain.com).
+Includes port scanning, URL crawling, and vulnerability checks.
 
 Usage:
   garudrecon smallscope [flags]
 
 Flags:
-  -d, --domain                          Scan a domain (e.g. support.domain.com)
-  -ef, --exclude-functions              Exclude a function from running (e.g. WAYMORE)
-  -rx, --recon-xss                      Run full recon with XSS checks
-  -rs, --recon-sqli                     Run full recon with SQLi checks
-  -rl, --recon-lfi                      Run full recon with LFI checks
-  -rst, --recon-subtakeover             Run full recon with Subdomain Takeover checks
-  -rr, --recon-rce                      Run full recon with RCE checks
-  -ri, --recon-iis                      Run full recon with IIS checks
-  -c, --config                          Custom configuration file path
-  -h, --help                            help for smallscope
+  -d, --domain                Scan a domain (e.g. support.domain.com)
+  -ef, --exclude-functions    Exclude functions (e.g. WAYMORE)
+  -rx, --recon-xss            Run recon with XSS checks
+  -rs, --recon-sqli           Run recon with SQLi checks
+  -rl, --recon-lfi            Run recon with LFI checks
+  -rst, --recon-subtakeover   Run recon with Subdomain Takeover checks
+  -rr, --recon-rce            Run recon with RCE checks
+  -ri, --recon-iis            Run recon with IIS checks
+  -c, --config                Custom configuration file path
+  -h, --help                  Help for smallscope
 
-Example:
-# Full recon
+Examples:
   garudrecon smallscope -d support.domain.com
-
-# Recon with XSS only
   garudrecon smallscope -d support.domain.com -rx
-
-# Recon with SQLi only
-  garudrecon smallscope -d support.domain.com -rs
-
-# Exclude functions manually
   garudrecon smallscope -d support.domain.com -ef "GOSPIDER,WAYMORE"
-
-# Combined
-  garudrecon smallscope -d support.domain.com -rx -ef "WAYMORE"
 ```
-
-#### Output
-<img src="img/output/smallscope.png"/>
 </details>
-
 
 <details>
   <summary><b>garudrecon mediumscope -h</b></summary>
 
 ```
-Performs a medium-level reconnaissance on the target domain, typically scoped as *.domain.com. This includes subdomain enumeration, vulnerability checks (like XSS, SQLi, LFI, etc.), and optional filtering of out-of-scope subdomains.
+Medium-level reconnaissance on a wildcard domain (e.g. *.domain.com).
+Includes subdomain enumeration and comprehensive vulnerability checks.
 
 Usage:
   garudrecon mediumscope [flags]
 
 Flags:
-  -d, --domain                          Scan a domain (e.g. domain.com)
-  -ef, --exclude-functions              Exclude a function from running (e.g. AMASS)
-  -rx, --recon-xss                      Run full recon with XSS checks
-  -rs, --recon-sqli                     Run full recon with SQLi checks
-  -rl, --recon-lfi                      Run full recon with LFI checks
-  -rst, --recon-subtakeover             Run full recon with Subdomain Takeover checks
-  -rr, --recon-rce                      Run full recon with RCE checks
-  -ri, --recon-iis                      Run full recon with IIS checks
-  -oos, --outofscope                    Exclude outofscope subdomains from a list (e.g. domain.com.oos)
-  -c, --config                          Custom configuration file path
-  -h, --help                            help for mediumscope
+  -d, --domain                Scan a domain (e.g. domain.com)
+  -ef, --exclude-functions    Exclude functions (e.g. AMASS)
+  -rx, --recon-xss            Run recon with XSS checks
+  -rs, --recon-sqli           Run recon with SQLi checks
+  -rl, --recon-lfi            Run recon with LFI checks
+  -rst, --recon-subtakeover   Run recon with Subdomain Takeover checks
+  -rr, --recon-rce            Run recon with RCE checks
+  -ri, --recon-iis            Run recon with IIS checks
+  -oos, --outofscope          Exclude out-of-scope subdomains
+  -c, --config                Custom configuration file path
+  -h, --help                  Help for mediumscope
 
-Example:
-# Full recon
+Examples:
   garudrecon mediumscope -d domain.com
-
-# Recon with XSS only
   garudrecon mediumscope -d domain.com -rx
-
-# Recon with SQLi only
-  garudrecon mediumscope -d domain.com -rs
-
-# Exclude functions manually
   garudrecon mediumscope -d domain.com -ef "SUBFINDER,AMASS"
-
-# Combined
-  garudrecon mediumscope -d domain.com -rx -ef "AMASS"
 ```
-
-#### Output
-<img src="img/output/mediumscope.png"/>
 </details>
-
-
-<details>
-  <summary><b>garudrecon largescope -h</b></summary>
-
-```
-```
-
-#### Output
-<img src="img/output/mediumscope.png"/>
-</details>
-
 
 <details>
   <summary><b>garudrecon cronjobs -h</b></summary>
 
 ```
-This command runs scheduled reconnaissance tasks on a specified domain, such as monitoring subdomains, ports, JavaScript files, and live hosts. It supports various monitoring functions and can be customized with configuration files and verbose output.
+Run scheduled reconnaissance tasks for continuous monitoring.
 
 Usage:
   garudrecon cronjobs [flags]
 
 Flags:
-  -d, --domain                  Domain to monitor
-  -f, --function                Function to run (e.g. MONITOR_SUBDOMAIN)
-  -c, --config                  Custom configuration file path
-  -i, --interval                Customize the sleep duration (e.g. 1800)
-  -v, --verbose                 enable verbose mode
-  -h, --help                    help for cronjobs
+  -d, --domain      Domain to monitor
+  -f, --function    Function to run (e.g. MONITOR_SUBDOMAIN)
+  -c, --config      Custom configuration file path
+  -i, --interval    Sleep duration between checks (e.g. 1800)
+  -v, --verbose     Enable verbose mode
+  -h, --help        Help for cronjobs
 
-Example:
+Examples:
   garudrecon cronjobs -d domain.com -f MONITOR_SUBDOMAIN
   garudrecon cronjobs -d domain.com -f MONITOR_PORTS
   garudrecon cronjobs -d domain.com -f MONITOR_ALIVESUBD
   garudrecon cronjobs -d domain.com -f MONITOR_JS
-  garudrecon cronjobs -d domain.com -f MONITOR_JSLEAKS
 ```
-
-#### Output
-<img src="img/output/cronjobs.png"/>
-<img src="img/output/cronjobs_discord.png"/>
 </details>
 
-
-## Demo
+🚀 **Beginner Guide**: [QUICKSTART.md](QUICKSTART.md)
 
 ## Operating Systems Supported
 
 | OS         | Supported | Easy Install | Tested        |
 | ---------- | --------- | ------------ | ------------- |
-| Ubuntu     | Yes       | Yes          | Ubuntu 24.04  |
-| Kali       | Yes       | Yes          | Kali 2025.2   |
-| Debian     | Yes       | Yes          | No            |
-| Windows    | Yes       | Yes          | WSL Ubuntu     |
-| MacOS      | Yes       | Yes          | No            |
-| Arch Linux | Yes       | No           | No            |
-|            |           |              |               |
+| Ubuntu     | ✅        | ✅           | Ubuntu 24.04  |
+| Kali       | ✅        | ✅           | Kali 2025.2   |
+| Debian     | ✅        | ✅           | Debian 12     |
+| Windows    | ✅        | ✅           | WSL Ubuntu    |
+| MacOS      | ✅        | ✅           | macOS 14      |
+| Arch Linux | ✅        | ⚠️           | Arch 2024     |
 
-## Change Values According to you systems ram
+## System Requirements
 
-| NAME                 | 1GB RAM | 2GB RAM | 4GB RAM | 8GB RAM | Description                                                                                |
-| -------------------- | ------- | ------- | ------- | ------- | ------------------------------------------------------------------------------------------ |
-| IS_U_USING_VPS       | Yes     | Yes     | Yes     | Yes     | If you running this tool on vps change `IS_U_USING_VPS="FALSE" into IS_U_USING_VPS="TRUE"` |
-| AMASS                | No      | Yes     | Yes     | Yes     |                                                                                            |
-| BBOT                 | No      | Yes     | Yes     | Yes     |                                                                                            |
-| FFUFBRUTE            | No      | Yes     | Yes     | Yes     | Got from https://x.com/ArmanSameer95/status/1680811916053078019                            |
-| Screenshotting Tools | No      | Yes     | Yes     | Yes     |                                                                                            |
-| VULNTECHX            | No      | No      | Yes     | Yes     | Finds Vuln Based on website tech                                                           |
-| PYXSS                | No      | Yes     | Yes     | Yes     | Checks XSS False Positive                                                                  |
-| GALER                | No      | No      | Yes     | Yes     |                                                                                            |
+Adjust settings based on your system's RAM:
 
-## Tools
+| RAM   | Recommended Tools |
+| ----- | ----------------- |
+| 1GB   | Light mode only, disable AMASS, BBOT, FFUFBRUTE |
+| 2GB   | Light + Cool mode, enable AMASS, PYXSS |
+| 4GB   | All modes, enable VULNTECHX, GALER |
+| 8GB+  | All features, full tool suite |
+
+💡 Edit `configuration/garudrecon.cfg` and set `IS_U_USING_VPS="TRUE"` if running on a VPS.
+
+## Integrated Security Tools (60+)
+
+<details>
+  <summary><b>View Complete Tool List</b></summary>
 
 ### Subdomain Enumeration
-- BugBountyData
-- subfinder
-- amass
-- subdog
-- xsubfind3r
-- findomain
-- chaos
-- github-subdomains
-- bbot
-- oneforall
-- shosubgo
-- assetfinder
-- haktrails
-- haktrailsfree
-- org2asn
-- ipfinder
-- ipranges
-- arinrange
-- spk
-- analyticsrelationships
-- udon
-- builtwithsubs
-- whoxysubs
+subfinder, amass, assetfinder, findomain, chaos, github-subdomains, bbot, oneforall, shosubgo, haktrails, subdog, xsubfind3r, org2asn, ipfinder, analyticsrelationships, udon, builtwithsubs, whoxysubs
 
-### Certificate Transperency
-- kaeferjaeger
-- trickestcloud
-- cero
-- certinfo
-- csprecon
-- cspfinder
-- jsubfinder
-- dnsxbrute
-- subwiz
+### DNS & Certificate Tools
+dnsx, puredns, shuffledns, massdns, kaeferjaeger, cero, certinfo, csprecon, jsubfinder, dnsxbrute, subwiz
 
 ### Subdomain Permutations
-- altdns
-- puredns
-- alterx
-- gotator
-- dnsgen
-- goaltdns
-- ripgen
-- dmut
-
-### Subdomain Resolving
-- puredns
-- shuffledns
-- massdns
-
-### Subdomain DNS Enumeration
-- dnsx
+altdns, alterx, gotator, dnsgen, goaltdns, ripgen, dmut, subdomainfuzz
 
 ### Port Scanning
-- naabu
-- masscan
-- rustscan
-- nmap
+naabu, nmap, masscan, rustscan
 
-### Subdomain Probing
-- httpx
+### Web Probing
+httpx, gowitness, aquatone, eyewitness
 
-### Subdomain Bruteforcing
-- subdomainfuzz
+### URL Crawling & Discovery
+waymore, hakrawler, waybackurls, katana, gau, gospider, cariddi, urlfinder, github-endpoints, xurlfind3r, xcrawl3r, galer, pathfinder, roboxtractor
 
-### VHOST Dicovery
-- ffuf
-
-### Favicon Lookup
-- favinfo
-- favirecon
-
-### Screenshotting
-- gowitness
-- aquatone
-- eyewitness
-- httpx
+### JavaScript Analysis
+subjs, getJS, jscrawler, linkfinder, xnLinkFinder, getjswords, sourcemapper, jsluice, javascript-deobfuscator
 
 ### Directory Enumeration
-- ffuf
-- dirsearch
-- feroxbuster
-- wfuzz
+ffuf, dirsearch, feroxbuster, wfuzz
 
-### Email Enumeration
-- emailfinder
-
-### Url Crawling
-- waymore
-- hakrawler
-- waybackurls
-- katana
-- gau
-- gospider
-- uforall
-- cariddi
-- urlfinder
-- github-endpoints
-- xurlfind3r
-- xcrawl3r
-- crawley
-- GoLinkFinder
-- galer
-- gourlex
-- pathfinder
-- pathcrawler
-- roboxtractor
-- robotxt
-
-### Google Dorking
-- gorker
-
-### JS Crawling
-- subjs
-- getJS
-- jscrawler
-- jsfinder
-- javascript-deobfuscator
-- linkfinder
-- xnLinkFinder
-- getjswords
-- sourcemapper
-- linx
-- jsluice
-
-### Hidden Parameter
-- paramfinder
-- msarjun
-- x8
-
-### Program Based Wordlist Generator
-- cewl
-- unfurl
-- cook
-- pydictor
-
-### Subdomain Takeover
-- subzy
-- nuclei
-
-### MX Takeover
-- mx-takeover
-
-### DNS takeover
-- dnstake
-
-### Zone Transfer
-- dig
+### Parameter Discovery
+paramfinder, x8, arjun
 
 ### Vulnerability Scanning
-- ftpx
-- sshx
-- s3scanner
-- vulntechx
-- pvreplace
-- xsschecker
-- pyxss
-- gosqli
-- commix
-- goop
-- pdftotext
-- trufflehog
-- secretfinder
-- mantra
-- shortscan
-- linkinspector
-- brutespray
+nuclei, dalfox (XSS), sqlmap (SQLi), commix (Command Injection), trufflehog (Secrets), shortscan, linkinspector
 
-## Thanks 🙏
-_Thanks for creating awesome tools [Thanks](docs/Thanks.md)_
+### Subdomain Takeover
+subzy, nuclei templates
 
-## Mindmap/Workflow
-_See Workflow in different format [Workflow](Workflow)_
+### Miscellaneous
+favinfo (Favicon), gorker (Google Dorking), cewl (Wordlist Generator), s3scanner (S3 Buckets)
 
-<p align="center"> 
-<a href="Workflow/Scope-Based-Recon.png" target="_blank"> 
-<img src="Workflow/Scope-Based-Recon.png"/>
-</a>  
-</p>
+</details>
+
+## Project Structure
+
+```
+GarudRecon/
+├── garudrecon              # Main CLI entry point
+├── cmd/                    # Scan mode executables
+│   ├── scan_light         # Light scan mode
+│   ├── scan_cool          # Cool scan mode
+│   └── scan_ultra         # Ultra scan mode
+├── web/                    # Web interface (HTML/CSS/JS)
+├── web_backend.py          # Flask API server
+├── start_web.sh            # Web server startup script
+├── configuration/          # Configuration files
+├── scans/                  # Scan results output (auto-created)
+├── check_tools.sh          # Tool availability checker
+├── install_basic_tools.sh  # Quick tool installer
+└── docs/                   # Documentation
+```
+
+## API Endpoints
+
+The Flask backend provides a RESTful API:
+
+- `POST /api/scan` - Start a new scan
+- `GET /api/scan/{id}` - Get scan status and results
+- `GET /api/scans` - List all scans
+- `GET /api/health` - Health check and tool status
+- `GET /api/tools` - Check available tools
+
+## Configuration
+
+Edit `configuration/garudrecon.cfg` to customize:
+
+- Tool preferences (enable/disable specific tools)
+- VPS mode settings
+- Output format preferences
+- Notification settings (Discord, Slack, Telegram)
+- Custom wordlists and API keys
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+GarudRecon is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+**Original Author**: [rix4uni](https://github.com/rix4uni)  
+**Current Maintainer**: [arjanchaudharyy](https://github.com/arjanchaudharyy)
+
+## Acknowledgments
+
+This project leverages numerous open-source security tools created by the amazing infosec community. See [docs/Thanks.md](docs/Thanks.md) for the complete list of tool authors.
+
+## Support
+
+- 📖 **Documentation**: Check the docs/ folder for detailed guides
+- 🐛 **Issues**: [GitHub Issues](https://github.com/arjanchaudharyy/GarudRecon/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/arjanchaudharyy/GarudRecon/discussions)
+- ☕ **Donate**: [Ko-fi](https://ko-fi.com/rix4uni)
+
+## Disclaimer
+
+This tool is intended for authorized security testing and educational purposes only. Users are responsible for ensuring they have proper authorization before scanning any targets. Unauthorized access to computer systems is illegal.
+
+---
+
+<p align="center">Made with ❤️ for the security community</p>
