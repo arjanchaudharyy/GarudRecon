@@ -60,6 +60,24 @@ GarudRecon now includes a modern web interface with **three optimized scan modes
 📚 **Documentation:**
 - **Beginners**: See [QUICKSTART.md](QUICKSTART.md) for step-by-step guide
 - **Web Interface**: See [WEB_INTERFACE.md](WEB_INTERFACE.md) for detailed docs
+- **Deployment**: See [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
+
+### 🚀 Quick Deployment
+
+**Local/Development:**
+```bash
+./start_web.sh
+```
+
+**Production (Automated):**
+```bash
+curl -fsSL https://raw.githubusercontent.com/rix4uni/GarudRecon/main/deployment/deploy.sh | sudo bash
+```
+
+**Docker:**
+```bash
+docker-compose up -d
+```
 
 ## History
 I created GarudRecon in 2022 but I deleted because some of api keys leaked here someone forked [GarudRecon](https://github.com/polling-repo-continua/GarudRecon)
