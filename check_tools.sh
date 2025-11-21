@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Tool Verification Script for GarudRecon
+# Tool Verification Script for CTXREC
+# Created by: arjanchaudharyy
 # Checks which tools are installed and provides installation recommendations
 
 echo "=================================================="
-echo "GarudRecon Tool Verification"
+echo "CTXREC Tool Verification"
 echo "=================================================="
+echo "Created by: arjanchaudharyy"
 echo ""
 
 # Color codes

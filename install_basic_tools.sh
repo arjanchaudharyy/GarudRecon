@@ -1,11 +1,13 @@
 #!/bin/bash
 
 # Quick installer for basic recon tools
+# Created by: arjanchaudharyy
 # This installs minimal tools needed for scans to work
 
 echo "=================================================="
-echo "GarudRecon - Installing Basic Tools"
+echo "CTXREC - Installing Basic Tools"
 echo "=================================================="
+echo "Created by: arjanchaudharyy"
 echo ""
 
 # Check if running as root

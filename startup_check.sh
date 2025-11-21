@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Startup Check Script for GarudRecon Web Interface
+# Startup Check Script for CTXREC Web Interface
+# Created by: arjanchaudharyy
 # Verifies tools and provides warnings before starting the server
 
 echo "=================================================="
-echo "GarudRecon Web Interface - Startup Check"
+echo "CTXREC Web Interface - Startup Check"
 echo "=================================================="
+echo "Created by: arjanchaudharyy"
 echo ""
 
 # Color codes
@@ -89,7 +91,7 @@ fi
 
 echo ""
 echo "=================================================="
-echo "Starting GarudRecon Web Interface..."
+echo "Starting CTXREC Web Interface..."
 echo "=================================================="
 echo ""
 

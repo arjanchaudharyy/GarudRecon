@@ -12,11 +12,13 @@
 <a href="https://github.com/rix4uni?tab=followers"><img src="https://img.shields.io/badge/github-%40rix4uni-orange"></a>
 </p>
 
-## GarudRecon
+## CTXREC
 
-GarudRecon - Recon Automation Framework
+CTXREC - Advanced Reconnaissance Automation Framework
 
-GarudRecon is an automated reconnaissance framework designed for asset discovery,
+**Created by:** [arjanchaudharyy](https://github.com/arjanchaudharyy)
+
+CTXREC is an automated reconnaissance framework designed for asset discovery,
 vulnerability detection, and continuous monitoring. It leverages a wide range of
 open-source tools to scan domains, collect subdomains, and check for various
 vulnerabilities such as:
@@ -39,15 +41,23 @@ for continuous monitoring.
 
 ## 🆕 Web Interface (NEW!)
 
-GarudRecon now includes a modern web interface with **three optimized scan modes**:
+CTXREC now includes a modern web interface with **three optimized scan modes** and **automatic tool installation**:
 
 - **⚡ Light** - Fast scan with basic recon (~5-10 minutes)
 - **🔥 Cool** - Medium-level comprehensive scan (~20-30 minutes)  
 - **🚀 Ultra** - Full deep reconnaissance scan (~1-2 hours)
 
-### ⚠️ Important: Install Tools First!
+### 🚀 Automatic Tool Installation!
 
-**GarudRecon scans will show 0 results without tools installed.**
+**CTXREC automatically installs required tools on first run!**
+
+When you start the web interface, CTXREC will:
+1. ✅ Check for missing reconnaissance tools
+2. 🔧 Automatically download and install them
+3. ⚡ Configure your environment
+4. 🎯 Ready to scan in 5-15 minutes!
+
+**Manual installation (optional):**
 
 ```bash
 # Check which tools you have

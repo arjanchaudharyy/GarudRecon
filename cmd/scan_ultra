@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# Ultra Scan Mode - Full comprehensive deep reconnaissance
+# CTXREC - Ultra Scan Mode
+# Created by: arjanchaudharyy
+# Full comprehensive deep reconnaissance
 # Uses all available tools for maximum coverage
 
 CONFIG_PATH="configuration/garudrecon.cfg"
@@ -332,8 +334,9 @@ EOF
 # Summary
 cat > "$OUTPUT_DIR/summary.txt" << EOF
 ========================================
-GarudRecon - ULTRA Scan Summary
+CTXREC - ULTRA Scan Summary
 ========================================
+Created by: arjanchaudharyy
 Domain: $DOMAIN
 Scan Type: Ultra (Full Deep Reconnaissance)
 Completed: $(date)

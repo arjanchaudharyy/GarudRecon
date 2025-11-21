@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# CTXREC Web Interface Launcher
+# Created by: arjanchaudharyy
+
 echo "=========================================="
-echo "   GarudRecon Web Interface Launcher"
+echo "   CTXREC Web Interface Launcher"
 echo "=========================================="
+echo "Created by: arjanchaudharyy"
 echo ""
 
 # Check if Python 3 is installed
@@ -65,7 +69,7 @@ else
 fi
 
 echo "=========================================="
-echo "   Starting GarudRecon Web Server"
+echo "   Starting CTXREC Web Server"
 echo "=========================================="
 echo ""
 echo "Access the web interface at:"

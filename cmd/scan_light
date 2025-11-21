@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# Light Scan Mode - Fast recon with basic vulnerability checks
+# CTXREC - Light Scan Mode
+# Created by: arjanchaudharyy
+# Fast recon with basic vulnerability checks
 # Optimized for speed with essential security checks
 
 CONFIG_PATH="configuration/garudrecon.cfg"
@@ -176,8 +178,9 @@ EOF
 # Summary
 cat > "$OUTPUT_DIR/summary.txt" << EOF
 ========================================
-GarudRecon - LIGHT Scan Summary
+CTXREC - LIGHT Scan Summary
 ========================================
+Created by: arjanchaudharyy
 Domain: $DOMAIN
 Scan Type: Light (Fast Recon)
 Completed: $(date)

@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Demo Workflow - Shows complete GarudRecon setup and usage
+# Demo Workflow - Shows complete CTXREC setup and usage
+# Created by: arjanchaudharyy
 
 echo "=========================================="
-echo "GarudRecon - Complete Workflow Demo"
+echo "CTXREC - Complete Workflow Demo"
 echo "=========================================="
+echo "Created by: arjanchaudharyy"
 echo ""
 
 # Step 1: Check tools

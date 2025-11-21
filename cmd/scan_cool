@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# Cool Scan Mode - Medium-level comprehensive scan
+# CTXREC - Cool Scan Mode
+# Created by: arjanchaudharyy
+# Medium-level comprehensive scan
 # Includes subdomain enumeration and extensive vulnerability checks
 
 CONFIG_PATH="configuration/garudrecon.cfg"
@@ -232,8 +234,9 @@ EOF
 # Summary
 cat > "$OUTPUT_DIR/summary.txt" << EOF
 ========================================
-GarudRecon - COOL Scan Summary
+CTXREC - COOL Scan Summary
 ========================================
+Created by: arjanchaudharyy
 Domain: $DOMAIN
 Scan Type: Cool (Medium-Level)
 Completed: $(date)
