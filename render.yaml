@@ -20,7 +20,3 @@ services:
       - key: CORS_ORIGINS
         value: "*"
     healthCheckPath: /api/health
-    disk:
-      name: scans
-      mountPath: /app/scans
-      sizeGB: 1
