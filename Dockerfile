@@ -16,6 +16,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     # Build essentials for Go compilation
     build-essential \
+    gcc \
+    g++ \
+    make \
+    # Library for network tools (naabu, etc.)
+    libpcap-dev \
     # DNS and network tools
     dnsutils \
     nmap \
@@ -23,44 +28,53 @@ RUN apt-get update && apt-get install -y \
     jq \
     netcat \
     whois \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Go 1.21.5
-ENV GO_VERSION=1.21.5
+# Install Go 1.23.5 (latest stable)
+ENV GO_VERSION=1.23.5
 ENV GOPATH=/root/go
 ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+ENV CGO_ENABLED=1
+ENV GOPROXY=https://proxy.golang.org,direct
+ENV GOTIMEOUT=10m
 
 RUN cd /tmp && \
-    wget -q https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
+    wget --progress=dot:giga https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
-    rm go${GO_VERSION}.linux-amd64.tar.gz
+    rm go${GO_VERSION}.linux-amd64.tar.gz && \
+    go version
 
-# Install Go-based reconnaissance tools
-RUN mkdir -p $GOPATH/bin && \
-    echo "Installing httpx..." && \
+# Install Go-based reconnaissance tools (in smaller batches for better error handling)
+RUN mkdir -p $GOPATH/bin
+
+# Batch 1: ProjectDiscovery core tools
+RUN echo "=== Installing ProjectDiscovery tools ===" && \
     go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest && \
-    echo "Installing subfinder..." && \
     go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest && \
-    echo "Installing dnsx..." && \
     go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest && \
-    echo "Installing naabu..." && \
+    echo "✓ Batch 1 complete"
+
+# Batch 2: More ProjectDiscovery tools
+RUN echo "=== Installing naabu and nuclei ===" && \
     go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest && \
-    echo "Installing nuclei..." && \
     go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest && \
-    echo "Installing katana..." && \
     go install -v github.com/projectdiscovery/katana/cmd/katana@latest && \
-    echo "Installing waybackurls..." && \
+    echo "✓ Batch 2 complete"
+
+# Batch 3: TomNomNom tools
+RUN echo "=== Installing TomNomNom tools ===" && \
     go install -v github.com/tomnomnom/waybackurls@latest && \
-    echo "Installing gau..." && \
-    go install -v github.com/lc/gau/v2/cmd/gau@latest && \
-    echo "Installing assetfinder..." && \
     go install -v github.com/tomnomnom/assetfinder@latest && \
-    echo "Installing dalfox..." && \
-    go install -v github.com/hahwul/dalfox/v2@latest && \
-    echo "Installing gf..." && \
     go install -v github.com/tomnomnom/gf@latest && \
-    echo "Installing anew..." && \
-    go install -v github.com/tomnomnom/anew@latest
+    go install -v github.com/tomnomnom/anew@latest && \
+    echo "✓ Batch 3 complete"
+
+# Batch 4: Additional tools
+RUN echo "=== Installing additional tools ===" && \
+    go install -v github.com/lc/gau/v2/cmd/gau@latest && \
+    go install -v github.com/hahwul/dalfox/v2@latest && \
+    echo "✓ Batch 4 complete"
 
 # Set working directory
 WORKDIR /app
