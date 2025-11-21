@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  garudrecon-web:
+    build: .
+    container_name: garudrecon-web
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./scans:/app/scans
+      - ./configuration:/app/configuration
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+    networks:
+      - garudrecon-network
+
+networks:
+  garudrecon-network:
+    driver: bridge

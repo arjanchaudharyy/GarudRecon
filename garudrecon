@@ -33,6 +33,7 @@ Usage:
   garudrecon [command]
 
 Available Commands:
+  web                     Start the web interface (recommended for beginners)
   install                 Set up the tool and dependencies
   smallscope              Run minimal recon for subdomain (e.g. support.domain.com)
   mediumscope             Perform moderate recon with optional vulnerability checks for wildcard domain (e.g. *.domain.com)
@@ -57,6 +58,9 @@ COMMAND=$1
 shift
 
 case "$COMMAND" in
+  web)
+    bash "$(dirname "$0")/start_web.sh"
+    ;;
   install)
     bash "$(dirname "$0")/cmd/install" "$@"
     ;;
@@ -66,8 +70,8 @@ case "$COMMAND" in
   mediumscope)
     bash "$(dirname "$0")/cmd/mediumscope" "$@"
     ;;
-  largemscope)
-    bash "$(dirname "$0")/cmd/largemscope" "$@"
+  largescope)
+    bash "$(dirname "$0")/cmd/largescope" "$@"
     ;;
   cronjobs)
     bash "$(dirname "$0")/cmd/cronjobs" "$@"

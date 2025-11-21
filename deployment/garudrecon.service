@@ -1,0 +1,24 @@
+[Unit]
+Description=GarudRecon Web Interface
+After=network.target
+
+[Service]
+Type=simple
+User=garudrecon
+Group=garudrecon
+WorkingDirectory=/home/garudrecon/GarudRecon
+Environment="PATH=/home/garudrecon/GarudRecon/venv/bin"
+Environment="FLASK_ENV=production"
+ExecStart=/home/garudrecon/GarudRecon/venv/bin/gunicorn -c /home/garudrecon/GarudRecon/gunicorn_config.py web_backend:app
+Restart=always
+RestartSec=10
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/home/garudrecon/GarudRecon/scans /home/garudrecon/GarudRecon/logs
+
+[Install]
+WantedBy=multi-user.target
