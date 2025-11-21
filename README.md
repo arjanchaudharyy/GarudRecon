@@ -45,6 +45,23 @@ GarudRecon now includes a modern web interface with **three optimized scan modes
 - **🔥 Cool** - Medium-level comprehensive scan (~20-30 minutes)  
 - **🚀 Ultra** - Full deep reconnaissance scan (~1-2 hours)
 
+### ⚠️ Important: Install Tools First!
+
+**GarudRecon scans will show 0 results without tools installed.**
+
+```bash
+# Check which tools you have
+./check_tools.sh
+
+# Quick install (recommended - 10 minutes)
+sudo ./install_basic_tools.sh
+
+# OR full install (30-60 minutes)
+./garudrecon install -f ALL
+```
+
+📖 **See [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md) for complete setup guide**
+
 ### Quick Start Web Interface
 
 ```bash
@@ -58,9 +75,10 @@ GarudRecon now includes a modern web interface with **three optimized scan modes
 ```
 
 📚 **Documentation:**
-- **Beginners**: See [QUICKSTART.md](QUICKSTART.md) for step-by-step guide
-- **Web Interface**: See [WEB_INTERFACE.md](WEB_INTERFACE.md) for detailed docs
-- **Deployment**: See [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
+- **🔧 Tool Setup**: [TOOL_INSTALLATION_GUIDE.md](TOOL_INSTALLATION_GUIDE.md) - **START HERE**
+- **🚀 Beginners**: [QUICKSTART.md](QUICKSTART.md) for step-by-step guide
+- **🌐 Web Interface**: [WEB_INTERFACE.md](WEB_INTERFACE.md) for detailed docs
+- **📦 Deployment**: [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
 
 ### 🚀 Quick Deployment
 

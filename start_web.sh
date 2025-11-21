@@ -40,6 +40,31 @@ fi
 
 echo ""
 echo "=========================================="
+echo "   Checking Tools Installation"
+echo "=========================================="
+echo ""
+
+# Quick tool check
+TOOL_COUNT=0
+for tool in dig curl httpx subfinder nuclei; do
+    command -v "$tool" &> /dev/null && ((TOOL_COUNT++))
+done
+
+if [ $TOOL_COUNT -eq 0 ]; then
+    echo "⚠️  WARNING: No reconnaissance tools installed!"
+    echo ""
+    echo "Scans will complete but show 0 results."
+    echo "To install basic tools, run:"
+    echo "  sudo ./install_basic_tools.sh"
+    echo ""
+    echo "Or check: ./check_tools.sh"
+    echo ""
+else
+    echo "✓ Found $TOOL_COUNT/5 basic tools installed"
+    echo ""
+fi
+
+echo "=========================================="
 echo "   Starting GarudRecon Web Server"
 echo "=========================================="
 echo ""

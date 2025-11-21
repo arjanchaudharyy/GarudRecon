@@ -10,6 +10,7 @@ import os
 import time
 from datetime import datetime
 from pathlib import Path
+import shutil
 
 app = Flask(__name__, static_folder='web', static_url_path='')
 CORS(app)
@@ -21,6 +22,24 @@ SCANS_DIR.mkdir(exist_ok=True)
 # Store active scans in memory
 active_scans = {}
 scan_results = {}
+
+# Check for essential tools
+def check_tools():
+    """Check which essential tools are available"""
+    essential_tools = {
+        'light': ['dig', 'curl'],
+        'cool': ['subfinder', 'httpx', 'dnsx'],
+        'ultra': ['subfinder', 'httpx', 'nuclei', 'naabu']
+    }
+    
+    available_tools = {}
+    for scan_type, tools in essential_tools.items():
+        available_tools[scan_type] = []
+        for tool in tools:
+            if shutil.which(tool):
+                available_tools[scan_type].append(tool)
+    
+    return available_tools
 
 def run_scan(scan_id, domain, scan_type):
     """Execute scan in background thread"""
@@ -176,7 +195,25 @@ def list_scans():
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
-    return jsonify({'status': 'ok', 'message': 'GarudRecon Web API is running'})
+    tools = check_tools()
+    return jsonify({
+        'status': 'ok', 
+        'message': 'GarudRecon Web API is running',
+        'tools_available': tools
+    })
+
+@app.route('/api/tools', methods=['GET'])
+def get_tools():
+    """Get available tools status"""
+    tools = check_tools()
+    return jsonify({
+        'available_tools': tools,
+        'recommendations': {
+            'light': 'Install: dig, nmap, httpx, waybackurls',
+            'cool': 'Install: subfinder, httpx, dnsx, naabu, nuclei',
+            'ultra': 'Run: ./garudrecon install -f ALL'
+        }
+    })
 
 if __name__ == '__main__':
     print("=" * 60)
