@@ -16,8 +16,11 @@ function setupEventListeners() {
 async function handleScanSubmit(e) {
     e.preventDefault();
     
-    const domain = document.getElementById('domain').value.trim();
+    let domain = document.getElementById('domain').value.trim();
     const scanType = document.querySelector('input[name="scan_type"]:checked').value;
+    
+    // Strip protocol and trailing slashes from domain
+    domain = domain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/+$/, '');
     
     // Validate domain
     if (!domain) {

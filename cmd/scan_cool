@@ -198,15 +198,20 @@ log "Waiting for vulnerability scans to complete..."
 # Generate Summary
 log "Generating summary..."
 
-# Count findings
+# Count findings with safe defaults
+SUBDOMAIN_COUNT=${SUBDOMAIN_COUNT:-0}
+RESOLVED_COUNT=${RESOLVED_COUNT:-0}
+LIVE_HOSTS=${LIVE_HOSTS:-0}
+URL_COUNT=${URL_COUNT:-0}
+JS_COUNT=0
 XSS_COUNT=0
 SQLI_COUNT=0
 TAKEOVER_COUNT=0
-JS_COUNT=0
-[[ -f "$OUTPUT_DIR/xss_findings.txt" ]] && XSS_COUNT=$(wc -l < "$OUTPUT_DIR/xss_findings.txt")
-[[ -f "$OUTPUT_DIR/sqli_findings.txt" ]] && SQLI_COUNT=$(wc -l < "$OUTPUT_DIR/sqli_findings.txt")
-[[ -f "$OUTPUT_DIR/subdomain_takeover.txt" ]] && TAKEOVER_COUNT=$(wc -l < "$OUTPUT_DIR/subdomain_takeover.txt")
-[[ -f "$OUTPUT_DIR/js_files.txt" ]] && JS_COUNT=$(wc -l < "$OUTPUT_DIR/js_files.txt")
+
+[[ -f "$OUTPUT_DIR/xss_findings.txt" ]] && XSS_COUNT=$(wc -l < "$OUTPUT_DIR/xss_findings.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/sqli_findings.txt" ]] && SQLI_COUNT=$(wc -l < "$OUTPUT_DIR/sqli_findings.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/subdomain_takeover.txt" ]] && TAKEOVER_COUNT=$(wc -l < "$OUTPUT_DIR/subdomain_takeover.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/js_files.txt" ]] && JS_COUNT=$(wc -l < "$OUTPUT_DIR/js_files.txt" 2>/dev/null || echo "0")
 
 # Complete results JSON
 cat >> "$RESULTS_FILE" << EOF

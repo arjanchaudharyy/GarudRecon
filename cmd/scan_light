@@ -144,17 +144,27 @@ log "Waiting for vulnerability scans to complete..."
 # Generate Summary
 log "Generating summary..."
 
-# Count findings
+# Ensure required files exist (create empty if missing)
+touch "$OUTPUT_DIR/dns_a_records.txt" 2>/dev/null
+touch "$OUTPUT_DIR/urls.txt" 2>/dev/null
+
+# Count findings with safe defaults
+DNS_COUNT=0
+URLS_COUNT=0
 XSS_COUNT=0
 SQLI_COUNT=0
-[[ -f "$OUTPUT_DIR/xss_findings.txt" ]] && XSS_COUNT=$(wc -l < "$OUTPUT_DIR/xss_findings.txt")
-[[ -f "$OUTPUT_DIR/sqli_findings.txt" ]] && SQLI_COUNT=$(wc -l < "$OUTPUT_DIR/sqli_findings.txt")
+OPEN_PORTS=${OPEN_PORTS:-0}
+
+[[ -f "$OUTPUT_DIR/dns_a_records.txt" ]] && DNS_COUNT=$(wc -l < "$OUTPUT_DIR/dns_a_records.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/urls.txt" ]] && URLS_COUNT=$(wc -l < "$OUTPUT_DIR/urls.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/xss_findings.txt" ]] && XSS_COUNT=$(wc -l < "$OUTPUT_DIR/xss_findings.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/sqli_findings.txt" ]] && SQLI_COUNT=$(wc -l < "$OUTPUT_DIR/sqli_findings.txt" 2>/dev/null || echo "0")
 
 # Complete results JSON
 cat >> "$RESULTS_FILE" << EOF
-    "dns_records": $(wc -l < "$OUTPUT_DIR/dns_a_records.txt" 2>/dev/null || echo "0"),
+    "dns_records": $DNS_COUNT,
     "open_ports": $OPEN_PORTS,
-    "urls_found": $(wc -l < "$OUTPUT_DIR/urls.txt" 2>/dev/null || echo "0"),
+    "urls_found": $URLS_COUNT,
     "xss_findings": $XSS_COUNT,
     "sqli_findings": $SQLI_COUNT
   },
@@ -174,9 +184,9 @@ Completed: $(date)
 
 FINDINGS:
 ---------
-DNS Records: $(wc -l < "$OUTPUT_DIR/dns_a_records.txt" 2>/dev/null || echo "0")
+DNS Records: $DNS_COUNT
 Open Ports: $OPEN_PORTS
-URLs Discovered: $(wc -l < "$OUTPUT_DIR/urls.txt" 2>/dev/null || echo "0")
+URLs Discovered: $URLS_COUNT
 XSS Findings: $XSS_COUNT
 SQLi Findings: $SQLI_COUNT
 

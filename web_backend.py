@@ -71,8 +71,17 @@ def run_scan(scan_id, domain, scan_type):
             # Load results
             result_file = scan_output_dir / 'results.json'
             if result_file.exists():
-                with open(result_file) as f:
-                    scan_results[scan_id] = json.load(f)
+                try:
+                    with open(result_file) as f:
+                        scan_results[scan_id] = json.load(f)
+                except json.JSONDecodeError as e:
+                    active_scans[scan_id]['status'] = 'failed'
+                    active_scans[scan_id]['error'] = f"JSON parse error: {str(e)}"
+                    active_scans[scan_id]['log'].append(f"ERROR: {str(e)}")
+                    scan_results[scan_id] = {
+                        'message': 'Scan completed but results file is invalid',
+                        'error': str(e)
+                    }
             else:
                 scan_results[scan_id] = {
                     'message': 'Scan completed but no results file found',

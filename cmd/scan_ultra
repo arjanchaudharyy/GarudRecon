@@ -119,6 +119,7 @@ fi
 
 # Step 3: DNS Resolution with multiple resolvers
 log "[3/15] DNS Resolution..."
+touch "$OUTPUT_DIR/reconnaissance/resolved.txt"
 if command -v puredns &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
     puredns resolve "$SUBDOMAINS_FILE" -r /usr/share/wordlists/resolvers.txt --write "$OUTPUT_DIR/reconnaissance/resolved.txt" 2>/dev/null
 elif command -v dnsx &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
@@ -182,6 +183,7 @@ log "Found $URL_COUNT unique URLs"
 
 # Step 7: JavaScript Discovery & Analysis
 log "[7/15] JavaScript Discovery & Analysis..."
+touch "$OUTPUT_DIR/reconnaissance/js_files.txt"
 if command -v subjs &> /dev/null && [[ -s "$SUBDOMAINS_FILE" ]]; then
     cat "$SUBDOMAINS_FILE" | subjs 2>/dev/null | sort -u > "$OUTPUT_DIR/reconnaissance/js_files.txt"
 fi
@@ -291,17 +293,23 @@ log "Waiting for all scans to complete..."
 # Generate Summary
 log "Generating comprehensive summary..."
 
-# Count findings
+# Count findings with safe defaults
+SUBDOMAIN_COUNT=${SUBDOMAIN_COUNT:-0}
+RESOLVED_COUNT=${RESOLVED_COUNT:-0}
+LIVE_HOSTS=${LIVE_HOSTS:-0}
+URL_COUNT=${URL_COUNT:-0}
+JS_COUNT=${JS_COUNT:-0}
 XSS_COUNT=0
 SQLI_COUNT=0
 NUCLEI_COUNT=0
 TAKEOVER_COUNT=0
 SCREENSHOT_COUNT=0
-[[ -f "$OUTPUT_DIR/vulnerabilities/xss_findings.txt" ]] && XSS_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/xss_findings.txt")
-[[ -f "$OUTPUT_DIR/vulnerabilities/sqli_findings.txt" ]] && SQLI_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/sqli_findings.txt")
-[[ -f "$OUTPUT_DIR/vulnerabilities/nuclei_findings.txt" ]] && NUCLEI_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/nuclei_findings.txt")
-[[ -f "$OUTPUT_DIR/vulnerabilities/subdomain_takeover.txt" ]] && TAKEOVER_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/subdomain_takeover.txt")
-[[ -d "$OUTPUT_DIR/screenshots" ]] && SCREENSHOT_COUNT=$(ls -1 "$OUTPUT_DIR/screenshots" 2>/dev/null | wc -l)
+
+[[ -f "$OUTPUT_DIR/vulnerabilities/xss_findings.txt" ]] && XSS_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/xss_findings.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/vulnerabilities/sqli_findings.txt" ]] && SQLI_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/sqli_findings.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/vulnerabilities/nuclei_findings.txt" ]] && NUCLEI_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/nuclei_findings.txt" 2>/dev/null || echo "0")
+[[ -f "$OUTPUT_DIR/vulnerabilities/subdomain_takeover.txt" ]] && TAKEOVER_COUNT=$(wc -l < "$OUTPUT_DIR/vulnerabilities/subdomain_takeover.txt" 2>/dev/null || echo "0")
+[[ -d "$OUTPUT_DIR/screenshots" ]] && SCREENSHOT_COUNT=$(ls -1 "$OUTPUT_DIR/screenshots" 2>/dev/null | wc -l || echo "0")
 
 # Complete results JSON
 cat >> "$RESULTS_FILE" << EOF
