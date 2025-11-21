@@ -256,13 +256,20 @@ def list_scans():
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
-    tools = check_tools()
-    return jsonify({
-        'status': 'ok', 
-        'message': 'GarudRecon Web API is running',
-        'tools_available': tools
-    })
+    """Health check endpoint - lightweight for Railway deployment"""
+    try:
+        # Quick health check without expensive tool scanning
+        # Tool checking is done in /api/tools endpoint instead
+        return jsonify({
+            'status': 'healthy', 
+            'message': 'GarudRecon Web API is running',
+            'version': '2.0'
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'status': 'unhealthy',
+            'error': str(e)
+        }), 503
 
 @app.route('/api/tools', methods=['GET'])
 def get_tools():
@@ -278,18 +285,23 @@ def get_tools():
     })
 
 if __name__ == '__main__':
-    # Auto-install tools on startup
-    auto_install_tools()
+    # Get port from environment (for Railway/cloud deployments) or default to 5000
+    port = int(os.environ.get('PORT', 5000))
     
     print("=" * 60)
     print("CTXREC Web Interface")
     print("Created by: arjanchaudharyy")
     print("=" * 60)
-    print("\nStarting server on http://0.0.0.0:5000")
+    print(f"\nStarting server on http://0.0.0.0:{port}")
     print("\nScan Types Available:")
     print("  - Light: Simple recon and vulnerability scan")
     print("  - Cool:  Medium-level comprehensive scan")
     print("  - Ultra: Full-scale deep reconnaissance")
     print("\n" + "=" * 60)
     
-    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
+    # Auto-install tools in background thread (non-blocking)
+    # This prevents blocking the health check endpoint during Railway deployment
+    install_thread = threading.Thread(target=auto_install_tools, daemon=True)
+    install_thread.start()
+    
+    app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
