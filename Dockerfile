@@ -31,50 +31,50 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Go 1.23.5 (latest stable)
+# Install Go (lightweight version, only for small tools)
 ENV GO_VERSION=1.23.5
 ENV GOPATH=/root/go
-ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-ENV CGO_ENABLED=1
-ENV GOPROXY=https://proxy.golang.org,direct
-ENV GOTIMEOUT=10m
+ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:/usr/local/bin
 
+# Install Go for lightweight tools only
 RUN cd /tmp && \
-    wget --progress=dot:giga https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
+    wget -q --show-progress https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
     rm go${GO_VERSION}.linux-amd64.tar.gz && \
     go version
 
-# Install Go-based reconnaissance tools (in smaller batches for better error handling)
-RUN mkdir -p $GOPATH/bin
+# Install pre-built binaries (FAST - no compilation needed)
+RUN echo "=== Installing pre-built tools (fast) ===" && \
+    mkdir -p /usr/local/bin && \
+    # httpx
+    wget -q https://github.com/projectdiscovery/httpx/releases/latest/download/httpx_linux_amd64.zip && \
+    unzip -q httpx_linux_amd64.zip && mv httpx /usr/local/bin/ && rm httpx_linux_amd64.zip && \
+    # subfinder
+    wget -q https://github.com/projectdiscovery/subfinder/releases/latest/download/subfinder_linux_amd64.zip && \
+    unzip -q subfinder_linux_amd64.zip && mv subfinder /usr/local/bin/ && rm subfinder_linux_amd64.zip && \
+    # dnsx
+    wget -q https://github.com/projectdiscovery/dnsx/releases/latest/download/dnsx_linux_amd64.zip && \
+    unzip -q dnsx_linux_amd64.zip && mv dnsx /usr/local/bin/ && rm dnsx_linux_amd64.zip && \
+    # naabu
+    wget -q https://github.com/projectdiscovery/naabu/releases/latest/download/naabu_linux_amd64.zip && \
+    unzip -q naabu_linux_amd64.zip && mv naabu /usr/local/bin/ && rm naabu_linux_amd64.zip && \
+    # nuclei
+    wget -q https://github.com/projectdiscovery/nuclei/releases/latest/download/nuclei_linux_amd64.zip && \
+    unzip -q nuclei_linux_amd64.zip && mv nuclei /usr/local/bin/ && rm nuclei_linux_amd64.zip && \
+    # katana
+    wget -q https://github.com/projectdiscovery/katana/releases/latest/download/katana_linux_amd64.zip && \
+    unzip -q katana_linux_amd64.zip && mv katana /usr/local/bin/ && rm katana_linux_amd64.zip && \
+    chmod +x /usr/local/bin/* && \
+    echo "✓ Pre-built tools installed"
 
-# Batch 1: ProjectDiscovery core tools
-RUN echo "=== Installing ProjectDiscovery tools ===" && \
-    go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest && \
-    go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest && \
-    go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest && \
-    echo "✓ Batch 1 complete"
-
-# Batch 2: More ProjectDiscovery tools
-RUN echo "=== Installing naabu and nuclei ===" && \
-    go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest && \
-    go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest && \
-    go install -v github.com/projectdiscovery/katana/cmd/katana@latest && \
-    echo "✓ Batch 2 complete"
-
-# Batch 3: TomNomNom tools
-RUN echo "=== Installing TomNomNom tools ===" && \
+# Install lightweight Go tools (FAST - small compilation)
+RUN echo "=== Installing lightweight Go tools ===" && \
+    mkdir -p $GOPATH/bin && \
     go install -v github.com/tomnomnom/waybackurls@latest && \
     go install -v github.com/tomnomnom/assetfinder@latest && \
-    go install -v github.com/tomnomnom/gf@latest && \
     go install -v github.com/tomnomnom/anew@latest && \
-    echo "✓ Batch 3 complete"
-
-# Batch 4: Additional tools
-RUN echo "=== Installing additional tools ===" && \
     go install -v github.com/lc/gau/v2/cmd/gau@latest && \
-    go install -v github.com/hahwul/dalfox/v2@latest && \
-    echo "✓ Batch 4 complete"
+    echo "✓ Lightweight tools complete"
 
 # Set working directory
 WORKDIR /app
@@ -98,8 +98,10 @@ RUN mkdir -p /app/scans
 RUN echo "=== Verifying tool installation ===" && \
     echo "System tools:" && \
     which dig nmap curl wget git jq || true && \
-    echo "Go tools:" && \
-    which httpx subfinder dnsx naabu nuclei katana waybackurls gau assetfinder dalfox || true && \
+    echo "Pre-built tools:" && \
+    which httpx subfinder dnsx naabu nuclei katana || true && \
+    echo "Go-based tools:" && \
+    which waybackurls gau assetfinder anew || true && \
     echo "Python tools:" && \
     which sqlmap || true && \
     echo "==================================="
