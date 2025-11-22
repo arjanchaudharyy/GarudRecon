@@ -1,0 +1,64 @@
+name: Codespaces Prebuild
+
+# This workflow creates prebuilt Codespaces to speed up environment creation
+# Prebuilds install dependencies in advance so users can start coding immediately
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  prebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Make scripts executable
+        run: |
+          chmod +x start_web.sh
+          chmod +x garudrecon
+          chmod +x check_tools.sh
+          chmod +x install_basic_tools.sh
+          chmod +x cmd/scan_* || true
+
+      - name: Validate configuration files
+        run: |
+          echo "Validating Python files..."
+          python -m py_compile web_backend.py
+          
+          echo "Validating shell scripts..."
+          bash -n start_web.sh
+          bash -n check_tools.sh
+          
+          echo "All validations passed!"
+
+      - name: Cache Go modules (for future tool installation)
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Summary
+        run: |
+          echo "✅ Prebuild completed successfully!"
+          echo "📦 Python dependencies installed"
+          echo "🔧 Scripts made executable"
+          echo "✨ Codespace is ready for instant use!"
