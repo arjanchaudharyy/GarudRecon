@@ -271,6 +271,54 @@ def get_tools():
         }
     })
 
+@app.route('/api/scan/<scan_id>/files', methods=['GET'])
+def list_scan_files(scan_id):
+    """List all files in a scan directory"""
+    if scan_id not in active_scans:
+        return jsonify({'error': 'Scan not found'}), 404
+    
+    scan_dir = SCANS_DIR / scan_id
+    if not scan_dir.exists():
+        return jsonify({'files': []})
+    
+    files = []
+    for file_path in scan_dir.glob('*.txt'):
+        file_stat = file_path.stat()
+        files.append({
+            'name': file_path.name,
+            'size': file_stat.st_size,
+            'lines': sum(1 for _ in open(file_path)) if file_stat.st_size > 0 else 0
+        })
+    
+    return jsonify({'files': files})
+
+@app.route('/api/scan/<scan_id>/file/<filename>', methods=['GET'])
+def get_scan_file(scan_id, filename):
+    """Get contents of a specific scan file"""
+    if scan_id not in active_scans:
+        return jsonify({'error': 'Scan not found'}), 404
+    
+    scan_dir = SCANS_DIR / scan_id
+    file_path = scan_dir / filename
+    
+    if not file_path.exists() or not file_path.is_file():
+        return jsonify({'error': 'File not found'}), 404
+    
+    # Security check: ensure file is within scan directory
+    if not str(file_path.resolve()).startswith(str(scan_dir.resolve())):
+        return jsonify({'error': 'Invalid file path'}), 403
+    
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read()
+        return jsonify({
+            'filename': filename,
+            'content': content,
+            'lines': len(content.split('\n'))
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     # Get port from environment (for Railway/cloud deployments) or default to 5000
     port = int(os.environ.get('PORT', 5000))

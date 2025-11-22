@@ -6,11 +6,37 @@ let pollInterval = null;
 document.addEventListener('DOMContentLoaded', () => {
     loadRecentScans();
     setupEventListeners();
+    checkToolStatus();
 });
 
 function setupEventListeners() {
     const scanForm = document.getElementById('scanForm');
     scanForm.addEventListener('submit', handleScanSubmit);
+}
+
+async function checkToolStatus() {
+    try {
+        const response = await fetch(`${API_BASE}/api/tools`);
+        const data = await response.json();
+        
+        // Show tool status banner if tools are missing
+        const availableCount = Object.values(data.available_tools).reduce((sum, tools) => sum + tools.length, 0);
+        if (availableCount < 5) {
+            showToolWarning();
+        }
+    } catch (error) {
+        console.error('Error checking tools:', error);
+    }
+}
+
+function showToolWarning() {
+    const banner = document.createElement('div');
+    banner.className = 'tool-warning-banner';
+    banner.innerHTML = `
+        <strong>⚠️ Warning:</strong> Some reconnaissance tools are not installed. 
+        Results may be limited. Run <code>sudo ./start_web.sh</code> to auto-install tools.
+    `;
+    document.querySelector('.container').insertBefore(banner, document.querySelector('header').nextSibling);
 }
 
 async function handleScanSubmit(e) {
@@ -86,6 +112,9 @@ function showScanProgress(scanData) {
     // Reset progress bar
     document.getElementById('progressBar').style.width = '10%';
     
+    // Hide results card
+    document.getElementById('scanResultsCard').style.display = 'none';
+    
     // Scroll to progress card
     progressCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -141,7 +170,7 @@ async function updateScanStatus(scanId) {
         if (data.log && data.log.length > 0) {
             const logOutput = document.getElementById('logOutput');
             logOutput.innerHTML = data.log
-                .map(line => `<div class="log-line">${escapeHtml(line)}</div>`)
+                .map(line => formatLogLine(line))
                 .join('');
             
             // Auto-scroll to bottom
@@ -158,7 +187,7 @@ async function updateScanStatus(scanId) {
             } else {
                 const logOutput = document.getElementById('logOutput');
                 const errorMsg = data.error || 'Scan failed';
-                logOutput.innerHTML += `<div class="log-line" style="color: var(--danger-color); font-weight: bold;">ERROR: ${escapeHtml(errorMsg)}</div>`;
+                logOutput.innerHTML += `<div class="log-line error">ERROR: ${escapeHtml(errorMsg)}</div>`;
             }
             
             // Reload recent scans
@@ -170,18 +199,203 @@ async function updateScanStatus(scanId) {
     }
 }
 
-function showResults(scanData) {
+function formatLogLine(line) {
+    let className = 'log-line';
+    let icon = '';
+    
+    // Detect log type and add appropriate styling
+    if (line.includes('ERROR') || line.includes('error') || line.includes('failed')) {
+        className += ' error';
+        icon = '❌ ';
+    } else if (line.includes('WARNING') || line.includes('warning') || line.includes('Skipping')) {
+        className += ' warning';
+        icon = '⚠️ ';
+    } else if (line.includes('✓') || line.includes('complete') || line.includes('Found')) {
+        className += ' success';
+        icon = '✓ ';
+    } else if (line.includes('[') && line.includes(']')) {
+        // Step indicators
+        className += ' step';
+        icon = '▶ ';
+    }
+    
+    // Highlight tool names
+    const toolNames = ['httpx', 'subfinder', 'nuclei', 'nmap', 'dig', 'waybackurls', 'dalfox', 'sqlmap', 'dnsx', 'naabu', 'katana', 'gau'];
+    let formattedLine = escapeHtml(line);
+    
+    toolNames.forEach(tool => {
+        const regex = new RegExp(`\\b${tool}\\b`, 'gi');
+        formattedLine = formattedLine.replace(regex, `<span class="tool-name">${tool}</span>`);
+    });
+    
+    return `<div class="${className}">${icon}${formattedLine}</div>`;
+}
+
+async function showResults(scanData) {
     const resultsCard = document.getElementById('scanResultsCard');
     const resultsDiv = document.getElementById('scanResults');
     
-    if (scanData.results) {
-        resultsDiv.innerHTML = `<pre>${JSON.stringify(scanData.results, null, 2)}</pre>`;
-    } else {
-        resultsDiv.innerHTML = '<p class="text-muted">Scan completed. Check the log for details.</p>';
+    if (!scanData.results) {
+        resultsDiv.innerHTML = '<p class="text-muted">No results available.</p>';
+        resultsCard.style.display = 'block';
+        return;
     }
     
+    const results = scanData.results;
+    const findings = results.findings || {};
+    
+    // Build structured results HTML
+    let html = `
+        <div class="results-summary">
+            <div class="summary-card">
+                <div class="summary-icon">🌐</div>
+                <div class="summary-value">${findings.dns_records || 0}</div>
+                <div class="summary-label">DNS Records</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">🔌</div>
+                <div class="summary-value">${findings.open_ports || 0}</div>
+                <div class="summary-label">Open Ports</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">🔗</div>
+                <div class="summary-value">${findings.urls_found || 0}</div>
+                <div class="summary-label">URLs Found</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">⚠️</div>
+                <div class="summary-value">${findings.xss_findings || 0}</div>
+                <div class="summary-label">XSS Issues</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">💉</div>
+                <div class="summary-value">${findings.sqli_findings || 0}</div>
+                <div class="summary-label">SQLi Issues</div>
+            </div>
+            ${findings.subdomains ? `
+            <div class="summary-card">
+                <div class="summary-icon">🔎</div>
+                <div class="summary-value">${findings.subdomains}</div>
+                <div class="summary-label">Subdomains</div>
+            </div>
+            ` : ''}
+            ${findings.nuclei_findings ? `
+            <div class="summary-card">
+                <div class="summary-icon">🔥</div>
+                <div class="summary-value">${findings.nuclei_findings}</div>
+                <div class="summary-label">Nuclei Findings</div>
+            </div>
+            ` : ''}
+        </div>
+    `;
+    
+    // Add detailed findings sections
+    html += '<div class="findings-sections">';
+    
+    // Load and display file contents
+    try {
+        const filesResponse = await fetch(`${API_BASE}/api/scan/${scanData.scan_id}/files`);
+        const filesData = await filesResponse.json();
+        
+        if (filesData.files && filesData.files.length > 0) {
+            html += '<div class="findings-section"><h3>📁 Generated Files</h3><div class="file-list">';
+            
+            for (const file of filesData.files) {
+                if (file.lines > 0) {
+                    html += `
+                        <div class="file-item" onclick="viewFile('${scanData.scan_id}', '${file.name}')">
+                            <div class="file-name">📄 ${file.name}</div>
+                            <div class="file-meta">${file.lines} lines</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            html += '</div></div>';
+        }
+    } catch (error) {
+        console.error('Error loading files:', error);
+    }
+    
+    html += '</div>';
+    
+    // Download button
+    html += `
+        <div class="results-actions">
+            <button class="btn btn-primary" onclick="downloadResults()">
+                📥 Download Full Results (JSON)
+            </button>
+            <button class="btn btn-secondary" onclick="downloadAllFiles()">
+                📦 Download All Files
+            </button>
+        </div>
+    `;
+    
+    resultsDiv.innerHTML = html;
     resultsCard.style.display = 'block';
     resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function viewFile(scanId, filename) {
+    try {
+        const response = await fetch(`${API_BASE}/api/scan/${scanId}/file/${filename}`);
+        if (!response.ok) throw new Error('Failed to load file');
+        
+        const data = await response.json();
+        
+        // Create modal to show file content
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📄 ${filename}</h3>
+                    <button class="modal-close" onclick="this.closest('.modal').remove()">×</button>
+                </div>
+                <div class="modal-body">
+                    <pre>${escapeHtml(data.content)}</pre>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="downloadFile('${scanId}', '${filename}')">
+                        Download File
+                    </button>
+                    <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    } catch (error) {
+        alert(`Error viewing file: ${error.message}`);
+    }
+}
+
+async function downloadFile(scanId, filename) {
+    try {
+        const response = await fetch(`${API_BASE}/api/scan/${scanId}/file/${filename}`);
+        const data = await response.json();
+        
+        const blob = new Blob([data.content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        alert(`Error downloading file: ${error.message}`);
+    }
 }
 
 async function loadRecentScans() {
@@ -261,7 +475,7 @@ async function viewScan(scanId) {
         if (data.log && data.log.length > 0) {
             const logOutput = document.getElementById('logOutput');
             logOutput.innerHTML = data.log
-                .map(line => `<div class="log-line">${escapeHtml(line)}</div>`)
+                .map(line => formatLogLine(line))
                 .join('');
         }
         
@@ -297,7 +511,7 @@ function downloadResults() {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `garudrecon-${data.domain}-${currentScanId}.json`;
+            a.download = `ctxrec-${data.domain}-${currentScanId}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -307,6 +521,14 @@ function downloadResults() {
             alert(`Error downloading results: ${error.message}`);
             console.error('Download error:', error);
         });
+}
+
+function downloadAllFiles() {
+    if (!currentScanId) {
+        alert('No scan selected');
+        return;
+    }
+    alert('Bulk download feature coming soon! For now, download individual files from the results section.');
 }
 
 function formatDate(dateString) {
