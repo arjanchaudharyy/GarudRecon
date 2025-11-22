@@ -29,6 +29,7 @@ scans/
 output/
 results/
 *.txt
+!requirements.txt
 *.json
 *.csv
 
