@@ -155,9 +155,9 @@ sudo ./install_basic_tools.sh
 ### Other Free Cloud Options
 
 <details>
-  <summary><b>Railway (Pre-configured Dockerfile)</b></summary>
+  <summary><b>Railway (Pre-configured Dockerfile) ⚡ FAST BUILD</b></summary>
 
-CTXREC includes a ready-to-use Dockerfile that pre-installs all reconnaissance tools during build.
+CTXREC includes an optimized Dockerfile that pre-installs all reconnaissance tools using pre-built binaries for ultra-fast builds.
 
 ```bash
 # Option 1: Deploy from GitHub (Recommended)
@@ -165,7 +165,7 @@ CTXREC includes a ready-to-use Dockerfile that pre-installs all reconnaissance t
 # 2. Go to Railway.app
 # 3. Click "New Project" → "Deploy from GitHub repo"
 # 4. Select your GarudRecon repository
-# 5. Wait 5-10 minutes for tools to install
+# 5. Wait 2-3 minutes for build to complete
 # 6. Access your deployment URL
 
 # Option 2: Using Railway CLI
@@ -175,10 +175,17 @@ railway init
 railway up
 ```
 
-**Important:** The Dockerfile automatically installs all tools (httpx, subfinder, nuclei, etc.) during build. This takes 5-10 minutes but ensures scans work correctly.
+**⚡ Fast Build:** The Dockerfile uses pre-built binaries instead of compilation, reducing build time from 8-12 minutes to just 2-3 minutes!
 
-📖 **Complete Railway Guide**: [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md)
-🔧 **Troubleshooting**: [RAILWAY_QUICK_FIX.md](RAILWAY_QUICK_FIX.md)
+**What's Installed:** httpx, subfinder, nuclei, naabu, dnsx, katana, waybackurls, gau, assetfinder, and more.
+
+**Troubleshooting:** See `RAILWAY_QUICK_START.md` for detailed deployment guide.
+
+📖 **Documentation**:
+- [RAILWAY_QUICK_START.md](RAILWAY_QUICK_START.md) - Quick start guide (START HERE)
+- [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md) - Complete deployment guide
+- [RAILWAY_BUILD_TIMEOUT_FIX.md](RAILWAY_BUILD_TIMEOUT_FIX.md) - How we fixed build timeouts
+- [RAILWAY_QUICK_FIX.md](RAILWAY_QUICK_FIX.md) - Troubleshooting guide
 </details>
 
 <details>
