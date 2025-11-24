@@ -82,6 +82,8 @@ sudo ./start_web.sh
 
 ### Windows
 
+⚠️ **Read First**: [HOW_TO_RUN_IN_BASH.md](HOW_TO_RUN_IN_BASH.md)
+
 **Option 1: WSL (Recommended)**
 ```powershell
 # Install WSL (PowerShell as Admin)

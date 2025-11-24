@@ -85,6 +85,7 @@ def auto_install_tools():
                 print("[+] WSL detected - scans will run through WSL")
             else:
                 print("[!] WSL not detected - GarudRecon requires Linux environment")
+                print("[!] See HOW_TO_RUN_IN_BASH.md for instructions")
                 print("[!] Please install WSL: https://docs.microsoft.com/windows/wsl/install")
                 print("[!] Or use Docker: docker run -p 5000:5000 garudrecon")
                 print("\n[i] Web interface will start, but scans will fail without WSL/Docker\n")
@@ -165,9 +166,10 @@ def run_scan(scan_id, domain, scan_type):
                 "GarudRecon scan scripts require a Linux environment.",
                 "",
                 "Solutions:",
-                "1. Install WSL: https://docs.microsoft.com/windows/wsl/install",
-                "2. Use Docker: docker run -p 5000:5000 garudrecon",
-                "3. Deploy to Railway/cloud: https://railway.app",
+                "1. Read HOW_TO_RUN_IN_BASH.md for detailed instructions",
+                "2. Install WSL: https://docs.microsoft.com/windows/wsl/install",
+                "3. Use Docker: docker run -p 5000:5000 garudrecon",
+                "4. Deploy to Railway/cloud: https://railway.app",
                 "",
                 f"Error: {error_msg}"
             ]
