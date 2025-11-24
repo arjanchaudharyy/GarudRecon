@@ -16,6 +16,33 @@ from datetime import datetime
 from pathlib import Path
 import shutil
 import sys
+import platform
+
+# Fix Windows console encoding for Unicode characters
+if platform.system() == 'Windows':
+    try:
+        # Set UTF-8 encoding for Windows console
+        if sys.stdout.encoding != 'utf-8':
+            sys.stdout.reconfigure(encoding='utf-8')
+        if sys.stderr.encoding != 'utf-8':
+            sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        # If reconfigure fails, we'll use ASCII fallbacks
+        pass
+
+# Platform detection
+IS_WINDOWS = platform.system() == 'Windows'
+IS_LINUX = platform.system() == 'Linux'
+IS_MAC = platform.system() == 'Darwin'
+
+# Check for WSL availability on Windows
+HAS_WSL = False
+if IS_WINDOWS:
+    try:
+        subprocess.run(['wsl', '--status'], capture_output=True, timeout=2)
+        HAS_WSL = True
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
 
 app = Flask(__name__, static_folder='web', static_url_path='')
 CORS(app)
@@ -31,46 +58,63 @@ scan_results = {}
 # Auto-install tools on startup
 def auto_install_tools():
     """Check tool availability and provide deployment info"""
-    print("\n" + "="*60)
-    print("CTXREC - Checking tool availability...")
-    print("="*60)
-    
-    # Check if running in Docker/Railway (tools should be pre-installed)
-    in_docker = os.path.exists('/.dockerenv') or os.environ.get('RAILWAY_ENVIRONMENT')
-    
-    essential_tools = ['dig', 'nmap', 'curl', 'httpx', 'subfinder', 'nuclei']
-    found_tools = []
-    missing_tools = []
-    
-    for tool in essential_tools:
-        if shutil.which(tool):
-            found_tools.append(tool)
-        else:
-            missing_tools.append(tool)
-    
-    if missing_tools:
-        print(f"\n⚠️  Missing tools: {', '.join(missing_tools)}")
+    try:
+        print("\n" + "="*60)
+        print("CTXREC - Checking tool availability...")
+        print("="*60)
         
-        if in_docker:
-            print("\n📦 Running in containerized environment (Docker/Railway)")
-            print("⚠️  Tools should be pre-installed in the Docker image.")
-            print("If tools are missing, the Docker build may have failed.")
-            print("Please check the build logs on Railway dashboard.\n")
-            print("Expected tools location:")
-            print(f"  - System tools: /usr/bin/")
-            print(f"  - Go tools: {os.environ.get('GOPATH', '/root/go')}/bin/")
-            print(f"  - Current PATH: {os.environ.get('PATH', 'Not set')}\n")
-        else:
-            print("\n🔧 To install missing tools, run:")
-            print("  sudo ./install_basic_tools.sh")
-            print("or for full installation:")
-            print("  ./garudrecon install -f ALL\n")
-    else:
-        print("\n✅ All essential tools are installed!")
-        print(f"✓ Found: {', '.join(found_tools)}\n")
+        # Windows platform warning
+        if IS_WINDOWS:
+            print("\n[!] WARNING: Running on Windows")
+            if HAS_WSL:
+                print("[+] WSL detected - scans will run through WSL")
+            else:
+                print("[!] WSL not detected - GarudRecon requires Linux environment")
+                print("[!] Please install WSL: https://docs.microsoft.com/windows/wsl/install")
+                print("[!] Or use Docker: docker run -p 5000:5000 garudrecon")
+                print("\n[i] Web interface will start, but scans will fail without WSL/Docker\n")
+                return
         
-    if found_tools:
-        print(f"✓ Available tools ({len(found_tools)}/{len(essential_tools)}): {', '.join(found_tools)}")
+        # Check if running in Docker/Railway (tools should be pre-installed)
+        in_docker = os.path.exists('/.dockerenv') or os.environ.get('RAILWAY_ENVIRONMENT')
+        
+        essential_tools = ['dig', 'nmap', 'curl', 'httpx', 'subfinder', 'nuclei']
+        found_tools = []
+        missing_tools = []
+        
+        for tool in essential_tools:
+            if shutil.which(tool):
+                found_tools.append(tool)
+            else:
+                missing_tools.append(tool)
+        
+        if missing_tools:
+            print(f"\n[!] Missing tools: {', '.join(missing_tools)}")
+            
+            if in_docker:
+                print("\n[*] Running in containerized environment (Docker/Railway)")
+                print("[!] Tools should be pre-installed in the Docker image.")
+                print("If tools are missing, the Docker build may have failed.")
+                print("Please check the build logs on Railway dashboard.\n")
+                print("Expected tools location:")
+                print(f"  - System tools: /usr/bin/")
+                print(f"  - Go tools: {os.environ.get('GOPATH', '/root/go')}/bin/")
+                print(f"  - Current PATH: {os.environ.get('PATH', 'Not set')}\n")
+            else:
+                print("\n[*] To install missing tools, run:")
+                print("  sudo ./install_basic_tools.sh")
+                print("or for full installation:")
+                print("  ./garudrecon install -f ALL\n")
+        else:
+            print("\n[+] All essential tools are installed!")
+            print(f"[+] Found: {', '.join(found_tools)}\n")
+            
+        if found_tools:
+            print(f"[+] Available tools ({len(found_tools)}/{len(essential_tools)}): {', '.join(found_tools)}")
+    except Exception as e:
+        # Catch any encoding or other errors gracefully
+        print(f"\n[!] Error checking tools: {str(e)}")
+        print("[i] Web interface will continue to start...")
 
 # Check for essential tools
 def check_tools():
@@ -96,6 +140,25 @@ def run_scan(scan_id, domain, scan_type):
         active_scans[scan_id]['status'] = 'running'
         active_scans[scan_id]['start_time'] = datetime.now().isoformat()
         
+        # Platform-specific error handling
+        if IS_WINDOWS and not HAS_WSL:
+            error_msg = "GarudRecon requires Linux environment. Please install WSL or use Docker."
+            active_scans[scan_id]['status'] = 'failed'
+            active_scans[scan_id]['error'] = error_msg
+            active_scans[scan_id]['log'] = [
+                "ERROR: Running on Windows without WSL",
+                "GarudRecon scan scripts require a Linux environment.",
+                "",
+                "Solutions:",
+                "1. Install WSL: https://docs.microsoft.com/windows/wsl/install",
+                "2. Use Docker: docker run -p 5000:5000 garudrecon",
+                "3. Deploy to Railway/cloud: https://railway.app",
+                "",
+                f"Error: {error_msg}"
+            ]
+            active_scans[scan_id]['end_time'] = datetime.now().isoformat()
+            return
+        
         # Determine which script to run based on scan type
         script_map = {
             'light': './cmd/scan_light',
@@ -114,8 +177,19 @@ def run_scan(scan_id, domain, scan_type):
         # Run the scan
         active_scans[scan_id]['log'] = []
         
+        # Prepare command based on platform
+        if IS_WINDOWS and HAS_WSL:
+            # Convert Windows path to WSL path
+            wsl_dir = str(scan_output_dir).replace('\\', '/')
+            # Run through WSL
+            cmd = ['wsl', 'bash', script, '-d', domain, '-o', wsl_dir]
+            active_scans[scan_id]['log'].append(f"Running on Windows via WSL: {' '.join(cmd)}")
+        else:
+            # Linux/Mac: run directly
+            cmd = [script, '-d', domain, '-o', str(scan_output_dir)]
+        
         process = subprocess.Popen(
-            [script, '-d', domain, '-o', str(scan_output_dir)],
+            cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             universal_newlines=True,

@@ -60,19 +60,54 @@
 - 📋 **60+ Tool Integration** - Best-in-class security tools
 - 🔐 **Secure by Design** - Built with security best practices
 
+### 🖥️ Platform Support
+- ✅ **Linux** - Full native support (Ubuntu, Debian, Kali, Arch)
+- ✅ **macOS** - Full native support
+- ✅ **Windows** - WSL (Windows Subsystem for Linux) support
+- ✅ **Docker** - All platforms via containerization
+- ✅ **Cloud** - Railway, Heroku, AWS, GCP, Azure
+
 ---
 
 ## 🚀 Quick Start
 
-### Web Interface (Recommended)
+### Linux / macOS
 
 ```bash
 # Start the web interface
-./start_web.sh
+sudo ./start_web.sh
 
-# Access the dashboard at:
-# http://localhost:5000
+# Access at http://localhost:5000
 ```
+
+### Windows
+
+**Option 1: WSL (Recommended)**
+```powershell
+# Install WSL (PowerShell as Admin)
+wsl --install
+
+# Restart computer, then in WSL:
+wsl
+cd /mnt/c/Users/YourUsername/GarudRecon
+sudo ./install_basic_tools.sh
+
+# Run from Windows:
+exit
+python3 web_backend.py
+
+# Access at http://localhost:5000
+```
+
+**Option 2: Docker (No WSL needed)**
+```powershell
+docker build -t garudrecon .
+docker run -p 5000:5000 garudrecon
+
+# Access at http://localhost:5000
+```
+
+📖 **Full Windows guide:** [WINDOWS_QUICK_START.md](WINDOWS_QUICK_START.md)
 
 That's it! Open your browser and start scanning immediately.
 
