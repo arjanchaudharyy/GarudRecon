@@ -39,9 +39,24 @@ IS_MAC = platform.system() == 'Darwin'
 HAS_WSL = False
 if IS_WINDOWS:
     try:
-        subprocess.run(['wsl', '--status'], capture_output=True, timeout=2)
-        HAS_WSL = True
+        # Check if wsl command works and has distributions
+        # wsl --list lists distributions. If none, it prints a message.
+        result = subprocess.run(['wsl', '--list'], capture_output=True, timeout=3)
+        
+        if result.returncode == 0:
+            # Try to decode output to check for "no installed distributions" message
+            # WSL often uses UTF-16LE for output
+            try:
+                output = result.stdout.decode('utf-16le')
+            except UnicodeDecodeError:
+                output = result.stdout.decode('utf-8', errors='ignore')
+            
+            # Check for common error messages indicating no distro
+            if "no installed distributions" not in output and "has no installed distributions" not in output:
+                HAS_WSL = True
     except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+    except Exception:
         pass
 
 app = Flask(__name__, static_folder='web', static_url_path='')
